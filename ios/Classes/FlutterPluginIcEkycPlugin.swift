@@ -613,7 +613,7 @@ extension FlutterPluginIcEkycPlugin: ICEkycCameraDelegate {
             KeyResultConstantsEKYC.pathImageFaceFull: pathImageFaceFull.path ,
             KeyResultConstantsEKYC.pathImageFaceFarFull: pathImageFaceFarFull.path,
             KeyResultConstantsEKYC.pathImageFaceNearFull: pathImageFaceNearFull.path,
-            KeyResultConstantsEKYC.pathImageFaceScan3D: pathFaceScan3D?.path ?? "",
+            KeyResultConstantsEKYC.pathImageFaceScan3D: dataScan3D.isEmpty ? "" : pathFaceScan3D?.path ?? "",
             KeyResultConstantsEKYC.clientSessionResult: clientSessionResult
         ]
         

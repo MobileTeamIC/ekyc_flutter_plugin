@@ -1,4 +1,4 @@
-class KeyResultConstants {
+class ICEkycKeyResult {
   static const String cropParam = "CROP_PARAM";
   static const String pathImageFrontFull = "PATH_IMAGE_FRONT_FULL";
   static const String pathImageBackFull = "PATH_IMAGE_BACK_FULL";

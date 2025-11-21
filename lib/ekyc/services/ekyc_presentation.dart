@@ -2,9 +2,9 @@ import 'ekyc_config.dart';
 import 'enum_ekyc.dart';
 
 /// Predefined configurations for common use cases
-class EkycPresets {
+class ICEkycPresets {
   /// Create default configuration for full eKYC flow
-  static EkycConfig fullEkyc({
+  static ICEkycConfig fullEkyc({
      String accessToken = '',
      String tokenId = '',
      String tokenKey = '',
@@ -25,7 +25,7 @@ class EkycPresets {
     bool isShowQRCodeResult = false,
     String challengeCode = '',
   }) =>
-      EkycConfig(
+      ICEkycConfig(
         accessToken: accessToken,
         tokenId: tokenId,
         tokenKey: tokenKey,
@@ -48,7 +48,7 @@ class EkycPresets {
       );
 
   /// Create configuration for OCR only flow
-  static EkycConfig ocrOnly({
+  static ICEkycConfig ocrOnly({
      String accessToken = '',
      String tokenId = '',
      String tokenKey = '',
@@ -66,7 +66,7 @@ class EkycPresets {
     bool isShowQRCodeResult = false,
     String challengeCode = '',
   }) =>
-      EkycConfig(
+      ICEkycConfig(
         accessToken: accessToken,
         tokenId: tokenId,
         tokenKey: tokenKey,
@@ -109,7 +109,7 @@ class EkycPresets {
     ///   - language_sdk: Ngôn ngữ SDK ("icekyc_vi", "icekyc_en")
     ///   - is_show_logo: Bật/tắt hiển thị LOGO thương hiệu ("true"/"false")
   /// Create configuration for OCR front side only flow
-  static EkycConfig ocrFront({
+  static ICEkycConfig ocrFront({
      String accessToken = '',
      String tokenId = '',
      String tokenKey = '',
@@ -126,7 +126,7 @@ class EkycPresets {
     bool isShowQRCodeResult = false,
     String challengeCode = '',
   }) =>
-      EkycConfig(
+      ICEkycConfig(
         accessToken: accessToken,
         tokenId: tokenId,
         tokenKey: tokenKey,
@@ -171,7 +171,7 @@ class EkycPresets {
   ///   - language_sdk: Ngôn ngữ SDK ("icekyc_vi", "icekyc_en")
   ///   - is_show_logo: Bật/tắt hiển thị LOGO thương hiệu ("true"/"false")
   /// Create configuration for OCR back side only flow
-  static EkycConfig ocrBack({
+  static ICEkycConfig ocrBack({
      String accessToken = '',
      String tokenId = '',
      String tokenKey = '',
@@ -185,7 +185,7 @@ class EkycPresets {
     LanguageSdk languageSdk = LanguageSdk.icekyc_vi,
     bool isShowLogo = true,
   }) =>
-      EkycConfig(
+      ICEkycConfig(
         accessToken: accessToken,
         tokenId: tokenId,
         tokenKey: tokenKey,
@@ -226,7 +226,7 @@ class EkycPresets {
   ///   - language_sdk: Ngôn ngữ SDK ("icekyc_vi", "icekyc_en")
   ///   - is_show_logo: Bật/tắt hiển thị LOGO thương hiệu ("true"/"false")
   /// Create configuration for face verification only
-  static EkycConfig faceVerification({
+  static ICEkycConfig faceVerification({
     String accessToken = '',
     String tokenId = '',
     String tokenKey = '',
@@ -246,7 +246,7 @@ class EkycPresets {
     VersionSdk versionSdk = VersionSdk.proOval,
     String challengeCode = '',
   }) =>
-      EkycConfig(
+      ICEkycConfig(
         accessToken: accessToken,
         tokenId: tokenId,
         tokenKey: tokenKey,
@@ -283,7 +283,7 @@ class EkycPresets {
     ///   - language_sdk: Ngôn ngữ SDK ("icekyc_vi", "icekyc_en")
     ///   - is_show_logo: Bật/tắt hiển thị LOGO thương hiệu ("true"/"false")
   /// Create configuration for scan QR code flow
-  static EkycConfig scanQRCode({
+  static ICEkycConfig scanQRCode({
     required String accessToken,
     required String tokenId,
     required String tokenKey,
@@ -292,7 +292,7 @@ class EkycPresets {
     LanguageSdk languageSdk = LanguageSdk.icekyc_vi,
     bool isShowLogo = true,
   }) =>
-      EkycConfig(
+      ICEkycConfig(
         accessToken: accessToken,
         tokenId: tokenId,
         tokenKey: tokenKey,

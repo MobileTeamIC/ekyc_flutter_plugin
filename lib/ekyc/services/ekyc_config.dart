@@ -1,11 +1,11 @@
 import 'enum_ekyc.dart';
 
 /// Configuration class for eKYC SDK parameters
-class EkycConfig {
+class ICEkycConfig {
   // Required authentication parameters
-  final String accessToken;
-  final String tokenId;
-  final String tokenKey;
+  final String? accessToken;
+  final String? tokenId;
+  final String? tokenKey;
   final DocumentType? documentType;
   final ValidateDocumentType? validateDocumentType;
   final String? hashImageCompare;
@@ -31,10 +31,10 @@ class EkycConfig {
   final LanguageSdk? languageSdk;
   final String? hashFrontOcr;
 
-  const EkycConfig({
-    required this.accessToken,
-    required this.tokenId,
-    required this.tokenKey,
+  const ICEkycConfig({
+     this.accessToken,
+     this.tokenId,
+     this.tokenKey,
     this.hashImageCompare,
     this.documentType,
     this.validateDocumentType,
@@ -58,32 +58,12 @@ class EkycConfig {
 
   /// Convert to Map for method channel
   Map<String, dynamic> toMap() {
-    final Map<String, dynamic> map = {
-      'access_token': accessToken,
-      'token_id': tokenId,
-      'token_key': tokenKey,
-      'version_sdk': versionSdk?.name,
-      'document_type': documentType?.name,
-      'is_show_tutorial': isShowTutorial,
-      'is_enable_compare': isEnableCompare,
-      'is_check_masked_face': isCheckMaskedFace,
-      'check_liveness_face': checkLivenessFace?.name,
-      'is_check_liveness_card': isCheckLivenessCard,
-      'is_validate_postcode': isValidatePostcode,
-      'validate_document_type': validateDocumentType?.name,
-      'change_base_url': changeBaseUrl,
-      'is_enable_gotit': isEnableGotIt,
-      'language_sdk': languageSdk?.name,
-      'is_show_logo': isShowLogo,
-      'hash_front_ocr': hashFrontOcr,
-      'hash_image_compare': hashImageCompare,
-      'is_turn_off_call_service': isTurnOffCallService,
-      'is_enable_scan_qrcode': isEnableScanQRCode,
-      'is_show_qrcode_result': isShowQRCodeResult,
-      'challenge_code': challengeCode,
-    };
+    final Map<String, dynamic> map = { };
 
     // Add optional parameters only if they are not null
+    if (accessToken != null) map['access_token'] = accessToken!;
+    if (tokenId != null) map['token_id'] = tokenId!;
+    if (tokenKey != null) map['token_key'] = tokenKey!;
     if (documentType != null) map['document_type'] = documentType!.name;
     if (validateDocumentType != null) {
       map['validate_document_type'] = validateDocumentType!.name;

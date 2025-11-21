@@ -238,7 +238,7 @@ class _EkycScreenState extends State<EkycScreen> {
 
   Future<void> _handleFullEkyc() async {
     try {
-      final config = EkycPresets.fullEkyc(
+      final config = ICEkycPresets.fullEkyc(
         accessToken: _accessToken,
         tokenId: _tokenId,
         tokenKey: _tokenKey,
@@ -252,7 +252,7 @@ class _EkycScreenState extends State<EkycScreen> {
 
   Future<void> _handleOcrOnly() async {
     try {
-      final config = EkycPresets.ocrOnly(
+      final config = ICEkycPresets.ocrOnly(
         accessToken: _accessToken,
         tokenId: _tokenId,
         tokenKey: _tokenKey,
@@ -266,7 +266,7 @@ class _EkycScreenState extends State<EkycScreen> {
 
   Future<void> _handleOcrFront() async {
     try {
-      final config = EkycPresets.ocrFront(
+      final config = ICEkycPresets.ocrFront(
         accessToken: _accessToken,
         tokenId: _tokenId,
         tokenKey: _tokenKey,
@@ -280,7 +280,7 @@ class _EkycScreenState extends State<EkycScreen> {
 
   Future<void> _handleOcrBack() async {
     try {
-      final config = EkycPresets.ocrBack(
+      final config = ICEkycPresets.ocrBack(
         accessToken: _accessToken,
         tokenId: _tokenId,
         tokenKey: _tokenKey,
@@ -295,7 +295,7 @@ class _EkycScreenState extends State<EkycScreen> {
 
   Future<void> _handleFaceVerification() async {
     try {
-      final config = EkycPresets.faceVerification(
+      final config = ICEkycPresets.faceVerification(
         accessToken: _accessToken,
         tokenId: _tokenId,
         tokenKey: _tokenKey,
@@ -309,7 +309,7 @@ class _EkycScreenState extends State<EkycScreen> {
 
   Future<void> _handleScanQRCode() async {
     try {
-      final config = EkycPresets.scanQRCode(
+      final config = ICEkycPresets.scanQRCode(
         accessToken: _accessToken,
         tokenId: _tokenId,
         tokenKey: _tokenKey,

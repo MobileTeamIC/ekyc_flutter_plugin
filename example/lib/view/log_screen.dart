@@ -58,56 +58,56 @@ class LogScreen extends StatelessWidget {
                   context,
                   icon: Icons.face_retouching_natural,
                   title: 'Client Session Result',
-                  content: json[KeyResultConstants.clientSessionResult],
+                  content: json[ICEkycKeyResult.clientSessionResult],
                 ),
                 const SizedBox(height: 12),
                 _buildLogItem(
                   context,
                   icon: Icons.document_scanner,
                   title: 'Crop Param',
-                  content: json[KeyResultConstants.cropParam],
+                  content: json[ICEkycKeyResult.cropParam],
                 ),
                 const SizedBox(height: 12),
                 _buildLogItem(
                   context,
                   icon: Icons.image,
                   title: 'Path Image Front Full',
-                  content: json[KeyResultConstants.pathImageFrontFull],
+                  content: json[ICEkycKeyResult.pathImageFrontFull],
                 ),
                 const SizedBox(height: 12),
                 _buildLogItem(
                   context,
                   icon: Icons.credit_card,
                   title: 'Path Image Back Full',
-                  content: json[KeyResultConstants.pathImageBackFull],
+                  content: json[ICEkycKeyResult.pathImageBackFull],
                 ),
                 const SizedBox(height: 12),
                 _buildLogItem(
                   context,
                   icon: Icons.credit_card,
                   title: 'Path Image Face Full',
-                  content: json[KeyResultConstants.pathImageFaceFull],
+                  content: json[ICEkycKeyResult.pathImageFaceFull],
                 ),
                 const SizedBox(height: 12),
                 _buildLogItem(
                   context,
                   icon: Icons.compare_arrows,
                   title: 'Path Image Face Far Full',
-                  content: json[KeyResultConstants.pathImageFaceFarFull],
+                  content: json[ICEkycKeyResult.pathImageFaceFarFull],
                 ),
 
                 _buildLogItem(
                   context,
                   icon: Icons.compare_arrows,
                   title: 'Path Image Face Near Full',
-                  content: json[KeyResultConstants.pathImageFaceNearFull],
+                  content: json[ICEkycKeyResult.pathImageFaceNearFull],
                 ),
 
                 _buildLogItem(
                   context,
                   icon: Icons.compare_arrows,
                   title: 'Path Image Face Scan 3D',
-                  content: json[KeyResultConstants.pathImageFaceScan3D],
+                  content: json[ICEkycKeyResult.pathImageFaceScan3D],
                 ),
               
                 const SizedBox(height: 16),
@@ -119,14 +119,14 @@ class LogScreen extends StatelessWidget {
   Future<void> _copyAllToClipboard(BuildContext context) async {
     final buffer = StringBuffer();
     final keys = [
-      KeyResultConstants.clientSessionResult,
-      KeyResultConstants.cropParam,
-      KeyResultConstants.pathImageFrontFull,
-      KeyResultConstants.pathImageBackFull,
-      KeyResultConstants.pathImageFaceFull,
-      KeyResultConstants.pathImageFaceFarFull,
-      KeyResultConstants.pathImageFaceNearFull,
-      KeyResultConstants.pathImageFaceScan3D,
+      ICEkycKeyResult.clientSessionResult,
+      ICEkycKeyResult.cropParam,
+      ICEkycKeyResult.pathImageFrontFull,
+      ICEkycKeyResult.pathImageBackFull,
+      ICEkycKeyResult.pathImageFaceFull,
+      ICEkycKeyResult.pathImageFaceFarFull,
+      ICEkycKeyResult.pathImageFaceNearFull,
+      ICEkycKeyResult.pathImageFaceScan3D,
     ];
 
     for (final key in keys) {
