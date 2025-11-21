@@ -600,15 +600,21 @@ extension FlutterPluginIcEkycPlugin: ICEkycCameraDelegate {
         let pathImageBackFull = ICEKYCSavedData.shared().pathImageBackFull;
         let pathImageFaceFull = ICEKYCSavedData.shared().pathImageFaceFull;
         let pathImageFaceFarFull = ICEKYCSavedData.shared().pathImageFaceFarFull;
+        let pathImageFaceNearFull = ICEKYCSavedData.shared().pathImageFaceNearFull;
+        let dataScan3D = ICEKYCSavedData.shared().dataScan3D;
+        // save file
+        let pathFaceScan3D = saveDataToDocuments(data: dataScan3D, fileName: "3dScanPortrait", fileExtension: "txt")
         let clientSessionResult = ICEKYCSavedData.shared().clientSessionResult;
         
         let dict: [String: Any] = [
-            KeyResultConstantsNFC.cropParam: cropParam,
-            KeyResultConstantsNFC.pathImageFrontFull: pathImageFrontFull.path,
-            KeyResultConstantsNFC.pathImageBackFull: pathImageBackFull.path,
-            KeyResultConstantsNFC.pathImageFaceFull: pathImageFaceFull.path ,
-            KeyResultConstantsNFC.pathImageFaceFarFull: pathImageFaceFarFull.path,
-            KeyResultConstantsNFC.clientSessionResult: clientSessionResult
+            KeyResultConstantsEKYC.cropParam: cropParam,
+            KeyResultConstantsEKYC.pathImageFrontFull: pathImageFrontFull.path,
+            KeyResultConstantsEKYC.pathImageBackFull: pathImageBackFull.path,
+            KeyResultConstantsEKYC.pathImageFaceFull: pathImageFaceFull.path ,
+            KeyResultConstantsEKYC.pathImageFaceFarFull: pathImageFaceFarFull.path,
+            KeyResultConstantsEKYC.pathImageFaceNearFull: pathImageFaceNearFull.path,
+            KeyResultConstantsEKYC.pathImageFaceScan3D: pathFaceScan3D?.path ?? "",
+            KeyResultConstantsEKYC.clientSessionResult: clientSessionResult
         ]
         
         do {
@@ -632,5 +638,34 @@ extension FlutterPluginIcEkycPlugin: ICEkycCameraDelegate {
     }
     
 }
-
+extension FlutterPluginIcEkycPlugin {
+    /// Hàm lưu Data vào thư mục Documents
+    /// - Parameters:
+    ///   - data: Dữ liệu cần lưu (tương đương NSData)
+    ///   - fileName: Tên file (không bao gồm đuôi file)
+    ///   - fileExtension: Đuôi file (ví dụ: "obj", "stl", "dat")
+    /// - Returns: URL tới file đã lưu nếu thành công, trả về nil nếu thất bại
+    func saveDataToDocuments(data: Data, fileName: String, fileExtension: String) -> URL? {
+        
+        // 1. Lấy đường dẫn thư mục Documents
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            debugPrint("[eKYC IC] Không tìm thấy thư mục Documents")
+            return nil
+        }
+        
+        // 2. Tạo URL đầy đủ cho file
+        let fileURL = documentsDirectory.appendingPathComponent(fileName).appendingPathExtension(fileExtension)
+        
+        // 3. Ghi dữ liệu vào file
+        do {
+            // options: .atomic đảm bảo file được ghi toàn vẹn hoặc không ghi gì cả (tránh lỗi corrupt file)
+            try data.write(to: fileURL, options: .atomic)
+            debugPrint("[eKYC IC] Lưu file thành công")
+            return fileURL
+        } catch {
+            debugPrint("[eKYC IC] Lỗi khi lưu data 3D: \(error.localizedDescription)")
+            return nil
+        }
+    }
+}
 

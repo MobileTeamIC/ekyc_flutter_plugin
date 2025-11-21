@@ -242,7 +242,6 @@ class _EkycScreenState extends State<EkycScreen> {
         accessToken: _accessToken,
         tokenId: _tokenId,
         tokenKey: _tokenKey,
-        changeBaseUrl: _baseUrl,
         languageSdk: _languageSdk,
       );
       _navigateToLog(await ICEkyc.instance.startEkycFull(config));
@@ -300,7 +299,6 @@ class _EkycScreenState extends State<EkycScreen> {
         accessToken: _accessToken,
         tokenId: _tokenId,
         tokenKey: _tokenKey,
-        hashImageCompare: _hashFrontOcrController.text,
         languageSdk: _languageSdk,
       );
       _navigateToLog(await ICEkyc.instance.startEkycFace(config));

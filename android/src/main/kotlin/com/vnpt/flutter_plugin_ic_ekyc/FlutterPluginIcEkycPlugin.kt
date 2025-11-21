@@ -2,7 +2,7 @@ package com.vnpt.flutter_plugin_ic_ekyc
 
 import android.app.Activity
 import android.content.Intent
-import com.vnpt.flutter_plugin_ic_ekyc.JsonUtil
+import android.text.TextUtils
 import com.vnptit.idg.sdk.activity.VnptFrontActivity
 import com.vnptit.idg.sdk.activity.VnptIdentityActivity
 import com.vnptit.idg.sdk.activity.VnptOcrActivity
@@ -104,7 +104,7 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
             if (requestCode == EKYC_REQUEST_CODE) {
                 if (resultCode == Activity.RESULT_OK) {
                     if (data != null) {
-                        val cropParam = data.getStringExtra(KeyResultConstants.CROP_PARAM)
+                        val cropPram = data.getStringExtra(KeyResultConstants.CROP_PARAM)
                         val pathImageFrontFull =
                             data.getStringExtra(KeyResultConstants.PATH_IMAGE_FRONT_FULL)
                         val pathImageBackFull =
@@ -113,11 +113,15 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
                             data.getStringExtra(KeyResultConstants.PATH_IMAGE_FACE_FULL)
                         val pathImageFaceFarFull =
                             data.getStringExtra(KeyResultConstants.PATH_IMAGE_FACE_FAR_FULL)
+                        val pathImageFaceNearFull =
+                            data.getStringExtra(KeyResultConstants.PATH_IMAGE_FACE_NEAR_FULL)
+                        val pathImageScan3DFull =
+                            data.getStringExtra(KeyResultConstants.PATH_FACE_SCAN3D)
                         val clientSessionResult =
                             data.getStringExtra(KeyResultConstants.CLIENT_SESSION_RESULT)
                         result?.success(
                             JSONObject().apply {
-                                putSafe(KeyResultConstants.CROP_PARAM, cropParam)
+                                putSafe(KeyResultConstants.CROP_PARAM, cropPram)
                                 putSafe(
                                     KeyResultConstants.PATH_IMAGE_FRONT_FULL,
                                     pathImageFrontFull
@@ -127,6 +131,14 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
                                 putSafe(
                                     KeyResultConstants.PATH_IMAGE_FACE_FAR_FULL,
                                     pathImageFaceFarFull
+                                )
+                                putSafe(
+                                    KeyResultConstants.PATH_IMAGE_FACE_NEAR_FULL,
+                                    pathImageFaceNearFull
+                                )
+                                putSafe(
+                                    KeyResultConstants.PATH_FACE_SCAN3D,
+                                    pathImageScan3DFull
                                 )
                                 putSafe(
                                     KeyResultConstants.CLIENT_SESSION_RESULT,
@@ -432,10 +444,10 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
         )
 
         // is_show_tutorial
-        intent.putExtra(KeyIntentConstants.IS_SHOW_TUTORIAL, json.optBoolean("is_show_tutorial", true))
+        intent.putExtra(KeyIntentConstants.IS_SHOW_TUTORIAL, json.optBoolean("is_show_tutorial", false))
 
         // is_enable_gotit
-        intent.putExtra(KeyIntentConstants.IS_ENABLE_GOT_IT, json.optBoolean("is_enable_gotit", true))
+        intent.putExtra(KeyIntentConstants.IS_ENABLE_GOT_IT, json.optBoolean("is_enable_gotit", false))
 
         // is_show_logo
         intent.putExtra(KeyIntentConstants.IS_SHOW_LOGO, json.optBoolean("is_show_logo", true))
@@ -443,18 +455,12 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
 
         intent.putExtra(
             KeyIntentConstants.IS_ENABLE_SCAN_QRCODE,
-            json.optBoolean("is_enable_scan_qrcode", true)
+            json.optBoolean("is_enable_scan_qrcode", false)
         )
 
         intent.putExtra(
             KeyIntentConstants.IS_TURN_OFF_CALL_SERVICE,
             json.optBoolean("is_turn_off_call_service", true)
-        )
-
-        // Camera front for portrait
-        intent.putExtra(
-            KeyIntentConstants.CAMERA_POSITION_FOR_PORTRAIT,
-            SDKEnum.CameraTypeEnum.FRONT.value
         )
 
         return intent
@@ -513,7 +519,7 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
             "basic" -> SDKEnum.ValidateDocumentType.Basic.value
             "medium" -> SDKEnum.ValidateDocumentType.Medium.value
             "advance" -> SDKEnum.ValidateDocumentType.Advance.value
-            else -> SDKEnum.ValidateDocumentType.Basic.value
+            else -> SDKEnum.ValidateDocumentType.None.value
         }
     }
 

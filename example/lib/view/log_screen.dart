@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_plugin_ic_ekyc/flutter_plugin_ic_ekyc.dart';
 
 class LogScreen extends StatelessWidget {
   final Map<String, dynamic> json;
@@ -57,49 +58,56 @@ class LogScreen extends StatelessWidget {
                   context,
                   icon: Icons.face_retouching_natural,
                   title: 'Client Session Result',
-                  content: json['CLIENT_SESSION_RESULT'],
+                  content: json[KeyResultConstants.clientSessionResult],
                 ),
                 const SizedBox(height: 12),
                 _buildLogItem(
                   context,
                   icon: Icons.document_scanner,
                   title: 'Crop Param',
-                  content: json['CROP_PARAM'],
+                  content: json[KeyResultConstants.cropParam],
                 ),
                 const SizedBox(height: 12),
                 _buildLogItem(
                   context,
                   icon: Icons.image,
                   title: 'Path Image Front Full',
-                  content: json['PATH_IMAGE_FRONT_FULL'],
+                  content: json[KeyResultConstants.pathImageFrontFull],
                 ),
                 const SizedBox(height: 12),
                 _buildLogItem(
                   context,
                   icon: Icons.credit_card,
                   title: 'Path Image Back Full',
-                  content: json['PATH_IMAGE_BACK_FULL'],
+                  content: json[KeyResultConstants.pathImageBackFull],
                 ),
                 const SizedBox(height: 12),
                 _buildLogItem(
                   context,
                   icon: Icons.credit_card,
                   title: 'Path Image Face Full',
-                  content: json['PATH_IMAGE_FACE_FULL'],
+                  content: json[KeyResultConstants.pathImageFaceFull],
                 ),
                 const SizedBox(height: 12),
                 _buildLogItem(
                   context,
                   icon: Icons.compare_arrows,
                   title: 'Path Image Face Far Full',
-                  content: json['PATH_IMAGE_FACE_FAR_FULL'],
+                  content: json[KeyResultConstants.pathImageFaceFarFull],
                 ),
-                const SizedBox(height: 12),
+
                 _buildLogItem(
                   context,
-                  icon: Icons.face,
-                  title: 'Client Session Result',
-                  content: json['CLIENT_SESSION_RESULT'],
+                  icon: Icons.compare_arrows,
+                  title: 'Path Image Face Near Full',
+                  content: json[KeyResultConstants.pathImageFaceNearFull],
+                ),
+
+                _buildLogItem(
+                  context,
+                  icon: Icons.compare_arrows,
+                  title: 'Path Image Face Scan 3D',
+                  content: json[KeyResultConstants.pathImageFaceScan3D],
                 ),
               
                 const SizedBox(height: 16),
@@ -111,13 +119,14 @@ class LogScreen extends StatelessWidget {
   Future<void> _copyAllToClipboard(BuildContext context) async {
     final buffer = StringBuffer();
     final keys = [
-      'CLIENT_SESSION_RESULT',
-      'CROP_PARAM',
-      'PATH_IMAGE_FRONT_FULL',
-      'PATH_IMAGE_BACK_FULL',
-      'PATH_IMAGE_FACE_FULL',
-      'PATH_IMAGE_FACE_FAR_FULL',
-    
+      KeyResultConstants.clientSessionResult,
+      KeyResultConstants.cropParam,
+      KeyResultConstants.pathImageFrontFull,
+      KeyResultConstants.pathImageBackFull,
+      KeyResultConstants.pathImageFaceFull,
+      KeyResultConstants.pathImageFaceFarFull,
+      KeyResultConstants.pathImageFaceNearFull,
+      KeyResultConstants.pathImageFaceScan3D,
     ];
 
     for (final key in keys) {

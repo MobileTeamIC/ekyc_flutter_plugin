@@ -146,11 +146,13 @@ struct KeyArgumentMethod {
 }
 
 
-struct KeyResultConstantsNFC {
+struct KeyResultConstantsEKYC {
    static let cropParam = "CROP_PARAM"
    static let pathImageFrontFull = "PATH_IMAGE_FRONT_FULL"
    static let pathImageBackFull = "PATH_IMAGE_BACK_FULL"
    static let pathImageFaceFull = "PATH_IMAGE_FACE_FULL"
    static let pathImageFaceFarFull = "PATH_IMAGE_FACE_FAR_FULL"
+   static let pathImageFaceNearFull = "PATH_IMAGE_FACE_NEAR_FULL"
+   static let pathImageFaceScan3D = "PATH_FACE_SCAN3D"
    static let clientSessionResult = "CLIENT_SESSION_RESULT"
 }
