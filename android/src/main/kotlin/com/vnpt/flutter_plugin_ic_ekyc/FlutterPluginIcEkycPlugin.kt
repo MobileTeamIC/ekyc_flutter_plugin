@@ -36,7 +36,7 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
     // when the Flutter Engine is detached from the Activity
     private lateinit var channel: MethodChannel
     private var result: Result? = null
-    private var activity: Activity? = null
+    private var binding: ActivityPluginBinding? = null
 
     // Hàm helper để chuyển JSONObject thành Map
     fun toMap(jsonObject: JSONObject): Map<String, Any> {
@@ -77,7 +77,8 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
         call: MethodCall,
         result: Result
     ) {
-        val activity = this.activity ?: return
+        val binding = this.binding ?: return
+        val activity = binding.activity
         this.result = result
 
         val json = parseJsonFromArgs(call)
@@ -146,6 +147,7 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
                                 )
                             }.toString()
                         )
+                        result = null
                     }
                 }
             }
@@ -540,7 +542,7 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        activity = binding.activity
+        this.binding = binding
         binding.addActivityResultListener(resultActivityListener)
     }
 
@@ -551,7 +553,8 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
     }
 
     override fun onDetachedFromActivity() {
-        activity = null
+        binding?.removeActivityResultListener(resultActivityListener)
+        binding = null
     }
     // endregion
 }
