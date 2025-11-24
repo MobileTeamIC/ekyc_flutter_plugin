@@ -38,35 +38,6 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
     private var result: Result? = null
     private var binding: ActivityPluginBinding? = null
 
-    // Hàm helper để chuyển JSONObject thành Map
-    fun toMap(jsonObject: JSONObject): Map<String, Any> {
-        val map = HashMap<String, Any>()
-        val keys = jsonObject.keys()
-        while (keys.hasNext()) {
-            val key = keys.next()
-            val value = jsonObject.get(key)
-            when (value) {
-                is JSONObject -> map[key] = toMap(value)
-                is JSONArray -> map[key] = toList(value)
-                else -> map[key] = value
-            }
-        }
-        return map
-    }
-
-    // Hàm helper để chuyển JSONArray thành List
-    fun toList(jsonArray: JSONArray): List<Any> {
-        val list = ArrayList<Any>()
-        for (i in 0 until jsonArray.length()) {
-            val value = jsonArray.get(i)
-            when (value) {
-                is JSONObject -> list.add(toMap(value))
-                is JSONArray -> list.add(toList(value))
-                else -> list.add(value)
-            }
-        }
-        return list
-    }
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, CHANNEL)
@@ -137,26 +108,26 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
                                 data.getStringExtra(KeyResultConstants.CLIENT_SESSION_RESULT)
                             pendingResult.success(
                                 JSONObject().apply {
-                                    putSafe(KeyResultConstants.CROP_PARAM, cropPram)
-                                    putSafe(
+                                    putResult(KeyResultConstants.CROP_PARAM, cropPram)
+                                    putResult(
                                         KeyResultConstants.PATH_IMAGE_FRONT_FULL,
                                         pathImageFrontFull
                                     )
-                                    putSafe(KeyResultConstants.PATH_IMAGE_BACK_FULL, pathImageBackFull)
-                                    putSafe(KeyResultConstants.PATH_IMAGE_FACE_FULL, pathImageFaceFull)
-                                    putSafe(
+                                    putResult(KeyResultConstants.PATH_IMAGE_BACK_FULL, pathImageBackFull)
+                                    putResult(KeyResultConstants.PATH_IMAGE_FACE_FULL, pathImageFaceFull)
+                                    putResult(
                                         KeyResultConstants.PATH_IMAGE_FACE_FAR_FULL,
                                         pathImageFaceFarFull
                                     )
-                                    putSafe(
+                                    putResult(
                                         KeyResultConstants.PATH_IMAGE_FACE_NEAR_FULL,
                                         pathImageFaceNearFull
                                     )
-                                    putSafe(
+                                    putResult(
                                         KeyResultConstants.PATH_FACE_SCAN3D,
                                         pathImageScan3DFull
                                     )
-                                    putSafe(
+                                    putResult(
                                         KeyResultConstants.CLIENT_SESSION_RESULT,
                                         clientSessionResult
                                     )
@@ -487,12 +458,91 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
         return intent
     }
 
+    // Mark: - Helper
     private fun parseJsonFromArgs(call: MethodCall): JSONObject {
         return try {
             @Suppress("UNCHECKED_CAST")
             (JSONObject(call.arguments as Map<String, Any>))
         } catch (e: Exception) {
             JSONObject(mapOf<String, Any>())
+        }
+    }
+
+    // Hàm helper để chuyển JSONArray thành List
+    fun toList(jsonArray: JSONArray): List<Any> {
+        val list = ArrayList<Any>()
+        for (i in 0 until jsonArray.length()) {
+            val value = jsonArray.get(i)
+            when (value) {
+                is JSONObject -> list.add(toMap(value))
+                is JSONArray -> list.add(toList(value))
+                else -> list.add(value)
+            }
+        }
+        return list
+    }
+
+    fun toMap(jsonObject: JSONObject): Map<String, Any> {
+        val map = HashMap<String, Any>()
+        val keys = jsonObject.keys()
+        while (keys.hasNext()) {
+            val key = keys.next()
+            val value = jsonObject.get(key)
+            when (value) {
+                is JSONObject -> map[key] = toMap(value)
+                is JSONArray -> map[key] = toList(value)
+                else -> map[key] = value
+            }
+        }
+        return map
+    }
+
+    // Hàm helper để parse JSON string thành Map hoặc trả về null nếu không phải JSON hợp lệ
+    private fun parseJsonStringToMap(jsonString: String?): Any? {
+        if (jsonString.isNullOrBlank()) return null
+        return try {
+            val jsonObject = JSONObject(jsonString)
+            toMap(jsonObject)
+        } catch (e: Exception) {
+            // Nếu không phải JSONObject, thử parse như JSONArray
+            try {
+                val jsonArray = JSONArray(jsonString)
+                toList(jsonArray)
+            } catch (e2: Exception) {
+                // Nếu không phải JSON hợp lệ, trả về string gốc
+                jsonString
+            }
+        }
+    }
+
+    // Hàm helper để put postcode value vào JSONObject (parse JSON string thành Map nếu cần)
+    private fun JSONObject.putResult(key: String, jsonString: String?) {
+        if (jsonString.isNullOrBlank()) return
+
+        val parsedValue = parseJsonStringToMap(jsonString)
+        when (parsedValue) {
+            is Map<*, *> -> {
+                // Nếu là Map, chuyển thành JSONObject
+                try {
+                    put(key, JSONObject(parsedValue as Map<String, Any>))
+                } catch (e: Exception) {
+                    // Nếu chuyển đổi thất bại, giữ nguyên string
+                    putSafe(key, jsonString)
+                }
+            }
+            is List<*> -> {
+                // Nếu là List, chuyển thành JSONArray
+                try {
+                    put(key, JSONArray(parsedValue as List<Any>))
+                } catch (e: Exception) {
+                    // Nếu chuyển đổi thất bại, giữ nguyên string
+                    putSafe(key, jsonString)
+                }
+            }
+            else -> {
+                // Nếu không phải Map hoặc List, giữ nguyên string
+                putSafe(key, jsonString)
+            }
         }
     }
 
