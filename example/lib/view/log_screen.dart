@@ -1,16 +1,18 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_plugin_ic_ekyc/flutter_plugin_ic_ekyc.dart';
 
 class LogScreen extends StatelessWidget {
-  final EkycResultData resultData;
+  final Map<String, dynamic> json;
 
-  const LogScreen({super.key, required this.resultData});
+  const LogScreen({
+    super.key,
+    required this.json,
+  });
 
-  bool get shouldShowCopyAll => resultData.isNotEmpty;
+  bool get shouldShowCopyAll => json.isNotEmpty;
 
   @override
   Widget build(BuildContext context) {
@@ -31,125 +33,129 @@ class LogScreen extends StatelessWidget {
           ),
         ],
       ),
-      body:
-          resultData.isEmpty
-              ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.info_outline,
-                      size: 64,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.3),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Không có dữ liệu',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ],
-                ),
-              )
-              : ListView(
-                padding: const EdgeInsets.all(8),
+      body: json.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(json.toString()),
-                  _buildSafeImage(
-                    resultData.pathImageFrontFull,
+                  Icon(
+                    Icons.info_outline,
+                    size: 64,
+                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
                   ),
-                  _buildSafeImage(
-                    resultData.pathImageBackFull,
-                  ),
-                  _buildSafeImage(
-                    resultData.pathImageFaceFull,
-                  ),
-                  _buildSafeImage(
-                    resultData.pathImageFaceFarFull,
-                  ),
-                  _buildSafeImage(
-                    resultData.pathImageFaceNearFull,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildLogItem(
-                    context,
-                    icon: Icons.face_retouching_natural,
-                    title: 'Client Session Result',
-                    content: resultData.clientSessionResult,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildLogItem(
-                    context,
-                    icon: Icons.document_scanner,
-                    title: 'Crop Param',
-                    content: resultData.cropParam,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildLogItem(
-                    context,
-                    icon: Icons.image,
-                    title: 'Path Image Front Full',
-                    content: resultData.pathImageFrontFull,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildLogItem(
-                    context,
-                    icon: Icons.credit_card,
-                    title: 'Path Image Back Full',
-                    content: resultData.pathImageBackFull,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildLogItem(
-                    context,
-                    icon: Icons.credit_card,
-                    title: 'Path Image Face Full',
-                    content: resultData.pathImageFaceFull,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildLogItem(
-                    context,
-                    icon: Icons.compare_arrows,
-                    title: 'Path Image Face Far Full',
-                    content: resultData.pathImageFaceFarFull,
-                  ),
-
-                  _buildLogItem(
-                    context,
-                    icon: Icons.compare_arrows,
-                    title: 'Path Image Face Near Full',
-                    content: resultData.pathImageFaceNearFull,
-                  ),
-
-                  _buildLogItem(
-                    context,
-                    icon: Icons.compare_arrows,
-                    title: 'Path Image Face Scan 3D',
-                    content: resultData.pathImageFaceScan3D,
-                  ),
-
                   const SizedBox(height: 16),
+                  Text(
+                    'Không có dữ liệu',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ],
               ),
-    );
-  }
+            )
+          : ListView(
+              padding: const EdgeInsets.all(8),
+              children: [
+                  _buildLogItem(
+                  context,
+                  icon: Icons.face_retouching_natural,
+                  title: 'Client Session Result',
+                  content: json[ICEkycKeyResult.clientSessionResult],
+                ),
+                const SizedBox(height: 12),
+                _buildLogItem(
+                  context,
+                  icon: Icons.document_scanner,
+                  title: 'Crop Param',
+                  content: json[ICEkycKeyResult.cropParam],
+                ),
+                const SizedBox(height: 12),
+                _buildLogItem(
+                  context,
+                  icon: Icons.image,
+                  title: 'Path Image Front Full',
+                  content: json[ICEkycKeyResult.pathImageFrontFull],
+                ),
+                const SizedBox(height: 12),
+                _buildLogItem(
+                  context,
+                  icon: Icons.credit_card,
+                  title: 'Path Image Back Full',
+                  content: json[ICEkycKeyResult.pathImageBackFull],
+                ),
+                const SizedBox(height: 12),
+                _buildLogItem(
+                  context,
+                  icon: Icons.credit_card,
+                  title: 'Path Image Face Full',
+                  content: json[ICEkycKeyResult.pathImageFaceFull],
+                ),
+                const SizedBox(height: 12),
+                _buildLogItem(
+                  context,
+                  icon: Icons.compare_arrows,
+                  title: 'Path Image Face Far Full',
+                  content: json[ICEkycKeyResult.pathImageFaceFarFull],
+                ),
 
-  Widget _buildSafeImage(String? path) {
-    if (path == null || path.isEmpty) {
-      return const SizedBox.shrink();
-    }
+                _buildLogItem(
+                  context,
+                  icon: Icons.compare_arrows,
+                  title: 'Path Image Face Near Full',
+                  content: json[ICEkycKeyResult.pathImageFaceNearFull],
+                ),
 
-    return Image.file(
-      File(path),
-      errorBuilder: (context, error, stackTrace) {
-        return const SizedBox.shrink();
-      },
+                _buildLogItem(
+                  context,
+                  icon: Icons.compare_arrows,
+                  title: 'Path Image Face Scan 3D',
+                  content: json[ICEkycKeyResult.pathImageFaceScan3D],
+                ),
+              
+                const SizedBox(height: 16),
+              ],
+            ),
     );
   }
 
   Future<void> _copyAllToClipboard(BuildContext context) async {
-    if (resultData.isNotEmpty) {
-      await Clipboard.setData(ClipboardData(text: resultData.toString()));
+    final buffer = StringBuffer();
+    final keys = [
+      ICEkycKeyResult.clientSessionResult,
+      ICEkycKeyResult.cropParam,
+      ICEkycKeyResult.pathImageFrontFull,
+      ICEkycKeyResult.pathImageBackFull,
+      ICEkycKeyResult.pathImageFaceFull,
+      ICEkycKeyResult.pathImageFaceFarFull,
+      ICEkycKeyResult.pathImageFaceNearFull,
+      ICEkycKeyResult.pathImageFaceScan3D,
+    ];
+
+    for (final key in keys) {
+      final content = json[key];
+      if (content != null && content.toString().trim().isNotEmpty) {
+        buffer.writeln('$key:');
+        buffer.writeln(content);
+        buffer.writeln('\n---\n');
+      }
+    }
+
+    if (buffer.isNotEmpty) {
+      await Clipboard.setData(ClipboardData(text: buffer.toString()));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.check_circle, color: Colors.white),
+                SizedBox(width: 8),
+                Text('Đã sao chép tất cả'),
+              ],
+            ),
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+        );
+      }
     }
   }
 
@@ -169,9 +175,7 @@ class LogScreen extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.primary,
             behavior: SnackBarBehavior.floating,
             duration: const Duration(seconds: 1),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
         );
       }
@@ -231,21 +235,14 @@ class LogScreen extends StatelessWidget {
                 ),
                 if (isJson && parsedJson?['logID'] != null)
                   TextButton.icon(
-                    onPressed:
-                        () => _copyToClipboard(
-                          context,
-                          parsedJson!['logID']?.toString(),
-                        ),
+                    onPressed: () => _copyToClipboard(context, parsedJson!['logID']?.toString()),
                     icon: const Icon(Icons.copy, size: 16, color: Colors.white),
                     label: const Text(
                       'LogID',
                       style: TextStyle(color: Colors.white, fontSize: 12),
                     ),
                     style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
@@ -258,10 +255,7 @@ class LogScreen extends StatelessWidget {
                     style: TextStyle(color: Colors.white, fontSize: 12),
                   ),
                   style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     minimumSize: Size.zero,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),

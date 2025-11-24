@@ -64,17 +64,17 @@ public class FlutterPluginIcEkycPlugin: NSObject, FlutterPlugin {
         
         switch call.method {
         case "startEkycFull":
-            self.startEkycFull(controller, args: args)
+            self.startEkyc(controller, flowType: full, args: args)
         case "startEkycOcr":
-            self.startEkycOcr(controller, args: args)
+            self.startEkyc(controller, flowType: ocr, args: args)
         case "startEkycOcrFront":
-            self.startEkycOcrFront(controller, args: args)
+            self.startEkyc(controller, flowType: ocrFront, args: args)
         case "startEkycOcrBack":
-            self.startEkycOcrBack(controller, args: args)
+            self.startEkyc(controller, flowType: ocrBack, args: args)
         case "startEkycFace":
-            self.startEkycFace(controller, args: args)
+            self.startEkyc(controller, flowType: face, args: args)
         case "startEkycScanQRCode":
-            self.startEkycScanQRCode(controller, args: args)
+            self.startEkyc(controller, flowType: scanQR, args: args)
         default:
             let errorResponse: [String: Any] = [
                 "status": EKYCStatus.failed,
@@ -87,434 +87,27 @@ public class FlutterPluginIcEkycPlugin: NSObject, FlutterPlugin {
         }
     }
     
-    //MARK: - Full
-    /// Luồng đầy đủ: OCR + Face Verification
-    ///
-    /// Thực hiện eKYC đầy đủ các bước: chụp giấy tờ và chụp ảnh chân dung
-    ///
-    /// - Parameters:
-    ///   - controller: Root view controller để present eKYC SDK
-    ///   - info: Dictionary chứa các thông số cấu hình eKYC
-    ///
-    /// - Required Parameters (info):
-    ///   - access_token: Mã truy cập từ eKYC admin dashboard
-    ///   - token_id: Token ID từ eKYC admin dashboard
-    ///   - token_key: Token key từ eKYC admin dashboard
-    ///
-    /// - Optional Parameters (info):
-    ///   - flow_type: Loại luồng thực hiện ("full", "none", "scanqr", "ocrfront", "ocrback", "ocr", "face")
-    ///   - version_sdk: Phiên bản SDK cho chụp ảnh chân dung ("normal", "prooval")
-    ///   - document_type: Loại giấy tờ ("identitycard", "idcardchipbased", "passport", "driverlicense", "militaryidcard")
-    ///   - is_show_tutorial: Hiển thị màn hình hướng dẫn ("true"/"false")
-    ///   - is_enable_compare: Bật/tắt chức năng so sánh ảnh chân dung ("true"/"false")
-    ///   - is_check_masked_face: Bật/tắt chức năng kiểm tra che mặt ("true"/"false")
-    ///   - check_liveness_face: Chức năng kiểm tra ảnh chân dung chụp trực tiếp ("nonecheckface", "ibeta", "standard")
-    ///   - is_check_liveness_card: Bật/tắt chức năng kiểm tra ảnh giấy tờ chụp trực tiếp ("true"/"false")
-    ///   - is_validate_postcode: Bật/tắt chức năng kiểm tra mã bưu điện ("true"/"false")
-    ///   - validate_document_type: Chế độ kiểm tra ảnh giấy tờ ("none", "basic", "medium", "advance")
-    ///   - change_base_url: Đường dẫn API tùy chỉnh
-    ///   - is_enable_gotit: Bật/tắt nút "Bỏ qua hướng dẫn" ("true"/"false")
-    ///   - language_sdk: Ngôn ngữ SDK ("icekyc_vi", "icekyc_en")
-    ///   - is_show_logo: Bật/tắt hiển thị LOGO thương hiệu ("true"/"false")
-    func startEkycFull(_ controller: UIViewController, args: [String: Any]) {
-        let ICEkycCamera = ICEkycCameraRouter.createModule() as! ICEkycCameraViewController
+    func startEkyc(_ controller: UIViewController, flowType: FlowType,  args: [String: Any]) {
+        let ekycVC = ICEkycCameraRouter.createModule() as! ICEkycCameraViewController
+   
+        ekycVC.cameraDelegate = self
         
-        let accessToken = (args[KeyArgumentMethod.accessToken] as? String) ?? ""
-        let tokenId = (args[KeyArgumentMethod.tokenId] as? String) ?? ""
-        let tokenKey = (args[KeyArgumentMethod.tokenKey] as? String) ?? ""
-        let versionSdk = (args[KeyArgumentMethod.versionSdk] as? String) ?? ""
-        let documentType = (args[KeyArgumentMethod.documentType] as? String) ?? ""
-        let isShowTutorial = (args[KeyArgumentMethod.isShowTutorial] as? Bool) ?? false
-        let isEnableCompare = (args[KeyArgumentMethod.isEnableCompare] as? Bool) ?? false
-        let isCheckMaskedFace = (args[KeyArgumentMethod.isCheckMaskedFace] as? Bool) ?? false
-        let checkLivenessFace = (args[KeyArgumentMethod.checkLivenessFace] as? String) ?? ""
-        let isCheckLivenessCard = (args[KeyArgumentMethod.isCheckLivenessCard] as? Bool) ?? false
-        let isValidatePostcode = (args[KeyArgumentMethod.isValidatePostcode] as? Bool) ?? false
-        let validateDocumentType = (args[KeyArgumentMethod.validateDocumentType] as? String) ?? ""
-        let changeBaseUrl = (args[KeyArgumentMethod.changeBaseUrl] as? String) ?? ""
-        let isEnableGotIt = (args[KeyArgumentMethod.isEnableGotIt] as? Bool) ?? false
-        let languageSdk = (args[KeyArgumentMethod.languageSdk] as? String) ?? ""
-        let isShowLogo = (args[KeyArgumentMethod.isShowLogo] as? Bool) ?? false
-        let challengeCode = (args[KeyArgumentMethod.challengeCode] as? String) ?? ""
-        let isEnableScanQRCode = (args[KeyArgumentMethod.isEnableScanQRCode] as? Bool) ?? false
-        let isTurnOffCallService = (args[KeyArgumentMethod.isTurnOffCallService] as? Bool) ?? true
+        ekycVC.flowType = flowType
         
-        ICEkycCamera.cameraDelegate = self
-        ICEkycCamera.flowType = full
-        ICEkycCamera.accessToken = accessToken
-        ICEkycCamera.tokenId = tokenId
-        ICEkycCamera.tokenKey = tokenKey
-        ICEkycCamera.versionSdk = convertToVersionSdk(versionSdk)
-        ICEkycCamera.documentType = convertToDocumentType(documentType)
-        ICEkycCamera.isShowTutorial = isShowTutorial
-        ICEkycCamera.isEnableCompare = isEnableCompare
-        ICEkycCamera.isCheckMaskedFace = isCheckMaskedFace
-        ICEkycCamera.checkLivenessFace = convertToLivenessFaceMode(checkLivenessFace)
-        ICEkycCamera.isCheckLivenessCard = isCheckLivenessCard
-        ICEkycCamera.isValidatePostcode = isValidatePostcode
-        ICEkycCamera.validateDocumentType = convertToValidateDocumentType(validateDocumentType)
-        ICEkycCamera.changeBaseUrl = changeBaseUrl
-        ICEkycCamera.isEnableGotIt = isEnableGotIt
-        ICEkycCamera.languageSdk = convertLanguageSdk(languageSdk)
-        ICEkycCamera.isShowLogo = isShowLogo
-        ICEkycCamera.isTurnOffCallService = isTurnOffCallService
-        ICEkycCamera.challengeCode = challengeCode
-        ICEkycCamera.cameraPositionForPortrait = PositionFront
-        ICEkycCamera.isEnableScanQRCode = isEnableScanQRCode
+        configureGeneral(for: ekycVC, with: args)
+        configureDocumentOptions(for: ekycVC, args: args)
+        configureFaceOptions(for: ekycVC, args: args)
+        configureVideoOptions(for: ekycVC, args: args)
+        configureEnvironmentOptions(for: ekycVC, args: args)
+        configureAnimationOptions(for: ekycVC, args: args)
+        configureUICommonOptions(for: ekycVC, args: args)
         
         DispatchQueue.main.async {
-            ICEkycCamera.modalTransitionStyle = .coverVertical
-            ICEkycCamera.modalPresentationStyle = .fullScreen
-            controller.present(ICEkycCamera, animated: true)
+            ekycVC.modalTransitionStyle = .coverVertical
+            ekycVC.modalPresentationStyle = .fullScreen
+            controller.present(ekycVC, animated: true)
         }
     }
-    
-    //MARK: - OCR
-    /// Luồng chỉ thực hiện đọc giấy tờ: OCR
-    ///
-    /// Thực hiện OCR giấy tờ (cả mặt trước và mặt sau)
-    ///
-    /// - Parameters:
-    ///   - controller: Root view controller để present eKYC SDK
-    ///   - info: Dictionary chứa các thông số cấu hình eKYC
-    ///
-    /// - Required Parameters (info):
-    ///   - access_token: Mã truy cập từ eKYC admin dashboard
-    ///   - token_id: Token ID từ eKYC admin dashboard
-    ///   - token_key: Token key từ eKYC admin dashboard
-    ///
-    /// - Optional Parameters (info):
-    ///   - flow_type: Loại luồng thực hiện ("ocr", "none", "scanqr", "ocrfront", "ocrback", "full", "face")
-    ///   - document_type: Loại giấy tờ ("identitycard", "idcardchipbased", "passport", "driverlicense", "militaryidcard")
-    ///   - is_show_tutorial: Hiển thị màn hình hướng dẫn ("true"/"false")
-    ///   - is_check_liveness_card: Bật/tắt chức năng kiểm tra ảnh giấy tờ chụp trực tiếp ("true"/"false")
-    ///   - validate_document_type: Chế độ kiểm tra ảnh giấy tờ ("none", "basic", "medium", "advance")
-    ///   - is_validate_postcode: Bật/tắt chức năng kiểm tra mã bưu điện ("true"/"false")
-    ///   - change_base_url: Đường dẫn API tùy chỉnh
-    ///   - is_enable_gotit: Bật/tắt nút "Bỏ qua hướng dẫn" ("true"/"false")
-    ///   - language_sdk: Ngôn ngữ SDK ("icekyc_vi", "icekyc_en")
-    ///   - is_show_logo: Bật/tắt hiển thị LOGO thương hiệu ("true"/"false")
-    func startEkycOcr(_ controller: UIViewController, args: [String: Any]) {
-        let ICEkycCamera = ICEkycCameraRouter.createModule() as! ICEkycCameraViewController
-        
-        let accessToken = (args[KeyArgumentMethod.accessToken] as? String) ?? ""
-        let tokenId = (args[KeyArgumentMethod.tokenId] as? String) ?? ""
-        let tokenKey = (args[KeyArgumentMethod.tokenKey] as? String) ?? ""
-        let documentType = (args[KeyArgumentMethod.documentType] as? String) ?? ""
-        let isShowTutorial = (args[KeyArgumentMethod.isShowTutorial] as? Bool) ?? false
-        let isCheckLivenessCard = (args[KeyArgumentMethod.isCheckLivenessCard] as? Bool) ?? false
-        let validateDocumentType = (args[KeyArgumentMethod.validateDocumentType] as? String) ?? ""
-        let changeBaseUrl = (args[KeyArgumentMethod.changeBaseUrl] as? String) ?? ""
-        let isEnableGotIt = (args[KeyArgumentMethod.isEnableGotIt] as? Bool) ?? false
-        let languageSdk = (args[KeyArgumentMethod.languageSdk] as? String) ?? ""
-        let isShowLogo = (args[KeyArgumentMethod.isShowLogo] as? Bool) ?? false
-        let isValidatePostcode = (args[KeyArgumentMethod.isValidatePostcode] as? Bool) ?? false
-        let isTurnOffCallService = (args[KeyArgumentMethod.isTurnOffCallService] as? Bool) ?? true
-        let challengeCode = (args[KeyArgumentMethod.challengeCode] as? String) ?? ""
-        let isEnableScanQRCode = (args[KeyArgumentMethod.isEnableScanQRCode] as? Bool) ?? false
-        ICEkycCamera.cameraDelegate = self
-        
-        ICEkycCamera.accessToken = accessToken
-        ICEkycCamera.tokenId = tokenId
-        ICEkycCamera.tokenKey = tokenKey
-        ICEkycCamera.documentType = convertToDocumentType(documentType)
-        ICEkycCamera.flowType = ocr
-        ICEkycCamera.isShowTutorial = isShowTutorial
-        ICEkycCamera.isValidatePostcode = isValidatePostcode
-        ICEkycCamera.isCheckLivenessCard = isCheckLivenessCard
-        ICEkycCamera.validateDocumentType = convertToValidateDocumentType(validateDocumentType)
-        ICEkycCamera.changeBaseUrl = changeBaseUrl
-        ICEkycCamera.isEnableGotIt = isEnableGotIt
-        ICEkycCamera.languageSdk = convertLanguageSdk(languageSdk)
-        ICEkycCamera.isShowLogo = isShowLogo
-        
-        ICEkycCamera.challengeCode = challengeCode
-        ICEkycCamera.challengeCode = challengeCode
-        ICEkycCamera.cameraPositionForPortrait = PositionFront
-        ICEkycCamera.isEnableScanQRCode = isEnableScanQRCode
-        ICEkycCamera.isTurnOffCallService = isTurnOffCallService
-        
-        DispatchQueue.main.async {
-            ICEkycCamera.modalTransitionStyle = .coverVertical
-            ICEkycCamera.modalPresentationStyle = .fullScreen
-            controller.present(ICEkycCamera, animated: true)
-        }
-        
-    }
-    
-    //MARK: - OCR FONT
-    /// Luồng chỉ thực hiện đọc giấy tờ chỉ mặt trước: OCR Front
-    ///
-    /// Thực hiện OCR giấy tờ một bước: chụp mặt trước giấy tờ
-    ///
-    /// - Parameters:
-    ///   - controller: Root view controller để present eKYC SDK
-    ///   - info: Dictionary chứa các thông số cấu hình eKYC
-    ///
-    /// - Required Parameters (info):
-    ///   - access_token: Mã truy cập từ eKYC admin dashboard
-    ///   - token_id: Token ID từ eKYC admin dashboard
-    ///   - token_key: Token key từ eKYC admin dashboard
-    ///
-    /// - Optional Parameters (info):
-    ///   - flow_type: Loại luồng thực hiện ("ocrfront", "none", "scanqr", "ocrback", "ocr", "full", "face")
-    ///   - document_type: Loại giấy tờ ("identitycard", "idcardchipbased", "passport", "driverlicense", "militaryidcard")
-    ///   - is_show_tutorial: Hiển thị màn hình hướng dẫn ("true"/"false")
-    ///   - is_check_liveness_card: Bật/tắt chức năng kiểm tra ảnh giấy tờ chụp trực tiếp ("true"/"false")
-    ///   - validate_document_type: Chế độ kiểm tra ảnh giấy tờ ("none", "basic", "medium", "advance")
-    ///   - change_base_url: Đường dẫn API tùy chỉnh
-    ///   - is_enable_gotit: Bật/tắt nút "Bỏ qua hướng dẫn" ("true"/"false")
-    ///   - language_sdk: Ngôn ngữ SDK ("icekyc_vi", "icekyc_en")
-    ///   - is_show_logo: Bật/tắt hiển thị LOGO thương hiệu ("true"/"false")
-    func startEkycOcrFront(_ controller: UIViewController, args: [String: Any]) {
-        let ICEkycCamera = ICEkycCameraRouter.createModule() as! ICEkycCameraViewController
-        
-        let accessToken = (args[KeyArgumentMethod.accessToken] as? String) ?? ""
-        let tokenId = (args[KeyArgumentMethod.tokenId] as? String) ?? ""
-        let tokenKey = (args[KeyArgumentMethod.tokenKey] as? String) ?? ""
-        let documentType = (args[KeyArgumentMethod.documentType] as? String) ?? ""
-        let isShowTutorial = (args[KeyArgumentMethod.isShowTutorial] as? Bool) ?? false
-        let isCheckLivenessCard = (args[KeyArgumentMethod.isCheckLivenessCard] as? Bool) ?? false
-        let validateDocumentType = (args[KeyArgumentMethod.validateDocumentType] as? String) ?? ""
-        let changeBaseUrl = (args[KeyArgumentMethod.changeBaseUrl] as? String) ?? ""
-        let isEnableGotIt = (args[KeyArgumentMethod.isEnableGotIt] as? Bool) ?? false
-        let languageSdk = (args[KeyArgumentMethod.languageSdk] as? String) ?? ""
-        let isShowLogo = (args[KeyArgumentMethod.isShowLogo] as? Bool) ?? false
-        let isValidatePostcode = (args[KeyArgumentMethod.isValidatePostcode] as? Bool) ?? false
-        let isTurnOffCallService = (args[KeyArgumentMethod.isTurnOffCallService] as? Bool) ?? true
-        let challengeCode = (args[KeyArgumentMethod.challengeCode] as? String) ?? ""
-        let isEnableScanQRCode = (args[KeyArgumentMethod.isEnableScanQRCode] as? Bool) ?? false
-        
-        ICEkycCamera.cameraDelegate = self
-        ICEkycCamera.flowType = ocrFront
-        
-        ICEkycCamera.accessToken = accessToken
-        ICEkycCamera.tokenId = tokenId
-        ICEkycCamera.tokenKey = tokenKey
-        ICEkycCamera.documentType = convertToDocumentType(documentType)
-        ICEkycCamera.isShowTutorial = isShowTutorial
-        ICEkycCamera.isValidatePostcode = isValidatePostcode
-        ICEkycCamera.isCheckLivenessCard = isCheckLivenessCard
-        ICEkycCamera.validateDocumentType = convertToValidateDocumentType(validateDocumentType)
-        ICEkycCamera.changeBaseUrl = changeBaseUrl
-        ICEkycCamera.isEnableGotIt = isEnableGotIt
-        ICEkycCamera.languageSdk = convertLanguageSdk(languageSdk)
-        ICEkycCamera.isShowLogo = isShowLogo
-        
-        ICEkycCamera.challengeCode = challengeCode
-        ICEkycCamera.cameraPositionForPortrait = PositionFront
-        ICEkycCamera.isEnableScanQRCode = isEnableScanQRCode
-        ICEkycCamera.isTurnOffCallService = isTurnOffCallService
-        
-        DispatchQueue.main.async {
-            ICEkycCamera.modalTransitionStyle = .coverVertical
-            ICEkycCamera.modalPresentationStyle = .fullScreen
-            controller.present(ICEkycCamera, animated: true)
-        }
-        
-    }
-    
-    //MARK: - ORC BACK
-    /// Luồng chỉ thực hiện đọc giấy tờ chỉ mặt sau: OCR Back
-    ///
-    /// Thực hiện OCR giấy tờ một bước: chụp mặt sau giấy tờ
-    ///
-    /// - Parameters:
-    ///   - controller: Root view controller để present eKYC SDK
-    ///   - info: Dictionary chứa các thông số cấu hình eKYC
-    ///
-    ///   - access_token: Mã truy cập từ eKYC admin dashboard
-    ///   - token_id: Token ID từ eKYC admin dashboard
-    ///   - token_key: Token key từ eKYC admin dashboard
-    ///
-    ///   - flow_type: Loại luồng thực hiện ("ocrback", "none", "scanqr", "ocrfront", "ocr", "full", "face")
-    ///   - document_type: Loại giấy tờ ("identitycard", "idcardchipbased", "passport", "driverlicense", "militaryidcard")
-    ///   - is_show_tutorial: Hiển thị màn hình hướng dẫn ("true"/"false")
-    ///   - hash_front_ocr: Hash của kết quả OCR mặt trước (bắt buộc cho ocrback)
-    ///   - is_check_liveness_card: Bật/tắt chức năng kiểm tra ảnh giấy tờ chụp trực tiếp ("true"/"false")
-    ///   - validate_document_type: Chế độ kiểm tra ảnh giấy tờ ("none", "basic", "medium", "advance")
-    ///   - is_validate_postcode: Bật/tắt chức năng kiểm tra mã bưu điện ("true"/"false")
-    ///   - change_base_url: Đường dẫn API tùy chỉnh
-    ///   - is_enable_gotit: Bật/tắt nút "Bỏ qua hướng dẫn" ("true"/"false")
-    ///   - language_sdk: Ngôn ngữ SDK ("icekyc_vi", "icekyc_en")
-    ///   - is_show_logo: Bật/tắt hiển thị LOGO thương hiệu ("true"/"false")
-    func startEkycOcrBack(_ controller: UIViewController, args: [String: Any]) {
-        let ICEkycCamera = ICEkycCameraRouter.createModule() as! ICEkycCameraViewController
-        
-        let accessToken = (args[KeyArgumentMethod.accessToken] as? String) ?? ""
-        let tokenId = (args[KeyArgumentMethod.tokenId] as? String) ?? ""
-        let tokenKey = (args[KeyArgumentMethod.tokenKey] as? String) ?? ""
-        let documentType = (args[KeyArgumentMethod.documentType] as? String) ?? ""
-        let isShowTutorial = (args[KeyArgumentMethod.isShowTutorial] as? Bool) ?? false
-        let hashFrontOCR = (args[KeyArgumentMethod.hashFrontOCR] as? String) ?? ""
-        let isCheckLivenessCard = (args[KeyArgumentMethod.isCheckLivenessCard] as? Bool) ?? false
-        let validateDocumentType = (args[KeyArgumentMethod.validateDocumentType] as? String) ?? ""
-        let changeBaseUrl = (args[KeyArgumentMethod.changeBaseUrl] as? String) ?? ""
-        let isEnableGotIt = (args[KeyArgumentMethod.isEnableGotIt] as? Bool) ?? false
-        let languageSdk = (args[KeyArgumentMethod.languageSdk] as? String) ?? ""
-        let isShowLogo = (args[KeyArgumentMethod.isShowLogo] as? Bool) ?? false
-        let isValidatePostcode = (args[KeyArgumentMethod.isValidatePostcode] as? Bool) ?? false
-        let isTurnOffCallService = (args[KeyArgumentMethod.isTurnOffCallService] as? Bool) ?? true
-        let challengeCode = (args[KeyArgumentMethod.challengeCode] as? String) ?? ""
-        let isEnableScanQRCode = (args[KeyArgumentMethod.isEnableScanQRCode] as? Bool) ?? false
-        ICEkycCamera.cameraDelegate = self
-        ICEkycCamera.flowType = ocrBack
-        
-        ICEkycCamera.accessToken = accessToken
-        ICEkycCamera.tokenId = tokenId
-        ICEkycCamera.tokenKey = tokenKey
-        ICEkycCamera.documentType = convertToDocumentType(documentType)
-        ICEkycCamera.isShowTutorial = isShowTutorial
-        ICEkycCamera.hashFrontOCR = hashFrontOCR
-        ICEkycCamera.isValidatePostcode = isValidatePostcode
-        ICEkycCamera.isCheckLivenessCard = isCheckLivenessCard
-        ICEkycCamera.validateDocumentType = convertToValidateDocumentType(validateDocumentType)
-        ICEkycCamera.changeBaseUrl = changeBaseUrl
-        ICEkycCamera.isEnableGotIt = isEnableGotIt
-        ICEkycCamera.isShowLogo = isShowLogo
-        
-        ICEkycCamera.challengeCode = challengeCode
-        ICEkycCamera.challengeCode = challengeCode
-        ICEkycCamera.languageSdk = convertLanguageSdk(languageSdk)
-        ICEkycCamera.cameraPositionForPortrait = PositionFront
-        ICEkycCamera.isEnableScanQRCode = isEnableScanQRCode
-        ICEkycCamera.isTurnOffCallService = isTurnOffCallService
-        
-        DispatchQueue.main.async {
-            ICEkycCamera.modalTransitionStyle = .coverVertical
-            ICEkycCamera.modalPresentationStyle = .fullScreen
-            controller.present(ICEkycCamera, animated: true)
-        }
-        
-    }
-    
-    //MARK: - FACE
-    /// Luồng chỉ thực hiện xác thực khuôn mặt: Face Verification
-    ///
-    /// Thực hiện chụp ảnh Oval xa gần và thực hiện các chức năng tùy vào cấu hình: Compare, Verify, Mask, Liveness Face
-    ///
-    /// - Parameters:
-    ///   - controller: Root view controller để present eKYC SDK
-    ///   - info: Dictionary chứa các thông số cấu hình eKYC
-    ///
-    ///   - access_token: Mã truy cập từ eKYC admin dashboard
-    ///   - token_id: Token ID từ eKYC admin dashboard
-    ///   - token_key: Token key từ eKYC admin dashboard
-    ///
-    ///   - flow_type: Loại luồng thực hiện ("face", "none", "scanqr", "ocrfront", "ocrback", "ocr", "full")
-    ///   - version_sdk: Phiên bản SDK cho chụp ảnh chân dung ("normal", "prooval")
-    ///   - is_show_tutorial: Hiển thị màn hình hướng dẫn ("true"/"false")
-    ///   - is_enable_compare: Bật/tắt chức năng so sánh ảnh chân dung ("true"/"false")
-    ///   - is_check_masked_face: Bật/tắt chức năng kiểm tra che mặt ("true"/"false")
-    ///   - check_liveness_face: Chức năng kiểm tra ảnh chân dung chụp trực tiếp ("nonecheckface", "ibeta", "standard")
-    ///   - change_base_url: Đường dẫn API tùy chỉnh
-    ///   - is_enable_gotit: Bật/tắt nút "Bỏ qua hướng dẫn" ("true"/"false")
-    ///   - language_sdk: Ngôn ngữ SDK ("icekyc_vi", "icekyc_en")
-    ///   - is_show_logo: Bật/tắt hiển thị LOGO thương hiệu ("true"/"false")
-    func startEkycFace(_ controller: UIViewController, args: [String: Any]) {
-        let ICEkycCamera = ICEkycCameraRouter.createModule() as! ICEkycCameraViewController
-        
-        let accessToken = (args[KeyArgumentMethod.accessToken] as? String) ?? ""
-        let tokenId = (args[KeyArgumentMethod.tokenId] as? String) ?? ""
-        let tokenKey = (args[KeyArgumentMethod.tokenKey] as? String) ?? ""
-        let versionSdk = (args[KeyArgumentMethod.versionSdk] as? String) ?? ""
-        let hashImageCompare = (args[KeyArgumentMethod.hashImageCompare] as? String) ?? ""
-        let isShowTutorial = (args[KeyArgumentMethod.isShowTutorial] as? Bool) ?? false
-        let isEnableCompare = (args[KeyArgumentMethod.isEnableCompare] as? Bool) ?? false
-        let isCheckMaskedFace = (args[KeyArgumentMethod.isCheckMaskedFace] as? Bool) ?? false
-        let checkLivenessFace = (args[KeyArgumentMethod.checkLivenessFace] as? String) ?? ""
-        let changeBaseUrl = (args[KeyArgumentMethod.changeBaseUrl] as? String) ?? ""
-        let isEnableGotIt = (args[KeyArgumentMethod.isEnableGotIt] as? Bool) ?? false
-        let languageSdk = (args[KeyArgumentMethod.languageSdk] as? String) ?? ""
-        let isShowLogo = (args[KeyArgumentMethod.isShowLogo] as? Bool) ?? false
-        let isTurnOffCallService = (args[KeyArgumentMethod.isTurnOffCallService] as? Bool) ?? false
-        let challengeCode = (args[KeyArgumentMethod.challengeCode] as? String) ?? ""
-        let isEnableScanQRCode = (args[KeyArgumentMethod.isEnableScanQRCode] as? Bool) ?? false
-        ICEkycCamera.cameraDelegate = self
-        ICEkycCamera.flowType = face
-        
-        
-        ICEkycCamera.accessToken = accessToken
-        ICEkycCamera.tokenId = tokenId
-        ICEkycCamera.tokenKey = tokenKey
-        ICEkycCamera.versionSdk = convertToVersionSdk(versionSdk)
-        ICEkycCamera.isShowTutorial = isShowTutorial
-        ICEkycCamera.isEnableCompare = isEnableCompare
-        ICEkycCamera.hashImageCompare = hashImageCompare
-        ICEkycCamera.isCheckMaskedFace = isCheckMaskedFace
-        ICEkycCamera.checkLivenessFace = convertToLivenessFaceMode(checkLivenessFace)
-        ICEkycCamera.changeBaseUrl = changeBaseUrl
-        ICEkycCamera.isEnableGotIt = isEnableGotIt
-        ICEkycCamera.isShowLogo = isShowLogo
-        
-        ICEkycCamera.challengeCode = challengeCode
-        ICEkycCamera.challengeCode = challengeCode
-        ICEkycCamera.languageSdk = convertLanguageSdk(languageSdk)
-        ICEkycCamera.cameraPositionForPortrait = PositionFront
-        ICEkycCamera.isEnableScanQRCode = isEnableScanQRCode
-        ICEkycCamera.isTurnOffCallService = isTurnOffCallService
-        DispatchQueue.main.async {
-            ICEkycCamera.modalTransitionStyle = .coverVertical
-            ICEkycCamera.modalPresentationStyle = .fullScreen
-            controller.present(ICEkycCamera, animated: true)
-        }
-    }
-    
-    //MARK: - SCANQR CODE
-    /// Luồng chỉ thực hiện quét QR code: Scan QR Code
-    ///
-    /// Thực hiện quét QR code để lấy thông tin từ QR code
-    ///
-    /// - Parameters:
-    ///   - controller: Root view controller để present eKYC SDK
-    ///   - info: Dictionary chứa các thông số cấu hình eKYC
-    ///
-    ///   - access_token: Mã truy cập từ eKYC admin dashboard
-    ///   - token_id: Token ID từ eKYC admin dashboard
-    ///   - token_key: Token key từ eKYC admin dashboard
-    ///
-    ///   - is_show_tutorial: Hiển thị màn hình hướng dẫn ("true"/"false")
-    ///   - is_enable_gotit: Bật/tắt nút "Bỏ qua hướng dẫn" ("true"/"false")
-    ///   - language_sdk: Ngôn ngữ SDK ("icekyc_vi", "icekyc_en")
-    ///   - is_show_logo: Bật/tắt hiển thị LOGO thương hiệu ("true"/"false")
-    func startEkycScanQRCode(_ controller: UIViewController, args: [String: Any]) {
-        let ICEkycCamera = ICEkycCameraRouter.createModule() as! ICEkycCameraViewController
-        
-        let accessToken = (args[KeyArgumentMethod.accessToken] as? String) ?? ""
-        let tokenId = (args[KeyArgumentMethod.tokenId] as? String) ?? ""
-        let tokenKey = (args[KeyArgumentMethod.tokenKey] as? String) ?? ""
-        let isShowTutorial = (args[KeyArgumentMethod.isShowTutorial] as? Bool) ?? false
-        let isEnableGotIt = (args[KeyArgumentMethod.isEnableGotIt] as? Bool) ?? false
-        let languageSdk = (args[KeyArgumentMethod.languageSdk] as? String) ?? ""
-        let isShowLogo = (args[KeyArgumentMethod.isShowLogo] as? Bool) ?? false
-        let isTurnOffCallService = (args[KeyArgumentMethod.isTurnOffCallService] as? Bool) ?? true
-        let challengeCode = (args[KeyArgumentMethod.challengeCode] as? String) ?? ""
-        let isEnableScanQRCode = (args[KeyArgumentMethod.isEnableScanQRCode] as? Bool) ?? false
-        
-        ICEkycCamera.cameraDelegate = self
-        ICEkycCamera.flowType = scanQR
-        
-        ICEkycCamera.accessToken = accessToken
-        ICEkycCamera.tokenId = tokenId
-        ICEkycCamera.tokenKey = tokenKey
-        ICEkycCamera.isShowTutorial = isShowTutorial
-        ICEkycCamera.isEnableGotIt = isEnableGotIt
-        ICEkycCamera.isShowLogo = isShowLogo
-        
-        ICEkycCamera.challengeCode = challengeCode
-        ICEkycCamera.challengeCode = challengeCode
-        ICEkycCamera.languageSdk = convertLanguageSdk(languageSdk)
-        ICEkycCamera.cameraPositionForPortrait = PositionFront
-        ICEkycCamera.isEnableScanQRCode = isEnableScanQRCode
-        ICEkycCamera.isTurnOffCallService = isTurnOffCallService
-        
-        DispatchQueue.main.async {
-            ICEkycCamera.modalTransitionStyle = .coverVertical
-            ICEkycCamera.modalPresentationStyle = .fullScreen
-            controller.present(ICEkycCamera, animated: true)
-        }
-    }
-    
     
     private func convertToDictionary(text: String) -> [String: Any]? {
         if let data = text.data(using: .utf8) {
@@ -527,7 +120,24 @@ public class FlutterPluginIcEkycPlugin: NSObject, FlutterPlugin {
         return nil
     }
     
-    // MARK: - Conversion Methods
+    
+    
+    
+}
+
+// MARK: - Conversion Methods
+extension FlutterPluginIcEkycPlugin {
+    /// Convert string to modeButtonHeaderBar enum
+    private func convertToModeButtonHeaderBar(_ value: String?) -> ModeButtonHeaderBar {
+        switch value {
+        case "leftButton":
+            return LeftButton
+        case "rightButton":
+            return RightButton
+        default:
+            return LeftButton
+        }
+    }
     
     /// Convert string to VersionSdk enum
     private func convertToVersionSdk(_ value: String?) -> VersionSdk {
@@ -610,68 +220,157 @@ public class FlutterPluginIcEkycPlugin: NSObject, FlutterPlugin {
         }
     }
     
-   
-    
 }
 
-extension FlutterPluginIcEkycPlugin: ICEkycCameraDelegate {
-    
-    // MARK: - Success Delegate
-    public func icEkycGetResult() {
-        UIDevice.current.isProximityMonitoringEnabled = false
-        
-        // 1. Lấy dữ liệu từ SDK
-        let sharedData = ICEKYCSavedData.shared()
-        
-        // Kiểm tra an toàn (Optional Unwrapping) nếu cần, ở đây giả định SDK luôn trả về
-        let cropParam = sharedData.cropParam
-        let pathImageFrontFull = sharedData.pathImageFrontFull
-        let pathImageBackFull = sharedData.pathImageBackFull
-        let pathImageFaceFull = sharedData.pathImageFaceFull
-        let pathImageFaceFarFull = sharedData.pathImageFaceFarFull
-        let pathImageFaceNearFull = sharedData.pathImageFaceNearFull
-        let dataScan3D = sharedData.dataScan3D
-        let clientSessionResult = sharedData.clientSessionResult
-        
-        // Save file 3D Scan
-        let pathFaceScan3D = saveDataToDocuments(data: dataScan3D, fileName: "3dScanPortrait", fileExtension: "txt")
-        
-        // 2. Tạo Dictionary chứa DATA thực tế
-        let dataDict: [String: Any] = [
-            KeyResultConstantsEKYC.cropParam: cropParam,
-            KeyResultConstantsEKYC.pathImageFrontFull: pathImageFrontFull.path,
-            KeyResultConstantsEKYC.pathImageBackFull: pathImageBackFull.path ,
-            KeyResultConstantsEKYC.pathImageFaceFull: pathImageFaceFull.path ,
-            KeyResultConstantsEKYC.pathImageFaceFarFull: pathImageFaceFarFull.path ,
-            KeyResultConstantsEKYC.pathImageFaceNearFull: pathImageFaceNearFull.path ,
-            KeyResultConstantsEKYC.pathImageFaceScan3D: dataScan3D.isEmpty ? "" : (pathFaceScan3D?.path ?? ""),
-            KeyResultConstantsEKYC.clientSessionResult: clientSessionResult
-        ]
-        
-        // 3. Đóng gói theo cấu trúc chuẩn: Status + Data
-        let finalResponse: [String: Any] = [
-            "status": EKYCStatus.success,
-            "data": dataDict
-        ]
-        
-        // 4. Serialize sang JSON String và trả về Flutter
-        sendJsonResult(finalResponse)
-    }
-    
-    public func icEkycCameraClosed(with type: ScreenType) {
-        UIDevice.current.isProximityMonitoringEnabled = false
-        
-        let finalResponse: [String: Any] = [
-            "status": EKYCStatus.cancelled,
-            "data": ["lastScreen": convertScreenTypeToString(type)]
-        ]
-        
-        sendJsonResult(finalResponse)
-    }
-}
 
 //MARK: Helper
 extension FlutterPluginIcEkycPlugin {
+    
+    private func configureGeneral(for ekycVC: ICEkycCameraViewController, with args: [String: Any]) {
+        
+        ekycVC.accessToken = args[KeyArgumentMethod.accessToken] as? String ?? ""
+        ekycVC.tokenId = args[KeyArgumentMethod.tokenId] as? String ?? ""
+        ekycVC.tokenKey = args[KeyArgumentMethod.tokenKey] as? String ?? ""
+        ekycVC.changeBaseUrl = args[KeyArgumentMethod.changeBaseUrl] as? String ?? ""
+        ekycVC.versionSdk = convertToVersionSdk(args[KeyArgumentMethod.versionSdk] as? String ?? "")
+        //       ekycVC.flowType = convertToFlowType(args[KeyArgumentMethod.flowType] as? String ?? "")
+        ekycVC.languageSdk = convertLanguageSdk(args[KeyArgumentMethod.languageSdk] as? String ?? "")
+        ekycVC.challengeCode = args[KeyArgumentMethod.challengeCode] as? String ?? ""
+        ekycVC.inputClientSession = args[KeyArgumentMethod.inputClientSession] as? String ?? ""
+        ekycVC.isShowTutorial = args[KeyArgumentMethod.isShowTutorial] as? Bool ?? false
+        ekycVC.isDisableTutorial = args[KeyArgumentMethod.isDisableTutorial] as? Bool ?? false
+        ekycVC.isShowRequiredPermissionDecree = args[KeyArgumentMethod.isShowRequiredPermissionDecree] as? Bool ?? false
+        ekycVC.isEnableTutorialCardAdvance = args[KeyArgumentMethod.isEnableTutorialCardAdvance] as? Bool ?? false
+        //       ekycVC.modelHelpFace =
+        ekycVC.isEnableGotIt = args[KeyArgumentMethod.isEnableGotIt] as? Bool ?? false
+        ekycVC.isShowSwitchCamera = args[KeyArgumentMethod.isShowSwitchCamera] as? Bool ?? false
+        ekycVC.cameraPositionForPortrait = PositionFront
+        ekycVC.zoomCamera = args[KeyArgumentMethod.zoomCamera] as? Double ?? 0.0
+        ekycVC.expiresTime = args[KeyArgumentMethod.expiresTime] as? Int ?? 0
+        ekycVC.isTurnOffCallService = args[KeyArgumentMethod.isTurnOffCallService] as? Bool ?? false
+        ekycVC.compressionQualityImage = args[KeyArgumentMethod.compressionQualityImage] as? Double ?? 0.0
+        ekycVC.isEnableAutoBrightness = args[KeyArgumentMethod.isEnableAutoBrightness] as? Bool ?? false
+        ekycVC.screenBrightness = args[KeyArgumentMethod.screenBrightness] as? Double ?? 0.0
+        ekycVC.isSkipPreview = args[KeyArgumentMethod.isSkipPreview] as? Bool ?? false
+        ekycVC.isEnableEncrypt = args[KeyArgumentMethod.isEnableEncrypt] as? Bool ?? false
+        ekycVC.encryptPublicKey = args[KeyArgumentMethod.encryptPublicKey] as? String ?? ""
+        //       ekycVC.modeUploadFile = args[KeyArgumentMethod.modeUploadFile] as? String ?? ""
+    }
+    
+    private func configureDocumentOptions(for ekycVC: ICEkycCameraViewController, args: [String: Any]) {
+        ekycVC.documentType = convertToDocumentType(args[KeyArgumentMethod.documentType] as? String ?? "")
+        ekycVC.hashFrontOCR = args[KeyArgumentMethod.hashFrontOCR] as? String ?? ""
+        ekycVC.isCheckLivenessCard = args[KeyArgumentMethod.isCheckLivenessCard] as? Bool ?? false
+        ekycVC.isEnableScanQRCode = args[KeyArgumentMethod.isEnableScanQRCode] as? Bool ?? false
+        ekycVC.isShowQRCodeResult = args[KeyArgumentMethod.isShowQRCodeResult] as? Bool ?? false
+        ekycVC.validateDocumentType = convertToValidateDocumentType(args[KeyArgumentMethod.validateDocumentType] as? String ?? "")
+        ekycVC.isValidatePostcode = args[KeyArgumentMethod.isValidatePostcode] as? Bool ?? false
+        //        ekycVC.listBlockedDocument = args[KeyArgumentMethod.listBlockedDocument] as? [String] ?? []
+        //        ekycVC.modeVersionOCR = convertToModeVersionOCR(args[KeyArgumentMethod.modeVersionOCR] as? String ?? "")
+    }
+    
+    //   CÁC THUỘC TÍNH VỀ KHUÔN MẶT
+    private func configureFaceOptions(for ekycVC: ICEkycCameraViewController, args: [String: Any]) {
+//        ekycVC.modeVersionFaceOval = convertToModeVersionFaceOval(args[KeyArgumentMethod.modeVersionFaceOval] as? String ?? "")
+        ekycVC.isEnableCompare = args[KeyArgumentMethod.isEnableCompare] as? Bool ?? false
+        ekycVC.compareType = args[KeyArgumentMethod.compareType] as? Int ?? 0
+        ekycVC.hashImageCompare = args[KeyArgumentMethod.hashImageCompare] as? String ?? ""
+        ekycVC.isCompareGeneral = args[KeyArgumentMethod.isCompareGeneral] as? Bool ?? false
+//        ekycVC.thresLevel = args[KeyArgumentMethod.thresLevel] as? Double ?? 0.0
+        ekycVC.checkLivenessFace = convertToLivenessFaceMode(args[KeyArgumentMethod.checkLivenessFace] as? String ?? "")
+        ekycVC.isCheckMaskedFace = args[KeyArgumentMethod.isCheckMaskedFace] as? Bool ?? false
+    }
+    
+    // CÁC THUỘC TÍNH VỀ VIỆC QUAY VIDEO LẠI QUÁ TRÌNH THỰC HIỆN OCR VÀ FACE TRONG SDK
+    private func configureVideoOptions(for ekycVC: ICEkycCameraViewController, args: [String: Any]) {
+        ekycVC.isRecordVideoFace = args[KeyArgumentMethod.isRecordVideoFace] as? Bool ?? false
+        ekycVC.isRecordVideoDocument = args[KeyArgumentMethod.isRecordVideoDocument] as? Bool ?? false
+    }
+    
+    // CÁC THUỘC TÍNH VỀ MÔI TRƯỜNG PHÁT TRIỂN - URL TÁC VỤ TRONG SDK
+    private func configureEnvironmentOptions(for ekycVC: ICEkycCameraViewController, args: [String: Any]) {
+        ekycVC.isEnableWaterMark = args[KeyArgumentMethod.isEnableWaterMark] as? Bool ?? false
+        ekycVC.isAddMetadataImage = args[KeyArgumentMethod.isAddMetadataImage] as? Bool ?? false
+        ekycVC.timeoutCallApi = args[KeyArgumentMethod.timeoutCallApi] as? Int ?? 0
+        ekycVC.changeBaseUrl = args[KeyArgumentMethod.changeBaseUrl] as? String ?? ""
+        ekycVC.urlUploadImage = args[KeyArgumentMethod.urlUploadImage] as? String ?? ""
+        ekycVC.urlOcr = args[KeyArgumentMethod.urlOcr] as? String ?? ""
+        ekycVC.urlOcrFront = args[KeyArgumentMethod.urlOcrFront] as? String ?? ""
+        ekycVC.urlCompare = args[KeyArgumentMethod.urlCompare] as? String ?? ""
+        ekycVC.urlCompareGeneral = args[KeyArgumentMethod.urlCompareGeneral] as? String ?? ""
+        ekycVC.urlVerifyFace = args[KeyArgumentMethod.urlVerifyFace] as? String ?? ""
+        ekycVC.urlAddFace = args[KeyArgumentMethod.urlAddFace] as? String ?? ""
+        ekycVC.urlAddCardId = args[KeyArgumentMethod.urlAddCardId] as? String ?? ""
+        ekycVC.urlLivenessCard = args[KeyArgumentMethod.urlLivenessCard] as? String ?? ""
+        ekycVC.urlCheckMaskedFace = args[KeyArgumentMethod.urlCheckMaskedFace] as? String ?? ""
+        ekycVC.urlSearchFace = args[KeyArgumentMethod.urlSearchFace] as? String ?? ""
+        ekycVC.urlLivenessFace = args[KeyArgumentMethod.urlLivenessFace] as? String ?? ""
+        ekycVC.urlLivenessFace3D = args[KeyArgumentMethod.urlLivenessFace3D] as? String ?? ""
+        ekycVC.urlLogSdk = args[KeyArgumentMethod.urlLogSdk] as? String ?? ""
+//        ekycVC.headersRequest = args[KeyArgumentMethod.headersRequest] as? [String: Any] ?? [:]
+        ekycVC.transactionId = args[KeyArgumentMethod.transactionId] as? String ?? ""
+        ekycVC.transactionPartnerId = args[KeyArgumentMethod.transactionPartnerId] as? String ?? ""
+        ekycVC.transactionPartnerIdOCR = args[KeyArgumentMethod.transactionPartnerIdOCR] as? String ?? ""
+        ekycVC.transactionPartnerIdOCRFront = args[KeyArgumentMethod.transactionPartnerIdOCRFront] as? String ?? ""
+        ekycVC.transactionPartnerIdLivenessFront = args[KeyArgumentMethod.transactionPartnerIdLivenessFront] as? String ?? ""
+        ekycVC.transactionPartnerIdLivenessBack = args[KeyArgumentMethod.transactionPartnerIdLivenessBack] as? String ?? ""
+        ekycVC.transactionPartnerIdCompareFace = args[KeyArgumentMethod.transactionPartnerIdCompareFace] as? String ?? ""
+        ekycVC.transactionPartnerIdLivenessFace = args[KeyArgumentMethod.transactionPartnerIdLivenessFace] as? String ?? ""
+        ekycVC.transactionPartnerIdMaskedFace = args[KeyArgumentMethod.transactionPartnerIdMaskedFace] as? String ?? ""
+    }
+    
+    // CÁC THUỘC TÍNH VỀ CHỈNH SỬA TÊN CÁC TỆP TIN HIỆU ỨNG - VIDEO HƯỚNG DẪN
+    private func configureAnimationOptions(for ekycVC: ICEkycCameraViewController, args: [String: Any]) {
+        ekycVC.nameOvalAnimation = args[KeyArgumentMethod.nameOvalAnimation] as? String ?? ""
+        ekycVC.nameFeedbackAnimation = args[KeyArgumentMethod.nameFeedbackAnimation] as? String ?? ""
+        ekycVC.nameScanQRCodeAnimation = args[KeyArgumentMethod.nameScanQRCodeAnimation] as? String ?? ""
+        ekycVC.namePreviewDocumentAnimation = args[KeyArgumentMethod.namePreviewDocumentAnimation] as? String ?? ""
+        ekycVC.nameLoadSuccessAnimation = args[KeyArgumentMethod.nameLoadSuccessAnimation] as? String ?? ""
+    }
+    
+    // CÁC THUỘC TÍNH VỀ MÀU SẮC GIAO DIỆN TRONG SDK
+    private func configureUICommonOptions(for ekycVC: ICEkycCameraViewController, args: [String: Any]) {
+        ekycVC.modeButtonHeaderBar = convertToModeButtonHeaderBar(args[KeyArgumentMethod.modeButtonHeaderBar] as? String ?? "")
+//        ekycVC.contentColorHeaderBar = args[KeyArgumentMethod.contentColorHeaderBar] as? String ?? ""
+//        ekycVC.backgroundColorHeaderBar = args[KeyArgumentMethod.backgroundColorHeaderBar] as? String ?? ""
+//        ekycVC.textColorContentMain = args[KeyArgumentMethod.textColorContentMain] as? String ?? ""
+//        ekycVC.titleColorMain = args[KeyArgumentMethod.titleColorMain] as? String ?? ""
+//        ekycVC.backgroundColorMainScreen = args[KeyArgumentMethod.backgroundColorMainScreen] as? String ?? ""
+//        ekycVC.backgroundColorLine = args[KeyArgumentMethod.backgroundColorLine] as? String ?? ""
+//        ekycVC.backgroundColorActiveButton = args[KeyArgumentMethod.backgroundColorActiveButton] as? String ?? ""
+//        ekycVC.backgroundColorDeactiveButton = args[KeyArgumentMethod.backgroundColorDeactiveButton] as? String ?? ""
+//        ekycVC.titleColorActiveButton = args[KeyArgumentMethod.titleColorActiveButton] as? String ?? ""
+//        ekycVC.titleColorDeactiveButton = args[KeyArgumentMethod.titleColorDeactiveButton] as? String ?? ""
+//        ekycVC.backgroundColorCaptureDocumentScreen = args[KeyArgumentMethod.backgroundColorCaptureDocumentScreen] as? String ?? ""
+//        ekycVC.backgroundColorCaptureFaceScreen = args[KeyArgumentMethod.backgroundColorCaptureFaceScreen] as? String ?? ""
+//        ekycVC.effectColorNoticeFace = args[KeyArgumentMethod.effectColorNoticeFace] as? String ?? ""
+//        ekycVC.textColorNoticeFace = args[KeyArgumentMethod.textColorNoticeFace] as? String ?? ""
+//        ekycVC.effectColorNoticeInvalidFace = args[KeyArgumentMethod.effectColorNoticeInvalidFace] as? String ?? ""
+//        ekycVC.colorContentFaceEffect = args[KeyArgumentMethod.colorContentFaceEffect] as? String ?? ""
+//        ekycVC.effectColorNoticeValidDocument = args[KeyArgumentMethod.effectColorNoticeValidDocument] as? String ?? ""
+//        ekycVC.effectColorNoticeInvalidDocument = args[KeyArgumentMethod.effectColorNoticeInvalidDocument] as? String ?? ""
+//        ekycVC.textColorNoticeValidDocument = args[KeyArgumentMethod.textColorNoticeValidDocument] as? String ?? ""
+//        ekycVC.textColorNoticeInvalidDocument = args[KeyArgumentMethod.textColorNoticeInvalidDocument] as? String ?? ""
+//        ekycVC.tintColorButtonCapture = args[KeyArgumentMethod.tintColorButtonCapture] as? String ?? ""
+//        ekycVC.backgroundColorBorderCaptureFace = args[KeyArgumentMethod.backgroundColorBorderCaptureFace] as? String ?? ""
+        ekycVC.isShowLogo = args[KeyArgumentMethod.isShowLogo] as? Bool ?? false
+//        ekycVC.logo = args[KeyArgumentMethod.logo] as? String ?? ""
+//        ekycVC.logoFaceOval = args[KeyArgumentMethod.logoFaceOval] as? String ?? ""
+        ekycVC.widthLogo = args[KeyArgumentMethod.widthLogo] as? Double ?? 0.0
+        ekycVC.heightLogo = args[KeyArgumentMethod.heightLogo] as? Double ?? 0.0
+//        ekycVC.imageTutorialQRCode = args[KeyArgumentMethod.imageTutorialQRCode] as? String ?? ""
+//        ekycVC.imageTutorialFront = args[KeyArgumentMethod.imageTutorialFront] as? String ?? ""
+//        ekycVC.imageTutorialBack = args[KeyArgumentMethod.imageTutorialBack] as? String ?? ""
+//        ekycVC.imageTutorialBlur = args[KeyArgumentMethod.imageTutorialBlur] as? String ?? ""
+//        ekycVC.imageTutorialLostAngle = args[KeyArgumentMethod.imageTutorialLostAngle] as? String ?? ""
+//        ekycVC.imageTutorialGlare = args[KeyArgumentMethod.imageTutorialGlare] as? String ?? ""
+//        ekycVC.backgroundColorPopup = args[KeyArgumentMethod.backgroundColorPopup] as? String ?? ""
+//        ekycVC.textColorContentPopup = args[KeyArgumentMethod.textColorContentPopup] as? String ?? ""
+        ekycVC.isEnableCheckVirtualCamera = args[KeyArgumentMethod.isEnableCheckVirtualCamera] as? Bool ?? false
+        ekycVC.isEnableCheckSimulator = args[KeyArgumentMethod.isEnableCheckSimulator] as? Bool ?? false
+        ekycVC.isEnableCheckJailbroken = args[KeyArgumentMethod.isEnableCheckJailbroken] as? Bool ?? false
+        ekycVC.isAnimatedDismissed = args[KeyArgumentMethod.isAnimatedDismissed] as? Bool ?? false
+    }
     
     /// Convert ScreenType enum to string representation
     /// - Parameter type: ScreenType enum value (Objective-C enum with NSUInteger rawValue)
@@ -775,5 +474,110 @@ extension FlutterPluginIcEkycPlugin {
             return nil
         }
     }
+}
+
+//MARK: eKYC delegate
+extension FlutterPluginIcEkycPlugin: ICEkycCameraDelegate {
+
+
+    
+    // // MARK: - Success Delegate
+    // public func icEkycGetResult() {
+    //     UIDevice.current.isProximityMonitoringEnabled = false
+        
+    //     // 1. Lấy dữ liệu từ SDK
+    //     let sharedData = ICEKYCSavedData.shared()
+        
+    //     // Kiểm tra an toàn (Optional Unwrapping) nếu cần, ở đây giả định SDK luôn trả về
+    //     let cropParam = sharedData.cropParam
+    //     let pathImageFrontFull = sharedData.pathImageFrontFull
+    //     let pathImageBackFull = sharedData.pathImageBackFull
+    //     let pathImageFaceFull = sharedData.pathImageFaceFull
+    //     let pathImageFaceFarFull = sharedData.pathImageFaceFarFull
+    //     let pathImageFaceNearFull = sharedData.pathImageFaceNearFull
+    //     let dataScan3D = sharedData.dataScan3D
+    //     let clientSessionResult = sharedData.clientSessionResult
+        
+    //     // Save file 3D Scan
+    //     let pathFaceScan3D = saveDataToDocuments(data: dataScan3D, fileName: "3dScanPortrait", fileExtension: "txt")
+        
+    //     // 2. Tạo Dictionary chứa DATA thực tế
+    //     let dataDict: [String: Any] = [
+    //         KeyResultConstantsEKYC.cropParam: cropParam,
+    //         KeyResultConstantsEKYC.pathImageFrontFull: pathImageFrontFull.path,
+    //         KeyResultConstantsEKYC.pathImageBackFull: pathImageBackFull.path ,
+    //         KeyResultConstantsEKYC.pathImageFaceFull: pathImageFaceFull.path ,
+    //         KeyResultConstantsEKYC.pathImageFaceFarFull: pathImageFaceFarFull.path ,
+    //         KeyResultConstantsEKYC.pathImageFaceNearFull: pathImageFaceNearFull.path ,
+    //         KeyResultConstantsEKYC.pathImageFaceScan3D: dataScan3D.isEmpty ? "" : (pathFaceScan3D?.path ?? ""),
+    //         KeyResultConstantsEKYC.clientSessionResult: clientSessionResult
+    //     ]
+        
+    //     // 3. Đóng gói theo cấu trúc chuẩn: Status + Data
+    //     let finalResponse: [String: Any] = [
+    //         "status": EKYCStatus.success,
+    //         "data": dataDict
+    //     ]
+        
+    //     // 4. Serialize sang JSON String và trả về Flutter
+    //     sendJsonResult(finalResponse)
+    // }
+    
+    // public func icEkycCameraClosed(with type: ScreenType) {
+    //     UIDevice.current.isProximityMonitoringEnabled = false
+        
+    //     let finalResponse: [String: Any] = [
+    //         "status": EKYCStatus.cancelled,
+    //         "data": ["lastScreen": convertScreenTypeToString(type)]
+    //     ]
+        
+    //     sendJsonResult(finalResponse)
+    // }
+    
+    public func icEkycGetResult() {
+        UIDevice.current.isProximityMonitoringEnabled = false /// tắt cảm biến làm tối màn hình
+        let cropParam = ICEKYCSavedData.shared().cropParam;
+        let pathImageFrontFull = ICEKYCSavedData.shared().pathImageFrontFull;
+        let pathImageBackFull = ICEKYCSavedData.shared().pathImageBackFull;
+        let pathImageFaceFull = ICEKYCSavedData.shared().pathImageFaceFull;
+        let pathImageFaceFarFull = ICEKYCSavedData.shared().pathImageFaceFarFull;
+        let pathImageFaceNearFull = ICEKYCSavedData.shared().pathImageFaceNearFull;
+        let dataScan3D = ICEKYCSavedData.shared().dataScan3D;
+        // save file
+        let pathFaceScan3D = saveDataToDocuments(data: dataScan3D, fileName: "3dScanPortrait", fileExtension: "txt")
+        let clientSessionResult = ICEKYCSavedData.shared().clientSessionResult;
+        
+        let dict: [String: Any] = [
+            KeyResultConstantsEKYC.cropParam: cropParam,
+            KeyResultConstantsEKYC.pathImageFrontFull: pathImageFrontFull.path,
+            KeyResultConstantsEKYC.pathImageBackFull: pathImageBackFull.path,
+            KeyResultConstantsEKYC.pathImageFaceFull: pathImageFaceFull.path ,
+            KeyResultConstantsEKYC.pathImageFaceFarFull: pathImageFaceFarFull.path,
+            KeyResultConstantsEKYC.pathImageFaceNearFull: pathImageFaceNearFull.path,
+            KeyResultConstantsEKYC.pathImageFaceScan3D: dataScan3D.isEmpty ? "" : pathFaceScan3D?.path ?? "",
+            KeyResultConstantsEKYC.clientSessionResult: clientSessionResult
+        ]
+        
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: dict, options: .prettyPrinted)
+            let jsonString = String(data: jsonData, encoding: String.Encoding.utf8)
+            pendingResult?(jsonString)
+            pendingResult = nil
+            
+        } catch {
+            print(error.localizedDescription)
+            pendingResult?(FlutterError(code: "JSON_ERROR", message: error.localizedDescription, details: nil))
+            pendingResult = nil
+        }
+      
+    }
+    
+    public func icEkycCameraClosed(with type: ScreenType) {
+        UIDevice.current.isProximityMonitoringEnabled = false
+        pendingResult?(FlutterError(code: "CANCELLED", message: "User cancelled eKYC flow", details: nil))
+        pendingResult = nil
+    }
+    
+
 }
 

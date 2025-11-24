@@ -19,6 +19,8 @@ enum FlowType { full, ocr, ocrFront, ocrBack, face, scanQRCode, none }
 
 enum LanguageSdk { icekyc_vi, icekyc_en }
 
+enum ModeButtonHeaderBar { leftButton, rightButton }
+
 /// Last screen where user cancelled the eKYC operation
 /// Unified format based on iOS ScreenType enum
 enum EkycLastScreen {

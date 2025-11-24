@@ -83,50 +83,113 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
     }
-
+    // config for new Ekyc response
+    /*
+//    private val resultActivityListener = PluginRegistry.ActivityResultListener { requestCode, resultCode, data ->
+//        if (requestCode == EKYC_REQUEST_CODE) {
+//            val pendingResult = this.result
+//            this.result = null // Clear reference ngay lập tức để tránh leak
+//
+//            if (pendingResult != null) {
+//                val lastStep = data?.getStringExtra(KeyResultConstants.LAST_STEP)
+//                val finalResponse = JSONObject()
+//
+//                if (resultCode == Activity.RESULT_OK && data != null && lastStep == SDKEnum.LastStepEnum.Done.value) {
+//                    val dataJson = JSONObject().apply {
+//                        putResult(KeyResultConstants.CROP_PARAM, data.getStringExtra(KeyResultConstants.CROP_PARAM))
+//                        putResult(KeyResultConstants.PATH_IMAGE_FRONT_FULL, data.getStringExtra(KeyResultConstants.PATH_IMAGE_FRONT_FULL))
+//                        putResult(KeyResultConstants.PATH_IMAGE_BACK_FULL, data.getStringExtra(KeyResultConstants.PATH_IMAGE_BACK_FULL))
+//                        putResult(KeyResultConstants.PATH_IMAGE_FACE_FULL, data.getStringExtra(KeyResultConstants.PATH_IMAGE_FACE_FULL))
+//                        putResult(KeyResultConstants.PATH_IMAGE_FACE_FAR_FULL, data.getStringExtra(KeyResultConstants.PATH_IMAGE_FACE_FAR_FULL))
+//                        putResult(KeyResultConstants.PATH_IMAGE_FACE_NEAR_FULL, data.getStringExtra(KeyResultConstants.PATH_IMAGE_FACE_NEAR_FULL))
+//                        putResult(KeyResultConstants.PATH_FACE_SCAN3D, data.getStringExtra(KeyResultConstants.PATH_FACE_SCAN3D))
+//                        putResult(KeyResultConstants.CLIENT_SESSION_RESULT, data.getStringExtra(KeyResultConstants.CLIENT_SESSION_RESULT))
+//                    }
+//
+//                    try {
+//                        finalResponse.put("status", EKYCStatus.SUCCESS)
+//                        finalResponse.put("data", dataJson)
+//                    } catch (e: JSONException) {
+//                        e.printStackTrace()
+//                    }
+//                } else {
+//                    try {
+//                        var canceledJson = JSONObject()
+//                        canceledJson.put("lastScreen", lastStep)
+//                        finalResponse.put("status", EKYCStatus.CANCELLED)
+//                        finalResponse.put("data", canceledJson)
+//                    } catch (e: JSONException) {
+//                        pendingResult.error("JSON_ERROR", e.message, e.message)
+//                    }
+//                }
+//                pendingResult.success(finalResponse.toString())
+//            }
+//        }
+//        true
+//    }
+*/
     private val resultActivityListener = PluginRegistry.ActivityResultListener { requestCode, resultCode, data ->
         if (requestCode == EKYC_REQUEST_CODE) {
             val pendingResult = this.result
-            this.result = null // Clear reference ngay lập tức để tránh leak
+            this.result = null
 
             if (pendingResult != null) {
+
                 val lastStep = data?.getStringExtra(KeyResultConstants.LAST_STEP)
-                val finalResponse = JSONObject()
-
-                if (resultCode == Activity.RESULT_OK && data != null && lastStep == SDKEnum.LastStepEnum.Done.value) {
-                    val dataJson = JSONObject().apply {
-                        putResult(KeyResultConstants.CROP_PARAM, data.getStringExtra(KeyResultConstants.CROP_PARAM))
-                        putResult(KeyResultConstants.PATH_IMAGE_FRONT_FULL, data.getStringExtra(KeyResultConstants.PATH_IMAGE_FRONT_FULL))
-                        putResult(KeyResultConstants.PATH_IMAGE_BACK_FULL, data.getStringExtra(KeyResultConstants.PATH_IMAGE_BACK_FULL))
-                        putResult(KeyResultConstants.PATH_IMAGE_FACE_FULL, data.getStringExtra(KeyResultConstants.PATH_IMAGE_FACE_FULL))
-                        putResult(KeyResultConstants.PATH_IMAGE_FACE_FAR_FULL, data.getStringExtra(KeyResultConstants.PATH_IMAGE_FACE_FAR_FULL))
-                        putResult(KeyResultConstants.PATH_IMAGE_FACE_NEAR_FULL, data.getStringExtra(KeyResultConstants.PATH_IMAGE_FACE_NEAR_FULL))
-                        putResult(KeyResultConstants.PATH_FACE_SCAN3D, data.getStringExtra(KeyResultConstants.PATH_FACE_SCAN3D))
-                        putResult(KeyResultConstants.CLIENT_SESSION_RESULT, data.getStringExtra(KeyResultConstants.CLIENT_SESSION_RESULT))
-                    }
-
-                    try {
-                        finalResponse.put("status", EKYCStatus.SUCCESS)
-                        finalResponse.put("data", dataJson)
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
+                if (resultCode == Activity.RESULT_OK ) {
+                    if (data != null && lastStep == SDKEnum.LastStepEnum.Done.value) {
+                        val cropPram = data.getStringExtra(KeyResultConstants.CROP_PARAM)
+                        val pathImageFrontFull =
+                            data.getStringExtra(KeyResultConstants.PATH_IMAGE_FRONT_FULL)
+                        val pathImageBackFull =
+                            data.getStringExtra(KeyResultConstants.PATH_IMAGE_BACK_FULL)
+                        val pathImageFaceFull =
+                            data.getStringExtra(KeyResultConstants.PATH_IMAGE_FACE_FULL)
+                        val pathImageFaceFarFull =
+                            data.getStringExtra(KeyResultConstants.PATH_IMAGE_FACE_FAR_FULL)
+                        val pathImageFaceNearFull =
+                            data.getStringExtra(KeyResultConstants.PATH_IMAGE_FACE_NEAR_FULL)
+                        val pathImageScan3DFull =
+                            data.getStringExtra(KeyResultConstants.PATH_FACE_SCAN3D)
+                        val clientSessionResult =
+                            data.getStringExtra(KeyResultConstants.CLIENT_SESSION_RESULT)
+                        pendingResult.success(
+                            JSONObject().apply {
+                                putSafe(KeyResultConstants.CROP_PARAM, cropPram)
+                                putSafe(
+                                    KeyResultConstants.PATH_IMAGE_FRONT_FULL,
+                                    pathImageFrontFull
+                                )
+                                putSafe(KeyResultConstants.PATH_IMAGE_BACK_FULL, pathImageBackFull)
+                                putSafe(KeyResultConstants.PATH_IMAGE_FACE_FULL, pathImageFaceFull)
+                                putSafe(
+                                    KeyResultConstants.PATH_IMAGE_FACE_FAR_FULL,
+                                    pathImageFaceFarFull
+                                )
+                                putSafe(
+                                    KeyResultConstants.PATH_IMAGE_FACE_NEAR_FULL,
+                                    pathImageFaceNearFull
+                                )
+                                putSafe(
+                                    KeyResultConstants.PATH_FACE_SCAN3D,
+                                    pathImageScan3DFull
+                                )
+                                putSafe(
+                                    KeyResultConstants.CLIENT_SESSION_RESULT,
+                                    clientSessionResult
+                                )
+                            }.toString()
+                        )
+                    } else {
+                        pendingResult.error("CANCELLED", "User canceled the operation", null)
                     }
                 } else {
-                    try {
-                        var canceledJson = JSONObject()
-                        canceledJson.put("lastScreen", lastStep)
-                        finalResponse.put("status", EKYCStatus.CANCELLED)
-                        finalResponse.put("data", canceledJson)
-                    } catch (e: JSONException) {
-                        pendingResult.error("JSON_ERROR", e.message, e.message)
-                    }
+                    pendingResult.error("CANCELLED", "User canceled the operation", null)
                 }
-                pendingResult.success(finalResponse.toString())
             }
         }
         true
     }
-
     // Phương thức thực hiện eKYC luồng "Chụp ảnh giấy tờ"
     // Bước 1 - chụp ảnh giấy tờ
     // Bước 2 - hiển thị kết quả
@@ -225,6 +288,8 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
 
         //change_base_url
         intent.putExtra(KeyIntentConstants.CHANGE_BASE_URL, json.optString("change_base_url"))
+
+        intent.putExtra(KeyIntentConstants.MODE_BUTTON_HEADER_BAR, mapModeButtonHeaderBar(json.optString("mode_button_header_bar")))
 
         return intent
     }
@@ -425,9 +490,7 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
         intent.putExtra(KeyIntentConstants.IS_ENABLE_GOT_IT, json.optBoolean("is_enable_gotit", false))
 
         // is_show_logo
-        intent.putExtra(KeyIntentConstants.IS_SHOW_LOGO, json.optBoolean("is_show_logo", true))
-
-
+        intent.putExtra(KeyIntentConstants.IS_SHOW_LOGO, json.optBoolean("is_show_logo", false))
         intent.putExtra(
             KeyIntentConstants.IS_ENABLE_SCAN_QRCODE,
             json.optBoolean("is_enable_scan_qrcode", false)
@@ -580,6 +643,14 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
             "medium" -> SDKEnum.ValidateDocumentType.Medium.value
             "advance" -> SDKEnum.ValidateDocumentType.Advance.value
             else -> SDKEnum.ValidateDocumentType.None.value
+        }
+    }
+
+    private fun mapModeButtonHeaderBar(value: String?): Int {
+        return when (value?.lowercase()) {
+            "rightbutton" -> SDKEnum.ModeButtonHeaderBar.RightButton.value
+            "leftbutton" -> SDKEnum.ModeButtonHeaderBar.LeftButton.value
+            else -> SDKEnum.ModeButtonHeaderBar.LeftButton.value
         }
     }
 

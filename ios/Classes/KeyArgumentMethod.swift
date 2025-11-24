@@ -1,37 +1,36 @@
 
 struct KeyArgumentMethod {
-   
+    
     /*========== CÁC THUỘC TÍNH CƠ BẢN CÀI ĐẶT CHUNG SDK ==========*/
-   static let accessToken = "access_token"
-   static let tokenId = "token_id"
-   static let tokenKey = "token_key"
-   static let versionSdk = "version_sdk"
-   static let flowType = "flow_type"
-   static let flowEKYC = "flow_ekyc"
-   static let languageSdk = "language_sdk"
-   static let challengeCode = "challenge_code"
-   static let inputClientSession = "input_client_session"
-   static let isShowTutorial = "is_show_tutorial"
-   static let isDisableTutorial = "is_disable_tutorial"
-   static let isShowRequiredPermissionDecree = "is_show_required_permission_decree"
-   static let isEnableTutorialCardAdvance = "is_enable_tutorial_card_advance"
-   static let modelHelpFace = "model_help_face"
-   static let isEnableGotIt = "isEnableGotIt"
-   static let isShowSwitchCamera = "is_show_switch_camera"
-   static let cameraPositionForPortrait = "camera_position_for_portrait"
-   static let zoomCamera = "zoomCamera"
-   static let expiresTime = "expires_time"
-   static let isTurnOffCallService = "is_turn_off_call_service"
-   static let compressionQualityImage = "compression_quality_image"
-   static let isEnableAutoBrightness = "is_enable_auto_brightness"
-   static let screenBrightness = "screen_brightness"
-   static let isSkipPreview = "is_skip_preview"
-   static let isEnableEncrypt = "is_enable_encrypt"
-   static let encryptPublicKey = "encrypt_public_key"
-   static let modeUploadFile = "mode_upload_file"
-
-
-/*========== CÁC THUỘC TÍNH VỀ GIẤY TỜ ==========*/   
+    static let accessToken = "access_token"
+    static let tokenId = "token_id"
+    static let tokenKey = "token_key"
+    static let versionSdk = "version_sdk"
+    static let flowType = "flow_type"
+    static let flowEKYC = "flow_ekyc"
+    static let languageSdk = "language_sdk"
+    static let challengeCode = "challenge_code"
+    static let inputClientSession = "input_client_session"
+    static let isShowTutorial = "is_show_tutorial"
+    static let isDisableTutorial = "is_disable_tutorial"
+    static let isShowRequiredPermissionDecree = "is_show_required_permission_decree"
+    static let isEnableTutorialCardAdvance = "is_enable_tutorial_card_advance"
+    static let modelHelpFace = "model_help_face"
+    static let isEnableGotIt = "isEnableGotIt"
+    static let isShowSwitchCamera = "is_show_switch_camera"
+    static let cameraPositionForPortrait = "camera_position_for_portrait"
+    static let zoomCamera = "zoomCamera"
+    static let expiresTime = "expires_time"
+    static let isTurnOffCallService = "is_turn_off_call_service"
+    static let compressionQualityImage = "compression_quality_image"
+    static let isEnableAutoBrightness = "is_enable_auto_brightness"
+    static let screenBrightness = "screen_brightness"
+    static let isSkipPreview = "is_skip_preview"
+    static let isEnableEncrypt = "is_enable_encrypt"
+    static let encryptPublicKey = "encrypt_public_key"
+    static let modeUploadFile = "mode_upload_file"
+ 
+    /*========== CÁC THUỘC TÍNH VỀ GIẤY TỜ ==========*/
     static let documentType = "document_type"
     static let hashFrontOCR = "hash_front_ocr"
     static let isCheckLivenessCard = "is_check_liveness_card"
@@ -41,10 +40,8 @@ struct KeyArgumentMethod {
     static let isValidatePostcode = "is_validate_postcode"
     static let listBlockedDocument = "list_blocked_document"
     static let modeVersionOCR = "mode_version_ocr"
-
-    /*========== CÁC THUỘC TÍNH VỀ KHUÔN MẶT ==========*/   
- 
-
+    
+    /*========== CÁC THUỘC TÍNH VỀ KHUÔN MẶT ==========*/
     static let modeVersionFaceOval = "mode_version_face_oval"
     static let isEnableCompare = "is_enable_compare"
     static let compareType = "compare_type"
@@ -53,12 +50,12 @@ struct KeyArgumentMethod {
     static let thresLevel = "thres_level"
     static let checkLivenessFace = "check_liveness_face"
     static let isCheckMaskedFace = "is_check_masked_face"
-
+    
     /*========== CÁC THUỘC TÍNH VỀ VIỆC QUAY VIDEO LẠI QUÁ TRÌNH THỰC HIỆN OCR VÀ FACE TRONG SDK ==========*/
     static let isRecordVideoFace = "is_record_video_face"
     static let isRecordVideoDocument = "is_record_video_document"
-  
-
+    
+    
     /*========== CÁC THUỘC TÍNH VỀ MÔI TRƯỜNG PHÁT TRIỂN - URL TÁC VỤ TRONG SDK ==========*/
     static let isEnableWaterMark = "is_enable_water_mark"
     static let isAddMetadataImage = "is_add_metadata_image"
@@ -88,11 +85,8 @@ struct KeyArgumentMethod {
     static let transactionPartnerIdCompareFace = "transaction_partner_id_compare_face"
     static let transactionPartnerIdLivenessFace = "transaction_partner_id_liveness_face"
     static let transactionPartnerIdMaskedFace = "transaction_partner_id_masked_face"
- 
-
-
-
-/*========== CHỈNH SỬA TÊN CÁC TỆP TIN HIỆU ỨNG - VIDEO HƯỚNG DẪN ==========*/
+    
+    /*========== CHỈNH SỬA TÊN CÁC TỆP TIN HIỆU ỨNG - VIDEO HƯỚNG DẪN ==========*/
     static let nameOvalAnimation = "name_oval_animation"
     static let nameFeedbackAnimation = "name_feedback_animation"
     static let nameScanQRCodeAnimation = "name_scan_qrcode_animation"
@@ -101,7 +95,7 @@ struct KeyArgumentMethod {
     static let nameHelpAudioFace = "name_help_audio_face"
     static let nameHelpVideoFace = "name_help_video_face"
     static let nameHelpVideoDocument = "name_help_video_document"
-
+    
     /*========== CÁC THUỘC TÍNH VỀ MÀU SẮC GIAO DIỆN TRONG SDK ==========*/
     static let modeButtonHeaderBar = "mode_button_header_bar"
     static let contentColorHeaderBar = "content_color_header_bar"
@@ -147,12 +141,12 @@ struct KeyArgumentMethod {
 
 
 struct KeyResultConstantsEKYC {
-   static let cropParam = "CROP_PARAM"
-   static let pathImageFrontFull = "PATH_IMAGE_FRONT_FULL"
-   static let pathImageBackFull = "PATH_IMAGE_BACK_FULL"
-   static let pathImageFaceFull = "PATH_IMAGE_FACE_FULL"
-   static let pathImageFaceFarFull = "PATH_IMAGE_FACE_FAR_FULL"
-   static let pathImageFaceNearFull = "PATH_IMAGE_FACE_NEAR_FULL"
-   static let pathImageFaceScan3D = "PATH_FACE_SCAN3D"
-   static let clientSessionResult = "CLIENT_SESSION_RESULT"
+    static let cropParam = "CROP_PARAM"
+    static let pathImageFrontFull = "PATH_IMAGE_FRONT_FULL"
+    static let pathImageBackFull = "PATH_IMAGE_BACK_FULL"
+    static let pathImageFaceFull = "PATH_IMAGE_FACE_FULL"
+    static let pathImageFaceFarFull = "PATH_IMAGE_FACE_FAR_FULL"
+    static let pathImageFaceNearFull = "PATH_IMAGE_FACE_NEAR_FULL"
+    static let pathImageFaceScan3D = "PATH_FACE_SCAN3D"
+    static let clientSessionResult = "CLIENT_SESSION_RESULT"
 }
