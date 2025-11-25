@@ -18,6 +18,10 @@ class _SettingScreenState extends State<SettingScreen> {
   final TextEditingController _baseUrlController = TextEditingController();
   bool _isLoading = false;
   LanguageSdk _languageSdk = LanguageSdk.icekyc_vi;
+  ModeButtonHeaderBar _modeButtonHeaderBar = ModeButtonHeaderBar.leftButton;
+  bool _isShowLogo = true;
+
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +48,13 @@ class _SettingScreenState extends State<SettingScreen> {
             )
             ? LanguageSdk.icekyc_vi
             : LanguageSdk.icekyc_en;
+    _modeButtonHeaderBar = SharedPreferenceService.instance.getString(
+      SharedPreferenceKeys.modeButtonHeaderBar,
+    ) == ModeButtonHeaderBar.leftButton.name ? ModeButtonHeaderBar.leftButton : ModeButtonHeaderBar.rightButton;
+    _isShowLogo = SharedPreferenceService.instance.getBool(
+      SharedPreferenceKeys.isShowLogo,
+      defaultValue: true,
+    );
   }
 
   @override
@@ -83,6 +94,14 @@ class _SettingScreenState extends State<SettingScreen> {
         SharedPreferenceService.instance.setBool(
           SharedPreferenceKeys.isViLanguageMode,
           _languageSdk == LanguageSdk.icekyc_vi,
+        ),
+        SharedPreferenceService.instance.setString(
+          SharedPreferenceKeys.modeButtonHeaderBar,
+          _modeButtonHeaderBar.name,
+        ),
+        SharedPreferenceService.instance.setBool(
+          SharedPreferenceKeys.isShowLogo,
+          _isShowLogo,
         ),
       ]);
 
@@ -143,9 +162,28 @@ class _SettingScreenState extends State<SettingScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Row(children: [
+                  Text('Hiển thị Logo'),
+                  Spacer(),
+                  Switch(value: _isShowLogo, onChanged: (value) {
+                    setState(() => _isShowLogo = value);
+                  }),
+                ],),
+                const SizedBox(height: 16),
+                  Row(children: [
+                      Text('Mode Button Header Bar'),
+                      Spacer(),
+                       Text(_modeButtonHeaderBar.name),
+                      Switch(value: _modeButtonHeaderBar == ModeButtonHeaderBar.leftButton, onChanged: (value) {
+                        setState(() => _modeButtonHeaderBar = value ? ModeButtonHeaderBar.leftButton : ModeButtonHeaderBar.rightButton);
+                      }),
+                     
+                    ],),
+                    const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
                   value: _languageSdk.name,
                   items: [
+                  
                     DropdownMenuItem(
                       value: LanguageSdk.icekyc_vi.name,
                       child: const Text('Tiếng Việt'),

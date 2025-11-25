@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -54,6 +55,21 @@ class LogScreen extends StatelessWidget {
           : ListView(
               padding: const EdgeInsets.all(8),
               children: [
+                 _buildSafeImage(
+                    json[ICEkycKeyResult.pathImageFrontFull]
+                  ),
+                  _buildSafeImage(
+                    json[ICEkycKeyResult.pathImageBackFull],
+                  ),
+                  _buildSafeImage(
+                    json[ICEkycKeyResult.pathImageFaceFull],
+                  ),
+                  _buildSafeImage(
+                    json[ICEkycKeyResult.pathImageFaceFarFull],
+                  ),
+                  _buildSafeImage(
+                    json[ICEkycKeyResult.pathImageFaceNearFull],
+                  ),
                   _buildLogItem(
                   context,
                   icon: Icons.face_retouching_natural,
@@ -113,6 +129,19 @@ class LogScreen extends StatelessWidget {
                 const SizedBox(height: 16),
               ],
             ),
+    );
+  }
+
+    Widget _buildSafeImage(String? path) {
+    if (path == null || path.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Image.file(
+      File(path),
+      errorBuilder: (context, error, stackTrace) {
+        return const SizedBox.shrink();
+      },
     );
   }
 

@@ -17,20 +17,51 @@ class EkycScreen extends StatefulWidget {
 
 class _EkycScreenState extends State<EkycScreen> {
   // You can source these from secure storage/config later per your environment
-  late final String _accessToken;
-  late final String _tokenId;
-  late final String _tokenKey;
-  late final String _baseUrl;
-  final TextEditingController _hashFrontOcrController = TextEditingController();
+  String _accessToken = '';
+  String _tokenId = '';
+  String _tokenKey = '';
+  String _baseUrl = '';
   LanguageSdk _languageSdk = LanguageSdk.icekyc_vi;
+  ModeButtonHeaderBar _modeButtonHeaderBar = ModeButtonHeaderBar.leftButton;
+  final TextEditingController _hashFrontOcrController = TextEditingController();
+  bool _isShowLogo = true;
   @override
   void initState() {
     super.initState();
-    _accessToken = SharedPreferenceService.instance.getString(SharedPreferenceKeys.accessToken);
-    _tokenId = SharedPreferenceService.instance.getString(SharedPreferenceKeys.tokenId);
-    _tokenKey = SharedPreferenceService.instance.getString(SharedPreferenceKeys.tokenKey);
-    _baseUrl = SharedPreferenceService.instance.getString(SharedPreferenceKeys.baseUrl);
-    _languageSdk = SharedPreferenceService.instance.getBool(SharedPreferenceKeys.isViLanguageMode, defaultValue: true) ? LanguageSdk.icekyc_vi : LanguageSdk.icekyc_en;
+    _loadSettings();
+  }
+
+  void _loadSettings() {
+    _accessToken = SharedPreferenceService.instance.getString(
+      SharedPreferenceKeys.accessToken,
+    );
+    _tokenId = SharedPreferenceService.instance.getString(
+      SharedPreferenceKeys.tokenId,
+    );
+    _tokenKey = SharedPreferenceService.instance.getString(
+      SharedPreferenceKeys.tokenKey,
+    );
+    _baseUrl = SharedPreferenceService.instance.getString(
+      SharedPreferenceKeys.baseUrl,
+    );
+    _languageSdk =
+        SharedPreferenceService.instance.getBool(
+              SharedPreferenceKeys.isViLanguageMode,
+              defaultValue: true,
+            )
+            ? LanguageSdk.icekyc_vi
+            : LanguageSdk.icekyc_en;
+    _modeButtonHeaderBar =
+        SharedPreferenceService.instance.getString(
+                  SharedPreferenceKeys.modeButtonHeaderBar,
+                ) ==
+                ModeButtonHeaderBar.leftButton.name
+            ? ModeButtonHeaderBar.leftButton
+            : ModeButtonHeaderBar.rightButton;
+    _isShowLogo = SharedPreferenceService.instance.getBool(
+      SharedPreferenceKeys.isShowLogo,
+      defaultValue: false,
+    );
   }
 
   @override
@@ -43,9 +74,7 @@ class _EkycScreenState extends State<EkycScreen> {
     if (json.isNotEmpty) {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => LogScreen(json: json),
-        ),
+        MaterialPageRoute(builder: (context) => LogScreen(json: json)),
       );
     }
   }
@@ -79,7 +108,7 @@ class _EkycScreenState extends State<EkycScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const SettingScreen()),
-              );
+              ).then((_) => _loadSettings());
             },
             tooltip: 'Cài đặt',
           ),
@@ -212,10 +241,7 @@ class _EkycScreenState extends State<EkycScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
+                    Text(title, style: Theme.of(context).textTheme.titleMedium),
                     const SizedBox(height: 4),
                     Text(
                       description,
@@ -243,7 +269,8 @@ class _EkycScreenState extends State<EkycScreen> {
         tokenId: _tokenId,
         tokenKey: _tokenKey,
         languageSdk: _languageSdk,
-        modeButtonHeaderBar: ModeButtonHeaderBar.rightButton
+        modeButtonHeaderBar: _modeButtonHeaderBar,
+        isShowLogo: _isShowLogo,
       );
       _navigateToLog(await ICEkyc.instance.startEkycFull(config));
     } on PlatformException catch (e) {
@@ -258,6 +285,8 @@ class _EkycScreenState extends State<EkycScreen> {
         tokenId: _tokenId,
         tokenKey: _tokenKey,
         languageSdk: _languageSdk,
+        modeButtonHeaderBar: _modeButtonHeaderBar,
+        isShowLogo: _isShowLogo,
       );
       _navigateToLog(await ICEkyc.instance.startEkycOcr(config));
     } on PlatformException catch (e) {
@@ -272,7 +301,8 @@ class _EkycScreenState extends State<EkycScreen> {
         tokenId: _tokenId,
         tokenKey: _tokenKey,
         languageSdk: _languageSdk,
-        modeButtonHeaderBar: ModeButtonHeaderBar.rightButton
+        modeButtonHeaderBar: _modeButtonHeaderBar,
+        isShowLogo: _isShowLogo,
       );
       _navigateToLog(await ICEkyc.instance.startEkycOcrFront(config));
     } on PlatformException catch (e) {
@@ -288,7 +318,8 @@ class _EkycScreenState extends State<EkycScreen> {
         tokenKey: _tokenKey,
         hashFrontOcr: _hashFrontOcrController.text,
         languageSdk: _languageSdk,
-        modeButtonHeaderBar: ModeButtonHeaderBar.rightButton
+        modeButtonHeaderBar: _modeButtonHeaderBar,
+        isShowLogo: _isShowLogo,
       );
       _navigateToLog(await ICEkyc.instance.startEkycOcrBack(config));
     } on PlatformException catch (e) {
@@ -303,7 +334,8 @@ class _EkycScreenState extends State<EkycScreen> {
         tokenId: _tokenId,
         tokenKey: _tokenKey,
         languageSdk: _languageSdk,
-        modeButtonHeaderBar: ModeButtonHeaderBar.rightButton
+        modeButtonHeaderBar: _modeButtonHeaderBar,
+        isShowLogo: _isShowLogo,
       );
       _navigateToLog(await ICEkyc.instance.startEkycFace(config));
     } on PlatformException catch (e) {
@@ -318,7 +350,8 @@ class _EkycScreenState extends State<EkycScreen> {
         tokenId: _tokenId,
         tokenKey: _tokenKey,
         languageSdk: _languageSdk,
-        modeButtonHeaderBar: ModeButtonHeaderBar.rightButton
+        modeButtonHeaderBar: _modeButtonHeaderBar,
+        isShowLogo: _isShowLogo,
       );
       _navigateToLog(await ICEkyc.instance.startEkycScanQRCode(config));
     } on PlatformException catch (e) {
