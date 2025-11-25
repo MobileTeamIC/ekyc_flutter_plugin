@@ -235,7 +235,6 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
     ///   - is_check_liveness_card: Bật/tắt chức năng kiểm tra ảnh giấy tờ chụp trực tiếp ("true"/"false")
     ///   - is_validate_postcode: Bật/tắt chức năng kiểm tra mã bưu điện ("true"/"false")
     ///   - validate_document_type: Chế độ kiểm tra ảnh giấy tờ ("none", "basic", "medium", "advance")
-    ///   - change_base_url: Đường dẫn API tùy chỉnh
     ///   - is_enable_gotit: Bật/tắt nút "Bỏ qua hướng dẫn" ("true"/"false")
     ///   - language_sdk: Ngôn ngữ SDK ("icekyc_vi", "icekyc_en")
     ///   - is_show_logo: Bật/tắt hiển thị LOGO thương hiệu ("true"/"false")
@@ -245,51 +244,48 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
         // document_type
         intent.putExtra(
             KeyIntentConstants.DOCUMENT_TYPE,
-            mapDocumentType(json.optString("document_type"))
+            mapDocumentType(json.optString(KeyArgumentMethod.DOCUMENT_TYPE))
         )
 
         // is_enable_compare
         intent.putExtra(KeyIntentConstants.IS_ENABLE_COMPARE,
-            json.optBoolean("is_enable_compare", true)
+            json.optBoolean(KeyArgumentMethod.IS_ENABLE_COMPARE, false)
         )
 
         // is_check_liveness_card
         intent.putExtra(KeyIntentConstants.IS_CHECK_LIVENESS_CARD,
-            json.optBoolean("is_check_liveness_card", true)
+            json.optBoolean(KeyArgumentMethod.IS_CHECK_LIVENESS_CARD, false)
         )
 
         // check_liveness_face
         intent.putExtra(
             KeyIntentConstants.CHECK_LIVENESS_FACE,
-            mapLivenessFace(json.optString("check_liveness_face"))
+            mapLivenessFace(json.optString(KeyArgumentMethod.CHECK_LIVENESS_FACE))
         )
 
         // is_check_masked_face
         intent.putExtra(KeyIntentConstants.IS_CHECK_MASKED_FACE,
-            json.optBoolean("is_check_masked_face", true)
+            json.optBoolean(KeyArgumentMethod.IS_CHECK_MASKED_FACE, false)
         )
 
         // validate_document_type
         intent.putExtra(
             KeyIntentConstants.VALIDATE_DOCUMENT_TYPE,
-            mapValidateDocument(json.optString("validate_document_type"))
+            mapValidateDocument(json.optString(KeyArgumentMethod.VALIDATE_DOCUMENT_TYPE))
         )
 
         // is_validate_postcode
         intent.putExtra(KeyIntentConstants.IS_VALIDATE_POSTCODE,
-            json.optBoolean("is_validate_postcode", true)
+            json.optBoolean(KeyArgumentMethod.IS_VALIDATE_POSTCODE, false)
         )
 
         // version_sdk
         intent.putExtra(
             KeyIntentConstants.VERSION_SDK,
-            mapVersionSdk(json.optString("version_sdk"))
+            mapVersionSdk(json.optString(KeyArgumentMethod.VERSION_SDK))
         )
 
-        //change_base_url
-        intent.putExtra(KeyIntentConstants.CHANGE_BASE_URL, json.optString("change_base_url"))
-
-        intent.putExtra(KeyIntentConstants.MODE_BUTTON_HEADER_BAR, mapModeButtonHeaderBar(json.optString("mode_button_header_bar")))
+       
 
         return intent
     }
@@ -310,7 +306,6 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
     ///   - is_enable_compare: Bật/tắt chức năng so sánh ảnh chân dung ("true"/"false")
     ///   - is_check_masked_face: Bật/tắt chức năng kiểm tra che mặt ("true"/"false")
     ///   - check_liveness_face: Chức năng kiểm tra ảnh chân dung chụp trực tiếp ("nonecheckface", "ibeta", "standard")
-    ///   - change_base_url: Đường dẫn API tùy chỉnh
     ///   - is_enable_gotit: Bật/tắt nút "Bỏ qua hướng dẫn" ("true"/"false")
     ///   - language_sdk: Ngôn ngữ SDK ("icekyc_vi", "icekyc_en")
     ///   - is_show_logo: Bật/tắt hiển thị LOGO thương hiệu ("true"/"false")
@@ -320,22 +315,22 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
         // version_sdk: normal|prooval (map -> Standard|ADVANCED)
         intent.putExtra(
             KeyIntentConstants.VERSION_SDK,
-            mapVersionSdk(json.optString("version_sdk"))
+            mapVersionSdk(json.optString(KeyArgumentMethod.VERSION_SDK))
         )
 
         // is_enable_compare
-        intent.putExtra(KeyIntentConstants.IS_ENABLE_COMPARE, json.optBoolean("is_enable_compare", false))
+        intent.putExtra(KeyIntentConstants.IS_ENABLE_COMPARE, json.optBoolean(KeyArgumentMethod.IS_ENABLE_COMPARE, false))
 
         // hash image compare
-        intent.putExtra(KeyIntentConstants.HASH_IMAGE_COMPARE, json.optString("hash_image_compare", ""))
+        intent.putExtra(KeyIntentConstants.HASH_IMAGE_COMPARE, json.optString(KeyArgumentMethod.HASH_IMAGE_COMPARE, ""))
 
         // is_check_masked_face
-        intent.putExtra(KeyIntentConstants.IS_CHECK_MASKED_FACE, json.optBoolean("is_check_masked_face", true))
+        intent.putExtra(KeyIntentConstants.IS_CHECK_MASKED_FACE, json.optBoolean(KeyArgumentMethod.IS_CHECK_MASKED_FACE, false))
 
         // check_liveness_face: nonecheckface|ibeta|standard
         intent.putExtra(
             KeyIntentConstants.CHECK_LIVENESS_FACE,
-            mapLivenessFace(json.optString("check_liveness_face"))
+            mapLivenessFace(json.optString(KeyArgumentMethod.CHECK_LIVENESS_FACE))
         )
 
         return intent
@@ -356,7 +351,6 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
     ///   - is_show_tutorial: Hiển thị màn hình hướng dẫn ("true"/"false")
     ///   - is_check_liveness_card: Bật/tắt chức năng kiểm tra ảnh giấy tờ chụp trực tiếp ("true"/"false")
     ///   - validate_document_type: Chế độ kiểm tra ảnh giấy tờ ("none", "basic", "medium", "advance")
-    ///   - change_base_url: Đường dẫn API tùy chỉnh
     ///   - is_enable_gotit: Bật/tắt nút "Bỏ qua hướng dẫn" ("true"/"false")
     ///   - language_sdk: Ngôn ngữ SDK ("icekyc_vi", "icekyc_en")
     ///   - is_show_logo: Bật/tắt hiển thị LOGO thương hiệu ("true"/"false")
@@ -366,20 +360,18 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
         // document_type
         intent.putExtra(
             KeyIntentConstants.DOCUMENT_TYPE,
-            mapDocumentType(json.optString("document_type"))
+            mapDocumentType(json.optString(KeyArgumentMethod.DOCUMENT_TYPE))
         )
 
         // is_check_liveness_card
-        intent.putExtra(KeyIntentConstants.IS_CHECK_LIVENESS_CARD, json.optBoolean("is_check_liveness_card", true))
+        intent.putExtra(KeyIntentConstants.IS_CHECK_LIVENESS_CARD, json.optBoolean(KeyArgumentMethod.IS_CHECK_LIVENESS_CARD, true))
 
         // validate_document_type
         intent.putExtra(
             KeyIntentConstants.VALIDATE_DOCUMENT_TYPE,
-            mapValidateDocument(json.optString("validate_document_type"))
+            mapValidateDocument(json.optString(KeyArgumentMethod.VALIDATE_DOCUMENT_TYPE))
         )
 
-        // change_base_url
-        intent.putExtra(KeyIntentConstants.CHANGE_BASE_URL, json.optString("change_base_url"))
 
         return intent
     }
@@ -400,7 +392,6 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
     ///   - hash_front_ocr: Hash của kết quả OCR mặt trước (bắt buộc cho ocrback)
     ///   - is_check_liveness_card: Bật/tắt chức năng kiểm tra ảnh giấy tờ chụp trực tiếp ("true"/"false")
     ///   - validate_document_type: Chế độ kiểm tra ảnh giấy tờ ("none", "basic", "medium", "advance")
-    ///   - change_base_url: Đường dẫn API tùy chỉnh
     ///   - is_enable_gotit: Bật/tắt nút "Bỏ qua hướng dẫn" ("true"/"false")
     ///   - language_sdk: Ngôn ngữ SDK ("icekyc_vi", "icekyc_en")
     ///   - is_show_logo: Bật/tắt hiển thị LOGO thương hiệu ("true"/"false")
@@ -410,25 +401,22 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
         // document_type
         intent.putExtra(
             KeyIntentConstants.DOCUMENT_TYPE,
-            mapDocumentType(json.optString("document_type"))
+            mapDocumentType(json.optString(KeyArgumentMethod.DOCUMENT_TYPE))
         )
 
         // hash_front_ocr (bắt buộc cho ocrback)
-        if (json.has("hash_front_ocr")) {
-            intent.putExtra("HASH_FRONT_OCR", json.optString("hash_front_ocr"))
+        if (json.has(KeyArgumentMethod.HASH_FRONT_OCR)) {
+            intent.putExtra(KeyIntentConstants.HASH_FRONT_OCR, json.optString(KeyArgumentMethod.HASH_FRONT_OCR))
         }
 
         // is_check_liveness_card
-        intent.putExtra(KeyIntentConstants.IS_CHECK_LIVENESS_CARD, json.optBoolean("is_check_liveness_card", true))
+        intent.putExtra(KeyIntentConstants.IS_CHECK_LIVENESS_CARD, json.optBoolean(KeyArgumentMethod.IS_CHECK_LIVENESS_CARD, true))
 
         // validate_document_type
         intent.putExtra(
             KeyIntentConstants.VALIDATE_DOCUMENT_TYPE,
-            mapValidateDocument(json.optString("validate_document_type"))
+            mapValidateDocument(json.optString(KeyArgumentMethod.VALIDATE_DOCUMENT_TYPE))
         )
-
-        // change_base_url
-        intent.putExtra(KeyIntentConstants.CHANGE_BASE_URL, json.optString("change_base_url"))
 
         return intent
     }
@@ -453,53 +441,98 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
         return intent
     }
 
+    ///MARK: BASE INTENT
     private fun <T : Activity> Activity.getBaseIntent(clazz: Class<T>, json: JSONObject): Intent {
         val intent = Intent(this, clazz)
 
         // ACCESS_TOKEN
         intent.putExtra(
             KeyIntentConstants.ACCESS_TOKEN,
-            if (json.has("access_token")) json.getString("access_token") else ""
+            if (json.has(KeyArgumentMethod.ACCESS_TOKEN)) json.getString(KeyArgumentMethod.ACCESS_TOKEN) else ""
         )
         intent.putExtra(
             KeyIntentConstants.TOKEN_ID,
-            if (json.has("token_id")) json.getString("token_id") else ""
+            if (json.has(KeyArgumentMethod.TOKEN_ID)) json.getString(KeyArgumentMethod.TOKEN_ID) else ""
         )
         intent.putExtra(
             KeyIntentConstants.TOKEN_KEY,
-            if (json.has("token_key")) json.getString("token_key") else ""
+            if (json.has(KeyArgumentMethod.TOKEN_KEY)) json.getString(KeyArgumentMethod.TOKEN_KEY) else ""
         )
 
         // Challenge code
         intent.putExtra(
             KeyIntentConstants.CHALLENGE_CODE,
-            if (json.has("challenge_code")) json.getString("challenge_code") else "")
+            if (json.has(KeyArgumentMethod.CHALLENGE_CODE)) json.getString(KeyArgumentMethod.CHALLENGE_CODE) else "")
 
         // Ngôn ngữ sử dụng trong SDK
         // - VIETNAMESE: Tiếng Việt
         // - ENGLISH: Tiếng Anh
         intent.putExtra(
             KeyIntentConstants.LANGUAGE_SDK,
-            mapLanguage(json.optString("language_sdk")).value
+            mapLanguage(json.optString(KeyArgumentMethod.LANGUAGE_SDK)).value
         )
 
         // is_show_tutorial
-        intent.putExtra(KeyIntentConstants.IS_SHOW_TUTORIAL, json.optBoolean("is_show_tutorial", false))
+        intent.putExtra(KeyIntentConstants.IS_SHOW_TUTORIAL, json.optBoolean(KeyArgumentMethod.IS_SHOW_TUTORIAL, false))
+
+        // is_disable_tutorial
+        intent.putExtra(KeyIntentConstants.IS_DISABLE_TUTORIAL, json.optBoolean(KeyArgumentMethod.IS_DISABLE_TUTORIAL, false))
 
         // is_enable_gotit
-        intent.putExtra(KeyIntentConstants.IS_ENABLE_GOT_IT, json.optBoolean("is_enable_gotit", false))
+        intent.putExtra(KeyIntentConstants.IS_ENABLE_GOT_IT, json.optBoolean(KeyArgumentMethod.IS_ENABLE_GOT_IT, false))
 
         // is_show_logo
-        intent.putExtra(KeyIntentConstants.IS_SHOW_LOGO, json.optBoolean("is_show_logo", false))
+        intent.putExtra(KeyIntentConstants.IS_SHOW_LOGO, json.optBoolean(KeyArgumentMethod.IS_SHOW_LOGO, false))
+
+        // is_enable_scan_qrcode
         intent.putExtra(
             KeyIntentConstants.IS_ENABLE_SCAN_QRCODE,
-            json.optBoolean("is_enable_scan_qrcode", false)
+            json.optBoolean(KeyArgumentMethod.IS_ENABLE_SCAN_QR_CODE, false)
         )
 
         intent.putExtra(
             KeyIntentConstants.IS_TURN_OFF_CALL_SERVICE,
-            json.optBoolean("is_turn_off_call_service", true)
+            json.optBoolean(KeyArgumentMethod.IS_TURN_OFF_CALL_SERVICE, false)
         )
+
+        // change_base_url
+        intent.putExtra(KeyIntentConstants.CHANGE_BASE_URL, json.optString(KeyArgumentMethod.CHANGE_BASE_URL))
+        
+        // input_client_session
+        intent.putExtra(KeyIntentConstants.INPUT_CLIENT_SESSION, json.optString(KeyArgumentMethod.INPUT_CLIENT_SESSION, ""))
+
+        // is_show_required_permission_decree
+        intent.putExtra(KeyIntentConstants.IS_SHOW_REQUIRED_PERMISSION_DECREE, json.optBoolean(KeyArgumentMethod.IS_SHOW_REQUIRED_PERMISSION_DECREE, false))
+
+        // is_enable_tutorial_card_advance
+        intent.putExtra(KeyIntentConstants.IS_ENABLE_TUTORIAL_CARD_ADVANCE, json.optBoolean(KeyArgumentMethod.IS_ENABLE_TUTORIAL_CARD_ADVANCE, false))
+
+        // is_show_switch_camera
+        intent.putExtra(KeyIntentConstants.IS_SHOW_SWITCH_CAMERA, json.optBoolean(KeyArgumentMethod.IS_SHOW_SWITCH_CAMERA, false))
+
+        // camera_position_for_portrait
+        intent.putExtra(KeyIntentConstants.CAMERA_POSITION_FOR_PORTRAIT, mapCameraPositionForPortrait(json.optString(KeyArgumentMethod.CAMERA_POSITION_FOR_PORTRAIT)))
+
+        // zoom_camera
+        intent.putExtra(KeyIntentConstants.ZOOM_CAMERA, json.optDouble(KeyArgumentMethod.ZOOM_CAMERA, 0.0))
+
+        // is_enable_auto_brightness
+        intent.putExtra(KeyIntentConstants.IS_ENABLE_AUTO_BRIGHTNESS, json.optBoolean(KeyArgumentMethod.IS_ENABLE_AUTO_BRIGHTNESS, false))
+
+        // screen_brightness
+        intent.putExtra(KeyIntentConstants.SCREEN_BRIGHTNESS, json.optDouble(KeyArgumentMethod.SCREEN_BRIGHTNESS, 0.0))
+        
+        // is_skip_preview
+        intent.putExtra(KeyIntentConstants.IS_SKIP_PREVIEW, json.optBoolean(KeyArgumentMethod.IS_SKIP_PREVIEW, false))
+
+        // is_enable_encrypt
+        intent.putExtra(KeyIntentConstants.IS_ENABLE_ENCRYPT, json.optBoolean(KeyArgumentMethod.IS_ENABLE_ENCRYPT, false))
+
+        // mode_button_header_bar: leftButton|rightButton
+        intent.putExtra(KeyIntentConstants.MODE_BUTTON_HEADER_BAR, mapModeButtonHeaderBar(json.optString(KeyArgumentMethod.MODE_BUTTON_HEADER_BAR)))
+        
+        // time_out_call_api
+        intent.putExtra(KeyIntentConstants.TIMEOUT_CALL_API, json.optInt(KeyArgumentMethod.TIMEOUT_CALL_API, 20))
 
         return intent
     }
@@ -651,6 +684,14 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
             "rightbutton" -> SDKEnum.ModeButtonHeaderBar.RightButton.value
             "leftbutton" -> SDKEnum.ModeButtonHeaderBar.LeftButton.value
             else -> SDKEnum.ModeButtonHeaderBar.LeftButton.value
+        }
+    }
+
+    private fun mapCameraPositionForPortrait(value: String?): Int {
+        return when (value?.lowercase()) {
+            "positionfront" -> SDKEnum.CameraTypeEnum.FRONT.value
+            "positionback" -> SDKEnum.CameraTypeEnum.BACK.value
+            else -> SDKEnum.CameraTypeEnum.FRONT.value
         }
     }
 

@@ -272,6 +272,7 @@ class _EkycScreenState extends State<EkycScreen> {
         tokenId: _tokenId,
         tokenKey: _tokenKey,
         languageSdk: _languageSdk,
+        modeButtonHeaderBar: ModeButtonHeaderBar.rightButton
       );
       _navigateToLog(await ICEkyc.instance.startEkycOcrFront(config));
     } on PlatformException catch (e) {
@@ -287,6 +288,7 @@ class _EkycScreenState extends State<EkycScreen> {
         tokenKey: _tokenKey,
         hashFrontOcr: _hashFrontOcrController.text,
         languageSdk: _languageSdk,
+        modeButtonHeaderBar: ModeButtonHeaderBar.rightButton
       );
       _navigateToLog(await ICEkyc.instance.startEkycOcrBack(config));
     } on PlatformException catch (e) {
@@ -301,6 +303,7 @@ class _EkycScreenState extends State<EkycScreen> {
         tokenId: _tokenId,
         tokenKey: _tokenKey,
         languageSdk: _languageSdk,
+        modeButtonHeaderBar: ModeButtonHeaderBar.rightButton
       );
       _navigateToLog(await ICEkyc.instance.startEkycFace(config));
     } on PlatformException catch (e) {
@@ -315,6 +318,7 @@ class _EkycScreenState extends State<EkycScreen> {
         tokenId: _tokenId,
         tokenKey: _tokenKey,
         languageSdk: _languageSdk,
+        modeButtonHeaderBar: ModeButtonHeaderBar.rightButton
       );
       _navigateToLog(await ICEkyc.instance.startEkycScanQRCode(config));
     } on PlatformException catch (e) {

@@ -16,7 +16,7 @@ struct KeyArgumentMethod {
     static let isShowRequiredPermissionDecree = "is_show_required_permission_decree"
     static let isEnableTutorialCardAdvance = "is_enable_tutorial_card_advance"
     static let modelHelpFace = "model_help_face"
-    static let isEnableGotIt = "isEnableGotIt"
+    static let isEnableGotIt = "is_enable_gotit"
     static let isShowSwitchCamera = "is_show_switch_camera"
     static let cameraPositionForPortrait = "camera_position_for_portrait"
     static let zoomCamera = "zoomCamera"
