@@ -99,8 +99,21 @@ class SharedPreferenceKeys {
   static const String isViLanguageMode = 'is_vi_language_mode';
   static const String modeButtonHeaderBar = 'mode_button_header_bar';
   static const String isShowLogo = 'is_show_logo';
+  static const String isShowTutorial = 'is_show_tutorial';
+  static const String isEnableGotIt = 'is_enable_got_it';
   
   // QR Code configuration
   static const String numberTimesRetryScanQRCode = 'number_times_retry_scan_qrcode';
   static const String timeoutQRCodeFlow = 'timeout_qrcode_flow';
+
+  // UI Configuration
+  static const String imageTutorialQRCode = 'image_tutorial_qrcode';
+  static const String imageTutorialFront = 'image_tutorial_front';
+  static const String imageTutorialBack = 'image_tutorial_back';
+  static const String imageTutorialBlur = 'image_tutorial_blur';
+  static const String imageTutorialLostAngle = 'image_tutorial_lost_angle';
+  static const String imageTutorialGlare = 'image_tutorial_glare';
+
+  static const String logo = 'logo';
+  static const String logoFaceOval = 'logo_face_oval';
 }

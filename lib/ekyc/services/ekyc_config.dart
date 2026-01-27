@@ -122,8 +122,8 @@ class ICEkycConfig {
   final bool? isShowLogo;
   final String? logo;
   final String? logoFaceOval;
-  final String? widthLogo;
-  final String? heightLogo;
+  final double? widthLogo;
+  final double? heightLogo;
   final String? imageTutorialQRCode;
   final String? imageTutorialFront;
   final String? imageTutorialBack;

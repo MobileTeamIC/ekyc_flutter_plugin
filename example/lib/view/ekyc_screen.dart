@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_plugin_ic_ekyc/flutter_plugin_ic_ekyc.dart';
 import 'package:flutter_plugin_ic_ekyc_example/service/shared_preference.dart';
+import 'package:flutter_plugin_ic_ekyc_example/view/config_ui_screen.dart';
 import 'package:flutter_plugin_ic_ekyc_example/view/log_screen.dart';
 import 'package:flutter_plugin_ic_ekyc_example/view/setting_screen.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -26,8 +27,18 @@ class _EkycScreenState extends State<EkycScreen> {
   LanguageSdk _language = LanguageSdk.icekyc_vi;
   ModeButtonHeaderBar _modeButtonHeaderBar = ModeButtonHeaderBar.leftButton;
   bool _isShowLogo = false;
+  bool _isShowTutorial = false;
+  bool _isEnableGotIt = false;
   int? _numberTimesRetryScanQRCode;
   int? _timeoutQRCodeFlow;
+  String? _imageTutorialQRCode;
+  String? _imageTutorialFront;
+  String? _imageTutorialBack;
+  String? _imageTutorialBlur;
+  String? _imageTutorialLostAngle;
+  String? _imageTutorialGlare;
+  String? _logo;
+  String? _logoFaceOval;
 
   @override
   void initState() {
@@ -66,6 +77,14 @@ class _EkycScreenState extends State<EkycScreen> {
       SharedPreferenceKeys.isShowLogo,
       defaultValue: false,
     );
+    _isShowTutorial = SharedPreferenceService.instance.getBool(
+      SharedPreferenceKeys.isShowTutorial,
+      defaultValue: false,
+    );
+    _isEnableGotIt = SharedPreferenceService.instance.getBool(
+      SharedPreferenceKeys.isEnableGotIt,
+      defaultValue: false,
+    );
     
     // QR Code configuration: pass null directly to SDK if not set
     _numberTimesRetryScanQRCode = SharedPreferenceService.instance.getInt(
@@ -75,6 +94,15 @@ class _EkycScreenState extends State<EkycScreen> {
     _timeoutQRCodeFlow = SharedPreferenceService.instance.getInt(
       SharedPreferenceKeys.timeoutQRCodeFlow,
     );
+
+    _imageTutorialQRCode = SharedPreferenceService.instance.getString(SharedPreferenceKeys.imageTutorialQRCode);
+    _imageTutorialFront = SharedPreferenceService.instance.getString(SharedPreferenceKeys.imageTutorialFront);
+    _imageTutorialBack = SharedPreferenceService.instance.getString(SharedPreferenceKeys.imageTutorialBack);
+    _imageTutorialBlur = SharedPreferenceService.instance.getString(SharedPreferenceKeys.imageTutorialBlur);
+    _imageTutorialLostAngle = SharedPreferenceService.instance.getString(SharedPreferenceKeys.imageTutorialLostAngle);
+    _imageTutorialGlare = SharedPreferenceService.instance.getString(SharedPreferenceKeys.imageTutorialGlare);
+    _logo = SharedPreferenceService.instance.getString(SharedPreferenceKeys.logo);
+    _logoFaceOval = SharedPreferenceService.instance.getString(SharedPreferenceKeys.logoFaceOval);
   }
 
   /// Navigate to Log Screen
@@ -98,10 +126,21 @@ class _EkycScreenState extends State<EkycScreen> {
         languageSdk: _language,
         modeButtonHeaderBar: _modeButtonHeaderBar,
         isShowLogo: _isShowLogo,
+        isShowTutorial: _isShowTutorial,
+        isEnableGotIt: _isEnableGotIt,
         documentType: DocumentType.identityCard,
         versionSdk: VersionSdk.proOval,
         checkLivenessFace: LivenessFaceMode.standard,
         validateDocumentType: ValidateDocumentType.basic,
+        imageTutorialFront: _imageTutorialFront?.isEmpty ?? true ? null : _imageTutorialFront,
+        imageTutorialBack: _imageTutorialBack?.isEmpty ?? true ? null : _imageTutorialBack,
+        imageTutorialBlur: _imageTutorialBlur?.isEmpty ?? true ? null : _imageTutorialBlur,
+        imageTutorialLostAngle: _imageTutorialLostAngle?.isEmpty ?? true ? null : _imageTutorialLostAngle,
+        imageTutorialGlare: _imageTutorialGlare?.isEmpty ?? true ? null : _imageTutorialGlare,
+        logo: _logo?.isEmpty ?? true ? null : _logo,
+        logoFaceOval: _logoFaceOval?.isEmpty ?? true ? null : _logoFaceOval,
+        widthLogo: 148.0,
+        heightLogo: 20.0,
       );
       _navigate(await ICEkyc.instance.startEkycFull(config));
     } on PlatformException catch (e) {
@@ -123,8 +162,15 @@ class _EkycScreenState extends State<EkycScreen> {
         languageSdk: _language,
         modeButtonHeaderBar: _modeButtonHeaderBar,
         isShowLogo: _isShowLogo,
+        isShowTutorial: _isShowTutorial,
+        isEnableGotIt: _isEnableGotIt,
         documentType: DocumentType.identityCard,
         validateDocumentType: ValidateDocumentType.basic,
+        imageTutorialFront: _imageTutorialFront?.isEmpty ?? true ? null : _imageTutorialFront,
+        imageTutorialBack: _imageTutorialBack?.isEmpty ?? true ? null : _imageTutorialBack,
+        logo: _logo?.isEmpty ?? true ? null : _logo,
+        widthLogo: 148.0,
+        heightLogo: 20.0,
       );
       _navigate(await ICEkyc.instance.startEkycOcr(config));
     } on PlatformException catch (e) {
@@ -142,8 +188,18 @@ class _EkycScreenState extends State<EkycScreen> {
         languageSdk: _language,
         modeButtonHeaderBar: _modeButtonHeaderBar,
         isShowLogo: _isShowLogo,
+        isShowTutorial: _isShowTutorial,
+        isEnableGotIt: _isEnableGotIt,
         documentType: DocumentType.identityCard,
         validateDocumentType: ValidateDocumentType.basic,
+        logo: _logo?.isEmpty ?? true ? null : _logo,
+        widthLogo: 148.0,
+        heightLogo: 20.0,
+        imageTutorialBlur: _imageTutorialBlur?.isEmpty ?? true ? null : _imageTutorialBlur,
+        imageTutorialLostAngle: _imageTutorialLostAngle?.isEmpty ?? true ? null : _imageTutorialLostAngle,
+        imageTutorialGlare: _imageTutorialGlare?.isEmpty ?? true ? null : _imageTutorialGlare,
+        imageTutorialFront: _imageTutorialFront?.isEmpty ?? true ? null : _imageTutorialFront,
+
       );
       _navigate(await ICEkyc.instance.startEkycOcrFront(config));
     } on PlatformException catch (e) {
@@ -164,8 +220,19 @@ class _EkycScreenState extends State<EkycScreen> {
         languageSdk: _language,
         modeButtonHeaderBar: _modeButtonHeaderBar,
         isShowLogo: _isShowLogo,
+        isShowTutorial: _isShowTutorial,
+        isEnableGotIt: _isEnableGotIt,
         versionSdk: VersionSdk.proOval,
         checkLivenessFace: LivenessFaceMode.standard,
+        logo: _logo?.isEmpty ?? true ? null : _logo,
+        logoFaceOval: _logoFaceOval?.isEmpty ?? true ? null : _logoFaceOval,
+        widthLogo: 148.0,
+        heightLogo: 20.0,
+        imageTutorialFront: _imageTutorialFront?.isEmpty ?? true ? null : _imageTutorialFront,
+        imageTutorialBack: _imageTutorialBack?.isEmpty ?? true ? null : _imageTutorialBack,
+        imageTutorialBlur: _imageTutorialBlur?.isEmpty ?? true ? null : _imageTutorialBlur,
+        imageTutorialLostAngle: _imageTutorialLostAngle?.isEmpty ?? true ? null : _imageTutorialLostAngle,
+        imageTutorialGlare: _imageTutorialGlare?.isEmpty ?? true ? null : _imageTutorialGlare,
       );
       _navigate(await ICEkyc.instance.startEkycFace(config));
     } on PlatformException catch (e) {
@@ -182,8 +249,20 @@ class _EkycScreenState extends State<EkycScreen> {
         languageSdk: _language,
         modeButtonHeaderBar: _modeButtonHeaderBar,
         isShowLogo: _isShowLogo,
+        isShowTutorial: _isShowTutorial,
+        isEnableGotIt: _isEnableGotIt,
         numberTimesRetryScanQRCode: _numberTimesRetryScanQRCode,
         timeoutQRCodeFlow: _timeoutQRCodeFlow,
+        imageTutorialQRCode: _imageTutorialQRCode?.isEmpty ?? true ? null : _imageTutorialQRCode,
+        logo: _logo?.isEmpty ?? true ? null : _logo,
+        widthLogo: 148.0,
+        heightLogo: 20.0,
+
+        imageTutorialFront: _imageTutorialFront?.isEmpty ?? true ? null : _imageTutorialFront,
+        imageTutorialBack: _imageTutorialBack?.isEmpty ?? true ? null : _imageTutorialBack,
+        imageTutorialBlur: _imageTutorialBlur?.isEmpty ?? true ? null : _imageTutorialBlur,
+        imageTutorialLostAngle: _imageTutorialLostAngle?.isEmpty ?? true ? null : _imageTutorialLostAngle,
+        imageTutorialGlare: _imageTutorialGlare?.isEmpty ?? true ? null : _imageTutorialGlare,
       );
       _navigate(await ICEkyc.instance.startEkycScanQRCode(config));
     } on PlatformException catch (e) {
@@ -226,6 +305,18 @@ class _EkycScreenState extends State<EkycScreen> {
                 ).then((_) => loadData());
               },
               tooltip: 'Cài đặt',
+            ),
+            IconButton(
+              icon: const Icon(Icons.palette),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ConfigUiScreen(),
+                  ),
+                ).then((_) => loadData());
+              },
+              tooltip: 'Cấu hình UI',
             ),
           ],
         ),

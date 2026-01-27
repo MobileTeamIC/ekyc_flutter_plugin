@@ -2,6 +2,8 @@ package com.vnpt.flutter_plugin_ic_ekyc
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.text.TextUtils
 import com.vnptit.idg.sdk.activity.VnptFrontActivity
 import com.vnptit.idg.sdk.activity.VnptIdentityActivity
@@ -12,6 +14,7 @@ import com.vnptit.idg.sdk.activity.VnptRearActivity
 import com.vnptit.idg.sdk.utils.KeyIntentConstants
 import com.vnptit.idg.sdk.utils.KeyResultConstants
 import com.vnptit.idg.sdk.utils.SDKEnum
+import io.flutter.FlutterInjector
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -38,9 +41,15 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
     private lateinit var channel: MethodChannel
     private var result: Result? = null
     private var binding: ActivityPluginBinding? = null
+    
+    /// Store the FlutterPluginBinding for accessing Flutter assets
+    private var flutterPluginBinding: FlutterPlugin.FlutterPluginBinding? = null
 
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        // Store binding reference for Flutter asset lookup
+        this.flutterPluginBinding = flutterPluginBinding
+        
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, CHANNEL)
         channel.setMethodCallHandler(this)
     }
@@ -82,6 +91,7 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
+        flutterPluginBinding = null  // Clear reference
     }
     // config for new Ekyc response
     /*
@@ -550,6 +560,35 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
         
         // time_out_call_api
         intent.putExtra(KeyIntentConstants.TIMEOUT_CALL_API, json.optInt(KeyArgumentMethod.TIMEOUT_CALL_API, 20))
+        
+        // MARK: - Load logo images from Flutter assets
+        loadFlutterAssetBitmap(json.optString(KeyArgumentMethod.LOGO, null))?.let {
+            intent.putExtra(KeyIntentConstants.LOGO, it)
+        }
+        loadFlutterAssetBitmap(json.optString(KeyArgumentMethod.LOGO_FACE_OVAL, null))?.let {
+            intent.putExtra(KeyIntentConstants.LOGO_FACE_OVAL, it)
+        }
+        
+        // MARK: - Load tutorial images from Flutter assets
+        loadFlutterAssetBitmap(json.optString(KeyArgumentMethod.IMAGE_TUTORIAL_QR_CODE, null))?.let {
+            intent.putExtra(KeyIntentConstants.IMAGE_TUTORIAL_QRCODE, it)
+        }
+        loadFlutterAssetBitmap(json.optString(KeyArgumentMethod.IMAGE_TUTORIAL_FRONT, null))?.let {
+            intent.putExtra(KeyIntentConstants.IMAGE_TUTORIAL_FRONT, it)
+        }
+        loadFlutterAssetBitmap(json.optString(KeyArgumentMethod.IMAGE_TUTORIAL_BACK, null))?.let {
+            intent.putExtra(KeyIntentConstants.IMAGE_TUTORIAL_BACK, it)
+        }
+        loadFlutterAssetBitmap(json.optString(KeyArgumentMethod.IMAGE_TUTORIAL_BLUR, null))?.let {
+            intent.putExtra(KeyIntentConstants.IMAGE_TUTORIAL_BLUR, it)
+        }
+        loadFlutterAssetBitmap(json.optString(KeyArgumentMethod.IMAGE_TUTORIAL_LOST_ANGLE, null))?.let {
+            intent.putExtra(KeyIntentConstants.IMAGE_TUTORIAL_LOST_ANGLE, it)
+        }
+        loadFlutterAssetBitmap(json.optString(KeyArgumentMethod.IMAGE_TUTORIAL_GLARE, null))?.let {
+            intent.putExtra(KeyIntentConstants.IMAGE_TUTORIAL_GLARE, it)
+        }
+        intent.putExtra(KeyIntentConstants.IMAGE_TUTORIAL_GLARE, androidx.constraintlayout.widget.R.drawable.abc_ic_star_black_16dp)
 
         return intent
     }
@@ -663,6 +702,37 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
             } else {
                 put(key, it)
             }
+        }
+    }
+    
+    // MARK: - Flutter Asset Loading
+    
+    /**
+     * Converts a Flutter asset path to Bitmap
+     * @param assetPath Flutter asset path (e.g., "assets/images/tutorial.png")
+     * @return Bitmap if found, null otherwise
+     */
+    private fun loadFlutterAssetBitmap(assetPath: String?): Bitmap? {
+        if (assetPath.isNullOrBlank()) return null
+        
+        val binding = flutterPluginBinding ?: run {
+            android.util.Log.w("eKYC_IC", "FlutterPluginBinding not available for asset lookup")
+            return null
+        }
+        
+        return try {
+            // Use FlutterLoader to get the correct asset lookup key
+            val flutterLoader = FlutterInjector.instance().flutterLoader()
+            val key = flutterLoader.getLookupKeyForAsset(assetPath)
+            
+            // Open asset stream and decode to Bitmap
+            val assetManager = binding.applicationContext.assets
+            assetManager.open(key).use { inputStream ->
+                BitmapFactory.decodeStream(inputStream)
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("eKYC_IC", "Failed to load Flutter asset: $assetPath", e)
+            null
         }
     }
 

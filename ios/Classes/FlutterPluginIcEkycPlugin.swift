@@ -4,7 +4,12 @@ import ICSdkEKYC
 
 public class FlutterPluginIcEkycPlugin: NSObject, FlutterPlugin {
     
-    // Store the result callback for SDK delegate methods
+    // MARK: - Properties
+    
+    /// Store the registrar for accessing Flutter assets
+    private static var registrar: FlutterPluginRegistrar?
+    
+    /// Store the result callback for SDK delegate methods
     private var pendingResult: FlutterResult?
     private var flutterViewController: UIViewController? {
         // Find the key window's root view controller
@@ -30,6 +35,9 @@ public class FlutterPluginIcEkycPlugin: NSObject, FlutterPlugin {
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
+        // Store registrar reference for Flutter asset lookup
+        self.registrar = registrar
+        
         let channel = FlutterMethodChannel(name: "flutter.sdk.ic_ekyc/integrate", binaryMessenger: registrar.messenger())
         let instance = FlutterPluginIcEkycPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
@@ -120,6 +128,35 @@ public class FlutterPluginIcEkycPlugin: NSObject, FlutterPlugin {
         return nil
     }
     
+    // MARK: - Flutter Asset Loading
+    
+    /// Converts a Flutter asset path to UIImage
+    /// - Parameter assetPath: Flutter asset path (e.g., "assets/images/tutorial.png")
+    /// - Returns: UIImage if found, nil otherwise
+    private func loadFlutterAssetImage(_ assetPath: String?) -> UIImage? {
+        guard let assetPath = assetPath, !assetPath.isEmpty else {
+            return nil
+        }
+        
+        // Use registrar to get the actual path in the bundle
+        guard let registrar = FlutterPluginIcEkycPlugin.registrar else {
+            debugPrint("[eKYC IC] Registrar not available for asset lookup")
+            return nil
+        }
+        
+        let key = registrar.lookupKey(forAsset: assetPath)
+        guard let path = Bundle.main.path(forResource: key, ofType: nil) else {
+            debugPrint("[eKYC IC] Asset not found: \(assetPath)")
+            return nil
+        }
+        
+        guard let image = UIImage(contentsOfFile: path) else {
+            debugPrint("[eKYC IC] Failed to create UIImage from: \(path)")
+            return nil
+        }
+        
+        return image
+    }
     
     
     
@@ -357,16 +394,37 @@ extension FlutterPluginIcEkycPlugin {
 //        ekycVC.tintColorButtonCapture = args[KeyArgumentMethod.tintColorButtonCapture] as? String ?? ""
 //        ekycVC.backgroundColorBorderCaptureFace = args[KeyArgumentMethod.backgroundColorBorderCaptureFace] as? String ?? ""
         ekycVC.isShowLogo = args[KeyArgumentMethod.isShowLogo] as? Bool ?? false
-//        ekycVC.logo = args[KeyArgumentMethod.logo] as? String ?? ""
-//        ekycVC.logoFaceOval = args[KeyArgumentMethod.logoFaceOval] as? String ?? ""
         ekycVC.widthLogo = args[KeyArgumentMethod.widthLogo] as? Double ?? 0.0
         ekycVC.heightLogo = args[KeyArgumentMethod.heightLogo] as? Double ?? 0.0
-//        ekycVC.imageTutorialQRCode = args[KeyArgumentMethod.imageTutorialQRCode] as? String ?? ""
-//        ekycVC.imageTutorialFront = args[KeyArgumentMethod.imageTutorialFront] as? String ?? ""
-//        ekycVC.imageTutorialBack = args[KeyArgumentMethod.imageTutorialBack] as? String ?? ""
-//        ekycVC.imageTutorialBlur = args[KeyArgumentMethod.imageTutorialBlur] as? String ?? ""
-//        ekycVC.imageTutorialLostAngle = args[KeyArgumentMethod.imageTutorialLostAngle] as? String ?? ""
-//        ekycVC.imageTutorialGlare = args[KeyArgumentMethod.imageTutorialGlare] as? String ?? ""
+        
+        // MARK: - Load logo images from Flutter assets
+        if let logoImage = loadFlutterAssetImage(args[KeyArgumentMethod.logo] as? String) {
+            ekycVC.logo = logoImage
+        }
+        if let logoFaceOvalImage = loadFlutterAssetImage(args[KeyArgumentMethod.logoFaceOval] as? String) {
+            ekycVC.logoFaceOval = logoFaceOvalImage
+        }
+        
+        // MARK: - Load tutorial images from Flutter assets
+        if let image = loadFlutterAssetImage(args[KeyArgumentMethod.imageTutorialQRCode] as? String) {
+            ekycVC.imageTutorialQRCode = image
+        }
+        if let image = loadFlutterAssetImage(args[KeyArgumentMethod.imageTutorialFront] as? String) {
+            ekycVC.imageTutorialFront = image
+        }
+        if let image = loadFlutterAssetImage(args[KeyArgumentMethod.imageTutorialBack] as? String) {
+            ekycVC.imageTutorialBack = image
+        }
+        if let image = loadFlutterAssetImage(args[KeyArgumentMethod.imageTutorialBlur] as? String) {
+            ekycVC.imageTutorialBlur = image
+        }
+        if let image = loadFlutterAssetImage(args[KeyArgumentMethod.imageTutorialLostAngle] as? String) {
+            ekycVC.imageTutorialLostAngle = image
+        }
+        if let image = loadFlutterAssetImage(args[KeyArgumentMethod.imageTutorialGlare] as? String) {
+            ekycVC.imageTutorialGlare = image
+        }
+        
 //        ekycVC.backgroundColorPopup = args[KeyArgumentMethod.backgroundColorPopup] as? String ?? ""
 //        ekycVC.textColorContentPopup = args[KeyArgumentMethod.textColorContentPopup] as? String ?? ""
         ekycVC.isEnableCheckVirtualCamera = args[KeyArgumentMethod.isEnableCheckVirtualCamera] as? Bool ?? false
@@ -456,7 +514,7 @@ extension FlutterPluginIcEkycPlugin: ICEkycCameraDelegate {
             }
         } else {
             pendingResult?(FlutterError(code: EKYCStatus.cancelled,
-                                        message: "User cancelled eKYC flow with last step: \(lastScreen)",
+                                        message: lastScreen,
                                         details: ["lastScreen": lastScreen]))
             pendingResult = nil
         }

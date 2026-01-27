@@ -13,21 +13,53 @@ class ICEkycPresets {
     ValidateDocumentType validateDocumentType = ValidateDocumentType.basic,
     VersionSdk versionSdk = VersionSdk.proOval,
     LivenessFaceMode checkLivenessFace = LivenessFaceMode.noneCheckFace,
-    bool isShowTutorial = false,
+    String challengeCode = '',
+    int? numberTimesRetryScanQRCode,
+    int? timeoutQRCodeFlow,
     bool isEnableCompare = false,
     bool isCheckMaskedFace = false,
     bool isCheckLivenessCard = false,
     bool isValidatePostcode = false,
-    bool isEnableGotIt = false,
-    LanguageSdk languageSdk = LanguageSdk.icekyc_vi,
-    bool isShowLogo = false,
     bool isTurnOffCallService = true,
     bool isEnableScanQRCode = false,
     bool isShowQRCodeResult = false,
-    String challengeCode = '',
+
+    //Config ui
+    bool isShowTutorial = false,
+    bool isEnableGotIt = false,
+    LanguageSdk languageSdk = LanguageSdk.icekyc_vi,
+    bool isShowLogo = false,
     ModeButtonHeaderBar modeButtonHeaderBar = ModeButtonHeaderBar.leftButton,
-    int? numberTimesRetryScanQRCode,
-    int? timeoutQRCodeFlow,
+
+    
+    /// Đường dẫn Logo thương hiệu
+    String? logo,
+    
+    /// Kích thước Ảnh thương hiệu. Mặc định 148.0 * 20.0 (chiều rộng * chiều cao)
+    double? widthLogo,
+    double? heightLogo,
+
+    /// Đường dẫn Logo trong màn hình chụp ảnh khuôn mặt oval. Mặc định là VNPT AI
+    String? logoFaceOval,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp mặt trước
+    String? imageTutorialFront,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp mặt sau
+    String? imageTutorialBack,
+
+    /// Đường dẫn Ảnh hướng dẫn quét QR code
+    String? imageTutorialQRCode,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp ảnh bị che
+    String? imageTutorialBlur,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp ảnh bị nghiêng, mất góc
+    String? imageTutorialLostAngle,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp ảnh bị chiếu sáng
+    String? imageTutorialGlare,
+
   }) => ICEkycConfig(
     accessToken: accessToken,
     tokenId: tokenId,
@@ -52,6 +84,16 @@ class ICEkycPresets {
     modeButtonHeaderBar: modeButtonHeaderBar,
     numberTimesRetryScanQRCode: numberTimesRetryScanQRCode,
     timeoutQRCodeFlow: timeoutQRCodeFlow,
+    logo: logo,
+    widthLogo: widthLogo,
+    heightLogo: heightLogo,
+    logoFaceOval: logoFaceOval,
+    imageTutorialFront: imageTutorialFront,
+    imageTutorialBack: imageTutorialBack,
+    imageTutorialQRCode: imageTutorialQRCode,
+    imageTutorialBlur: imageTutorialBlur,
+    imageTutorialLostAngle: imageTutorialLostAngle,
+    imageTutorialGlare: imageTutorialGlare,
   );
 
   /// Create configuration for OCR only flow
@@ -61,20 +103,51 @@ class ICEkycPresets {
     String tokenKey = '',
     DocumentType documentType = DocumentType.identityCard,
     String changeBaseUrl = '',
-    bool isShowTutorial = false,
     bool isCheckLivenessCard = false,
     ValidateDocumentType validateDocumentType = ValidateDocumentType.basic,
     bool isValidatePostcode = false,
-    bool isEnableGotIt = false,
-    LanguageSdk languageSdk = LanguageSdk.icekyc_vi,
-    bool isShowLogo = false,
     bool isTurnOffCallService = true,
     bool isEnableScanQRCode = false,
     bool isShowQRCodeResult = false,
     String challengeCode = '',
-    ModeButtonHeaderBar modeButtonHeaderBar = ModeButtonHeaderBar.leftButton,
     int? numberTimesRetryScanQRCode,
     int? timeoutQRCodeFlow,
+
+    // Config UI
+    bool isShowTutorial = false,
+    bool isEnableGotIt = false,
+    LanguageSdk languageSdk = LanguageSdk.icekyc_vi,
+    bool isShowLogo = false,
+    ModeButtonHeaderBar modeButtonHeaderBar = ModeButtonHeaderBar.leftButton,
+
+    /// Đường dẫn Logo thương hiệu
+    String? logo,
+    
+    /// Kích thước Ảnh thương hiệu. Mặc định 148.0 * 20.0 (chiều rộng * chiều cao)
+    double? widthLogo,
+    double? heightLogo,
+
+    /// Đường dẫn Logo trong màn hình chụp ảnh khuôn mặt oval. Mặc định là VNPT AI
+    String? logoFaceOval,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp mặt trước
+    String? imageTutorialFront,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp mặt sau
+    String? imageTutorialBack,
+
+    /// Đường dẫn Ảnh hướng dẫn quét QR code
+    String? imageTutorialQRCode,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp ảnh bị che
+    String? imageTutorialBlur,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp ảnh bị nghiêng, mất góc
+    String? imageTutorialLostAngle,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp ảnh bị chiếu sáng
+    String? imageTutorialGlare,
+
   }) => ICEkycConfig(
     accessToken: accessToken,
     tokenId: tokenId,
@@ -93,6 +166,16 @@ class ICEkycPresets {
     isShowQRCodeResult: isShowQRCodeResult,
     challengeCode: challengeCode,
     modeButtonHeaderBar: modeButtonHeaderBar,
+    logo: logo,
+    widthLogo: widthLogo,
+    heightLogo: heightLogo,
+    logoFaceOval: logoFaceOval,
+    imageTutorialFront: imageTutorialFront,
+    imageTutorialBack: imageTutorialBack,
+    imageTutorialQRCode: imageTutorialQRCode,
+    imageTutorialBlur: imageTutorialBlur,
+    imageTutorialLostAngle: imageTutorialLostAngle,
+    imageTutorialGlare: imageTutorialGlare,
   );
 
   //MARK: - OCR FONT
@@ -126,18 +209,48 @@ class ICEkycPresets {
     String tokenKey = '',
     DocumentType documentType = DocumentType.identityCard,
     String changeBaseUrl = '',
-    bool isShowTutorial = false,
     bool isCheckLivenessCard = false,
     ValidateDocumentType validateDocumentType = ValidateDocumentType.basic,
     bool isValidatePostcode = false,
-    bool isEnableGotIt = false,
-    LanguageSdk languageSdk = LanguageSdk.icekyc_vi,
-    bool isShowLogo = false,
     bool isTurnOffCallService = true,
     bool isEnableScanQRCode = false,
     bool isShowQRCodeResult = false,
     String challengeCode = '',
+
+     // Config UI
+    bool isShowTutorial = false,
+    bool isEnableGotIt = false,
+    LanguageSdk languageSdk = LanguageSdk.icekyc_vi,
+    bool isShowLogo = false,
     ModeButtonHeaderBar modeButtonHeaderBar = ModeButtonHeaderBar.leftButton,
+
+    /// Đường dẫn Logo thương hiệu
+    String? logo,
+    
+    /// Kích thước Ảnh thương hiệu. Mặc định 148.0 * 20.0 (chiều rộng * chiều cao)
+    double? widthLogo,
+    double? heightLogo,
+
+    /// Đường dẫn Logo trong màn hình chụp ảnh khuôn mặt oval. Mặc định là VNPT AI
+    String? logoFaceOval,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp mặt trước
+    String? imageTutorialFront,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp mặt sau
+    String? imageTutorialBack,
+
+    /// Đường dẫn Ảnh hướng dẫn quét QR code
+    String? imageTutorialQRCode,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp ảnh bị che
+    String? imageTutorialBlur,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp ảnh bị nghiêng, mất góc
+    String? imageTutorialLostAngle,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp ảnh bị chiếu sáng
+    String? imageTutorialGlare,
   }) => ICEkycConfig(
     accessToken: accessToken,
     tokenId: tokenId,
@@ -156,6 +269,16 @@ class ICEkycPresets {
     isShowQRCodeResult: isShowQRCodeResult,
     challengeCode: challengeCode,
     modeButtonHeaderBar: modeButtonHeaderBar,
+    logo: logo,
+    widthLogo: widthLogo,
+    heightLogo: heightLogo,
+    logoFaceOval: logoFaceOval,
+    imageTutorialFront: imageTutorialFront,
+    imageTutorialBack: imageTutorialBack,
+    imageTutorialQRCode: imageTutorialQRCode,
+    imageTutorialBlur: imageTutorialBlur,
+    imageTutorialLostAngle: imageTutorialLostAngle,
+    imageTutorialGlare: imageTutorialGlare,
   );
 
   //MARK: - ORC BACK
@@ -247,22 +370,51 @@ class ICEkycPresets {
     String tokenId = '',
     String tokenKey = '',
     DocumentType documentType = DocumentType.identityCard,
-    bool isShowTutorial = false,
     bool isCheckLivenessCard = false,
     bool isCheckMaskedFace = false,
     LivenessFaceMode checkLivenessFace = LivenessFaceMode.noneCheckFace,
     ValidateDocumentType validateDocumentType = ValidateDocumentType.basic,
     bool isValidatePostcode = false,
-    bool isEnableGotIt = false,
-    LanguageSdk languageSdk = LanguageSdk.icekyc_vi,
-    bool isShowLogo = true,
     bool isTurnOffCallService = true,
     bool isEnableScanQRCode = false,
     bool isShowQRCodeResult = false,
     VersionSdk versionSdk = VersionSdk.proOval,
     String challengeCode = '',
+
+  // Config UI
+    bool isShowTutorial = false,
+    bool isEnableGotIt = false,
+    LanguageSdk languageSdk = LanguageSdk.icekyc_vi,
+    bool isShowLogo = false,
     ModeButtonHeaderBar modeButtonHeaderBar = ModeButtonHeaderBar.leftButton,
-  }) => ICEkycConfig(
+
+    /// Đường dẫn Logo thương hiệu
+    String? logo,
+    
+    /// Kích thước Ảnh thương hiệu. Mặc định 148.0 * 20.0 (chiều rộng * chiều cao)
+    double? widthLogo,
+    double? heightLogo,
+
+    /// Đường dẫn Logo trong màn hình chụp ảnh khuôn mặt oval. Mặc định là VNPT AI
+    String? logoFaceOval,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp mặt trước
+    String? imageTutorialFront,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp mặt sau
+    String? imageTutorialBack,
+
+    /// Đường dẫn Ảnh hướng dẫn quét QR code
+    String? imageTutorialQRCode,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp ảnh bị che
+    String? imageTutorialBlur,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp ảnh bị nghiêng, mất góc
+    String? imageTutorialLostAngle,
+
+    /// Đường dẫn Ảnh hướng dẫn chụp ảnh bị chiếu sáng
+    String? imageTutorialGlare,  }) => ICEkycConfig(
     accessToken: accessToken,
     tokenId: tokenId,
     tokenKey: tokenKey,
@@ -278,6 +430,16 @@ class ICEkycPresets {
     isShowQRCodeResult: isShowQRCodeResult,
     challengeCode: challengeCode,
     modeButtonHeaderBar: modeButtonHeaderBar,
+    logo: logo,
+    widthLogo: widthLogo,
+    heightLogo: heightLogo,
+    logoFaceOval: logoFaceOval,
+    imageTutorialFront: imageTutorialFront,
+    imageTutorialBack: imageTutorialBack,
+    imageTutorialQRCode: imageTutorialQRCode,
+    imageTutorialBlur: imageTutorialBlur,
+    imageTutorialLostAngle: imageTutorialLostAngle,
+    imageTutorialGlare: imageTutorialGlare,
   );
 
   //MARK: - SCANQR CODE
@@ -307,14 +469,39 @@ class ICEkycPresets {
     required String accessToken,
     required String tokenId,
     required String tokenKey,
-    bool isShowTutorial = true,
-    bool isEnableGotIt = true,
+    bool isShowTutorial = false,
+    bool isEnableGotIt = false,
     bool isTurnOffCallService = true,
     LanguageSdk languageSdk = LanguageSdk.icekyc_vi,
     bool isShowLogo = false,
     ModeButtonHeaderBar modeButtonHeaderBar = ModeButtonHeaderBar.leftButton,
     int? numberTimesRetryScanQRCode,
     int? timeoutQRCodeFlow,
+
+    //Config UI
+    /// Đường dẫn Logo thương hiệu
+    String? logo,
+
+    /// Kích thước Ảnh thương hiệu. Mặc định 148.0 * 20.0 (chiều rộng * chiều cao)
+    double? widthLogo,
+    double? heightLogo,
+
+    /// Đường dẫn Logo trong màn hình chụp ảnh khuôn mặt oval. Mặc định là VNPT AI
+    String? logoFaceOval,
+    /// Đường dẫn Ảnh hướng dẫn chụp mặt trước
+    String? imageTutorialFront,
+    /// Đường dẫn Ảnh hướng dẫn chụp mặt sau
+    String? imageTutorialBack,
+    /// Đường dẫn Ảnh hướng dẫn quét QR code
+    String? imageTutorialQRCode,
+    /// Đường dẫn Ảnh hướng dẫn chụp ảnh bị che
+    String? imageTutorialBlur,
+    /// Đường dẫn Ảnh hướng dẫn chụp ảnh bị nghiêng, mất góc
+    String? imageTutorialLostAngle,
+    /// Đường dẫn Ảnh hướng dẫn chụp ảnh bị chiếu sáng
+    String? imageTutorialGlare,
+
+    
   }) => ICEkycConfig(
     accessToken: accessToken,
     tokenId: tokenId,
@@ -327,5 +514,17 @@ class ICEkycPresets {
     modeButtonHeaderBar: modeButtonHeaderBar,
     numberTimesRetryScanQRCode: numberTimesRetryScanQRCode,
     timeoutQRCodeFlow: timeoutQRCodeFlow,
+
+    //Config UI
+    logo: logo,
+    widthLogo: widthLogo,
+    heightLogo: heightLogo,
+    logoFaceOval: logoFaceOval,
+    imageTutorialFront: imageTutorialFront,
+    imageTutorialBack: imageTutorialBack,
+    imageTutorialQRCode: imageTutorialQRCode,
+    imageTutorialBlur: imageTutorialBlur,
+    imageTutorialLostAngle: imageTutorialLostAngle,
+    imageTutorialGlare: imageTutorialGlare,
   );
 }

@@ -26,6 +26,8 @@ class _SettingScreenState extends State<SettingScreen> {
   LanguageSdk _languageMode = LanguageSdk.icekyc_vi;
   ModeButtonHeaderBar _modeButtonHeaderBar = ModeButtonHeaderBar.leftButton;
   bool _isShowLogo = false;
+  bool _isShowTutorial = false;
+  bool _isEnableGotIt = false;
 
   @override
   void initState() {
@@ -63,6 +65,14 @@ class _SettingScreenState extends State<SettingScreen> {
             : ModeButtonHeaderBar.rightButton;
     _isShowLogo = SharedPreferenceService.instance.getBool(
       SharedPreferenceKeys.isShowLogo,
+      defaultValue: false,
+    );
+    _isShowTutorial = SharedPreferenceService.instance.getBool(
+      SharedPreferenceKeys.isShowTutorial,
+      defaultValue: false,
+    );
+    _isEnableGotIt = SharedPreferenceService.instance.getBool(
+      SharedPreferenceKeys.isEnableGotIt,
       defaultValue: false,
     );
     
@@ -126,6 +136,14 @@ class _SettingScreenState extends State<SettingScreen> {
         SharedPreferenceService.instance.setBool(
           SharedPreferenceKeys.isShowLogo,
           _isShowLogo,
+        ),
+        SharedPreferenceService.instance.setBool(
+          SharedPreferenceKeys.isShowTutorial,
+          _isShowTutorial,
+        ),
+        SharedPreferenceService.instance.setBool(
+          SharedPreferenceKeys.isEnableGotIt,
+          _isEnableGotIt,
         ),
       ]);
       
@@ -212,12 +230,38 @@ class _SettingScreenState extends State<SettingScreen> {
                           children: [
                             Text(
                               'Hiển thị Logo',
-                              style: context.textTheme.large,
+                              style: context.textTheme.p,
                             ),
                             Spacer(),
                             ShadSwitch(
                               value: _isShowLogo,
                               onChanged: (v) => setState(() => _isShowLogo = v),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              'Hiển thị Tutorial',
+                              style: context.textTheme.p,
+                            ),
+                            Spacer(),
+                            ShadSwitch(
+                              value: _isShowTutorial,
+                              onChanged: (v) => setState(() => _isShowTutorial = v),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              'Hiển thị Got It',
+                              style: context.textTheme.p,
+                            ),
+                            Spacer(),
+                            ShadSwitch(
+                              value: _isEnableGotIt,
+                              onChanged: (v) => setState(() => _isEnableGotIt = v),
                             ),
                           ],
                         ),
