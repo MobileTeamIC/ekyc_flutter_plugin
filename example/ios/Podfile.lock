@@ -35,7 +35,7 @@ SPEC CHECKSUMS:
   flutter_plugin_ic_ekyc: 10325e7343a60409234611e023205a5ae8c4507d
   integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
   path_provider_foundation: bb55f6dbba17d0dccd6737fe6f7f34fbd0376880
-  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
 
 PODFILE CHECKSUM: 251cb053df7158f337c0712f2ab29f4e0fa474ce
 

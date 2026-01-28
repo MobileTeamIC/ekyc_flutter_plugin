@@ -563,6 +563,80 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
         // time_out_call_api
         intent.putExtra(KeyIntentConstants.TIMEOUT_CALL_API, json.optInt(KeyArgumentMethod.TIMEOUT_CALL_API, 20))
         
+        // MARK: - Color configurations (Android uses AARRGGBB format directly)
+        json.optInt(KeyArgumentMethod.CONTENT_COLOR_HEADER_BAR, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.CONTENT_COLOR_HEADER_BAR, it)
+        }
+        json.optInt(KeyArgumentMethod.BACKGROUND_COLOR_HEADER_BAR, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.BACKGROUND_COLOR_HEADER_BAR, it)
+        }
+        json.optInt(KeyArgumentMethod.TEXT_COLOR_CONTENT_MAIN, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.TEXT_COLOR_CONTENT_MAIN, it)
+        }
+        json.optInt(KeyArgumentMethod.TITLE_COLOR_MAIN, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.TITLE_COLOR_MAIN, it)
+        }
+        json.optInt(KeyArgumentMethod.BACKGROUND_COLOR_MAIN_SCREEN, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.BACKGROUND_COLOR_MAIN_SCREEN, it)
+        }
+        json.optInt(KeyArgumentMethod.BACKGROUND_COLOR_LINE, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.BACKGROUND_COLOR_LINE, it)
+        }
+        json.optInt(KeyArgumentMethod.BACKGROUND_COLOR_ACTIVE_BUTTON, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.BACKGROUND_COLOR_ACTIVE_BUTTON, it)
+        }
+        json.optInt(KeyArgumentMethod.BACKGROUND_COLOR_DEACTIVE_BUTTON, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.BACKGROUND_COLOR_DEACTIVE_BUTTON, it)
+        }
+        json.optInt(KeyArgumentMethod.TITLE_COLOR_ACTIVE_BUTTON, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.TITLE_COLOR_ACTIVE_BUTTON, it)
+        }
+        json.optInt(KeyArgumentMethod.TITLE_COLOR_DEACTIVE_BUTTON, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.TITLE_COLOR_DEACTIVE_BUTTON, it)
+        }
+        json.optInt(KeyArgumentMethod.BACKGROUND_COLOR_CAPTURE_DOCUMENT_SCREEN, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.BACKGROUND_COLOR_CAPTURE_DOCUMENT_SCREEN, it)
+        }
+        json.optInt(KeyArgumentMethod.BACKGROUND_COLOR_CAPTURE_FACE_SCREEN, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.BACKGROUND_COLOR_CAPTURE_FACE_SCREEN, it)
+        }
+        json.optInt(KeyArgumentMethod.EFFECT_COLOR_NOTICE_FACE, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.EFFECT_COLOR_NOTICE_FACE, it)
+        }
+        json.optInt(KeyArgumentMethod.TEXT_COLOR_NOTICE_FACE, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.TEXT_COLOR_NOTICE_FACE, it)
+        }
+        json.optInt(KeyArgumentMethod.EFFECT_COLOR_NOTICE_INVALID_FACE, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.EFFECT_COLOR_NOTICE_INVALID_FACE, it)
+        }
+        json.optInt(KeyArgumentMethod.COLOR_CONTENT_FACE_EFFECT, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.COLOR_CONTENT_FACE_EFFECT, it)
+        }
+        json.optInt(KeyArgumentMethod.EFFECT_COLOR_NOTICE_VALID_DOCUMENT, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.EFFECT_COLOR_NOTICE_VALID_DOCUMENT, it)
+        }
+        json.optInt(KeyArgumentMethod.EFFECT_COLOR_NOTICE_INVALID_DOCUMENT, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.EFFECT_COLOR_NOTICE_INVALID_DOCUMENT, it)
+        }
+        json.optInt(KeyArgumentMethod.TEXT_COLOR_NOTICE_VALID_DOCUMENT, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.TEXT_COLOR_NOTICE_VALID_DOCUMENT, it)
+        }
+        json.optInt(KeyArgumentMethod.TEXT_COLOR_NOTICE_INVALID_DOCUMENT, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.TEXT_COLOR_NOTICE_INVALID_DOCUMENT, it)
+        }
+        json.optInt(KeyArgumentMethod.TINT_COLOR_BUTTON_CAPTURE, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.TINT_COLOR_BUTTON_CAPTURE, it)
+        }
+        json.optInt(KeyArgumentMethod.BACKGROUND_COLOR_BORDER_CAPTURE_FACE, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.BACKGROUND_COLOR_BORDER_CAPTURE_FACE, it)
+        }
+        json.optInt(KeyArgumentMethod.BACKGROUND_COLOR_POPUP, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.BACKGROUND_COLOR_POPUP, it)
+        }
+        json.optInt(KeyArgumentMethod.TEXT_COLOR_CONTENT_POPUP, -1).takeIf { it != -1 }?.let {
+            intent.putExtra(KeyIntentConstants.TEXT_COLOR_CONTENT_POPUP, it)
+        }
+        
         // MARK: - Load logo images from Flutter assets
         loadFlutterAssetBitmap(json.optString(KeyArgumentMethod.LOGO, null))?.let {
             intent.putExtra(KeyIntentConstants.LOGO, it)

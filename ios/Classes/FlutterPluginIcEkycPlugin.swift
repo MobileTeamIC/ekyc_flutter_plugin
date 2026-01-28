@@ -371,28 +371,75 @@ extension FlutterPluginIcEkycPlugin {
     // CÁC THUỘC TÍNH VỀ MÀU SẮC GIAO DIỆN TRONG SDK
     private func configureUICommonOptions(for ekycVC: ICEkycCameraViewController, args: [String: Any]) {
         ekycVC.modeButtonHeaderBar = convertToModeButtonHeaderBar(args[KeyArgumentMethod.modeButtonHeaderBar] as? String ?? "")
-//        ekycVC.contentColorHeaderBar = args[KeyArgumentMethod.contentColorHeaderBar] as? String ?? ""
-//        ekycVC.backgroundColorHeaderBar = args[KeyArgumentMethod.backgroundColorHeaderBar] as? String ?? ""
-//        ekycVC.textColorContentMain = args[KeyArgumentMethod.textColorContentMain] as? String ?? ""
-//        ekycVC.titleColorMain = args[KeyArgumentMethod.titleColorMain] as? String ?? ""
-//        ekycVC.backgroundColorMainScreen = args[KeyArgumentMethod.backgroundColorMainScreen] as? String ?? ""
-//        ekycVC.backgroundColorLine = args[KeyArgumentMethod.backgroundColorLine] as? String ?? ""
-//        ekycVC.backgroundColorActiveButton = args[KeyArgumentMethod.backgroundColorActiveButton] as? String ?? ""
-//        ekycVC.backgroundColorDeactiveButton = args[KeyArgumentMethod.backgroundColorDeactiveButton] as? String ?? ""
-//        ekycVC.titleColorActiveButton = args[KeyArgumentMethod.titleColorActiveButton] as? String ?? ""
-//        ekycVC.titleColorDeactiveButton = args[KeyArgumentMethod.titleColorDeactiveButton] as? String ?? ""
-//        ekycVC.backgroundColorCaptureDocumentScreen = args[KeyArgumentMethod.backgroundColorCaptureDocumentScreen] as? String ?? ""
-//        ekycVC.backgroundColorCaptureFaceScreen = args[KeyArgumentMethod.backgroundColorCaptureFaceScreen] as? String ?? ""
-//        ekycVC.effectColorNoticeFace = args[KeyArgumentMethod.effectColorNoticeFace] as? String ?? ""
-//        ekycVC.textColorNoticeFace = args[KeyArgumentMethod.textColorNoticeFace] as? String ?? ""
-//        ekycVC.effectColorNoticeInvalidFace = args[KeyArgumentMethod.effectColorNoticeInvalidFace] as? String ?? ""
-//        ekycVC.colorContentFaceEffect = args[KeyArgumentMethod.colorContentFaceEffect] as? String ?? ""
-//        ekycVC.effectColorNoticeValidDocument = args[KeyArgumentMethod.effectColorNoticeValidDocument] as? String ?? ""
-//        ekycVC.effectColorNoticeInvalidDocument = args[KeyArgumentMethod.effectColorNoticeInvalidDocument] as? String ?? ""
-//        ekycVC.textColorNoticeValidDocument = args[KeyArgumentMethod.textColorNoticeValidDocument] as? String ?? ""
-//        ekycVC.textColorNoticeInvalidDocument = args[KeyArgumentMethod.textColorNoticeInvalidDocument] as? String ?? ""
-//        ekycVC.tintColorButtonCapture = args[KeyArgumentMethod.tintColorButtonCapture] as? String ?? ""
-//        ekycVC.backgroundColorBorderCaptureFace = args[KeyArgumentMethod.backgroundColorBorderCaptureFace] as? String ?? ""
+        
+        // Color configurations - Convert Flutter ARGB int to UIColor
+        if let colorInt = args[KeyArgumentMethod.contentColorHeaderBar] as? Int64 {
+            ekycVC.contentColorHeaderBar = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.backgroundColorHeaderBar] as? Int64 {
+            ekycVC.backgroundColorHeaderBar = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.textColorContentMain] as? Int64 {
+            ekycVC.textColorContentMain = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.titleColorMain] as? Int64 {
+            ekycVC.titleColorMain = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.backgroundColorMainScreen] as? Int64 {
+            ekycVC.backgroundColorMainScreen = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.backgroundColorLine] as? Int64 {
+            ekycVC.backgroundColorLine = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.backgroundColorActiveButton] as? Int64 {
+            ekycVC.backgroundColorActiveButton = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.backgroundColorDeactiveButton] as? Int64 {
+            ekycVC.backgroundColorDeactiveButton = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.titleColorActiveButton] as? Int64 {
+            ekycVC.titleColorActiveButton = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.titleColorDeactiveButton] as? Int64 {
+            ekycVC.titleColorDeactiveButton = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.backgroundColorCaptureDocumentScreen] as? Int64 {
+            ekycVC.backgroundColorCaptureDocumentScreen = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.backgroundColorCaptureFaceScreen] as? Int64 {
+            ekycVC.backgroundColorCaptureFaceScreen = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.effectColorNoticeFace] as? Int64 {
+            ekycVC.effectColorNoticeFace = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.textColorNoticeFace] as? Int64 {
+            ekycVC.textColorNoticeFace = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.effectColorNoticeInvalidFace] as? Int64 {
+            ekycVC.effectColorNoticeInvalidFace = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.colorContentFaceEffect] as? Int64 {
+            ekycVC.colorContentFaceEffect = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.effectColorNoticeValidDocument] as? Int64 {
+            ekycVC.effectColorNoticeValidDocument = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.effectColorNoticeInvalidDocument] as? Int64 {
+            ekycVC.effectColorNoticeInvalidDocument = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.textColorNoticeValidDocument] as? Int64 {
+            ekycVC.textColorNoticeValidDocument = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.textColorNoticeInvalidDocument] as? Int64 {
+            ekycVC.textColorNoticeInvalidDocument = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.tintColorButtonCapture] as? Int64 {
+            ekycVC.tintColorButtonCapture = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.backgroundColorBorderCaptureFace] as? Int64 {
+            ekycVC.backgroundColorBorderCaptureFace = UIColor(argb: colorInt)
+        }
+        
         ekycVC.isShowLogo = args[KeyArgumentMethod.isShowLogo] as? Bool ?? false
         ekycVC.widthLogo = args[KeyArgumentMethod.widthLogo] as? Double ?? 0.0
         ekycVC.heightLogo = args[KeyArgumentMethod.heightLogo] as? Double ?? 0.0
@@ -425,8 +472,14 @@ extension FlutterPluginIcEkycPlugin {
             ekycVC.imageTutorialGlare = image
         }
         
-//        ekycVC.backgroundColorPopup = args[KeyArgumentMethod.backgroundColorPopup] as? String ?? ""
-//        ekycVC.textColorContentPopup = args[KeyArgumentMethod.textColorContentPopup] as? String ?? ""
+        // Popup color configurations
+        if let colorInt = args[KeyArgumentMethod.backgroundColorPopup] as? Int64 {
+            ekycVC.backgroundColorPopup = UIColor(argb: colorInt)
+        }
+        if let colorInt = args[KeyArgumentMethod.textColorContentPopup] as? Int64 {
+            ekycVC.textColorContentPopup = UIColor(argb: colorInt)
+        }
+        
         ekycVC.isEnableCheckVirtualCamera = args[KeyArgumentMethod.isEnableCheckVirtualCamera] as? Bool ?? false
         ekycVC.isEnableCheckSimulator = args[KeyArgumentMethod.isEnableCheckSimulator] as? Bool ?? false
         ekycVC.isEnableCheckJailbroken = args[KeyArgumentMethod.isEnableCheckJailbroken] as? Bool ?? false

@@ -1,3 +1,11 @@
+//
+//  UIColor+Extension.swift
+//  flutter_plugin_ic_ekyc
+//
+//  Created by Dev J on 28/1/26.
+//
+
+import Foundation
 import UIKit
 
 /// Extension to support ARGB color format from Flutter

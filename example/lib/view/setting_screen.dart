@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_plugin_ic_ekyc/flutter_plugin_ic_ekyc.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 import '../service/shared_preference.dart';
 import '../theme/context.dart';
@@ -19,8 +20,10 @@ class _SettingScreenState extends State<SettingScreen> {
   final TextEditingController _tokenIdController = TextEditingController();
   final TextEditingController _tokenKeyController = TextEditingController();
   final TextEditingController _baseUrlController = TextEditingController();
-  final TextEditingController _numberTimesRetryScanQRCodeController = TextEditingController();
-  final TextEditingController _timeoutQRCodeFlowController = TextEditingController();
+  final TextEditingController _numberTimesRetryScanQRCodeController =
+      TextEditingController();
+  final TextEditingController _timeoutQRCodeFlowController =
+      TextEditingController();
   bool _isLoading = false;
 
   LanguageSdk _languageMode = LanguageSdk.icekyc_vi;
@@ -28,6 +31,7 @@ class _SettingScreenState extends State<SettingScreen> {
   bool _isShowLogo = false;
   bool _isShowTutorial = false;
   bool _isEnableGotIt = false;
+
 
   @override
   void initState() {
@@ -75,18 +79,22 @@ class _SettingScreenState extends State<SettingScreen> {
       SharedPreferenceKeys.isEnableGotIt,
       defaultValue: false,
     );
-    
+
     // QR Code configuration: null means not set
     final retryCount = SharedPreferenceService.instance.getInt(
       SharedPreferenceKeys.numberTimesRetryScanQRCode,
     );
     _numberTimesRetryScanQRCodeController.text = retryCount?.toString() ?? '';
-    
+
     final timeout = SharedPreferenceService.instance.getInt(
       SharedPreferenceKeys.timeoutQRCodeFlow,
     );
     _timeoutQRCodeFlowController.text = timeout?.toString() ?? '';
+
+  
   }
+
+
 
   @override
   void dispose() {
@@ -146,7 +154,7 @@ class _SettingScreenState extends State<SettingScreen> {
           _isEnableGotIt,
         ),
       ]);
-      
+
       // Handle QR Code configuration: save null by removing key if empty
       final retryText = _numberTimesRetryScanQRCodeController.text.trim();
       if (retryText.isEmpty) {
@@ -162,7 +170,7 @@ class _SettingScreenState extends State<SettingScreen> {
           );
         }
       }
-      
+
       final timeoutText = _timeoutQRCodeFlowController.text.trim();
       if (timeoutText.isEmpty) {
         await SharedPreferenceService.instance.remove(
@@ -228,10 +236,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       children: [
                         Row(
                           children: [
-                            Text(
-                              'Hiển thị Logo',
-                              style: context.textTheme.p,
-                            ),
+                            Text('Hiển thị Logo', style: context.textTheme.p),
                             Spacer(),
                             ShadSwitch(
                               value: _isShowLogo,
@@ -248,20 +253,19 @@ class _SettingScreenState extends State<SettingScreen> {
                             Spacer(),
                             ShadSwitch(
                               value: _isShowTutorial,
-                              onChanged: (v) => setState(() => _isShowTutorial = v),
+                              onChanged:
+                                  (v) => setState(() => _isShowTutorial = v),
                             ),
                           ],
                         ),
                         Row(
                           children: [
-                            Text(
-                              'Hiển thị Got It',
-                              style: context.textTheme.p,
-                            ),
+                            Text('Hiển thị Got It', style: context.textTheme.p),
                             Spacer(),
                             ShadSwitch(
                               value: _isEnableGotIt,
-                              onChanged: (v) => setState(() => _isEnableGotIt = v),
+                              onChanged:
+                                  (v) => setState(() => _isEnableGotIt = v),
                             ),
                           ],
                         ),
@@ -373,6 +377,13 @@ class _SettingScreenState extends State<SettingScreen> {
                           placeholder: 'Để trống để dùng mặc định SDK',
                           controller: _timeoutQRCodeFlowController,
                         ),
+
+                        // Color configurations
+                        Divider(height: 32),
+                        Text('Cấu hình màu sắc', style: context.textTheme.h4),
+                        SizedBox(height: 8),
+
+                      
                       ],
                     ),
                   ),
@@ -493,7 +504,9 @@ class _SettingScreenState extends State<SettingScreen> {
       controller: controller,
       keyboardType: TextInputType.number,
       inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'^-?\d*')), // Allow negative numbers
+        FilteringTextInputFormatter.allow(
+          RegExp(r'^-?\d*'),
+        ), // Allow negative numbers
       ],
     );
   }

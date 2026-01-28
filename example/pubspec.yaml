@@ -27,6 +27,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   awesome_extensions: ^2.0.22
   shadcn_ui: ^0.40.6
+  flutter_colorpicker: ^1.1.0
 
 dev_dependencies:
   integration_test:

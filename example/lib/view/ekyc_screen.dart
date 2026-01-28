@@ -39,6 +39,34 @@ class _EkycScreenState extends State<EkycScreen> {
   String? _imageTutorialGlare;
   String? _logo;
   String? _logoFaceOval;
+  
+  // Color configurations
+  Color? _contentColorHeaderBar;
+  Color? _backgroundColorHeaderBar;
+  Color? _titleColorMain;
+  Color? _backgroundColorMainScreen;
+  Color? _backgroundColorActiveButton;
+  Color? _titleColorActiveButton;
+  Color? _effectColorNoticeFace;
+  Color? _backgroundColorPopup;
+  Color? _backgroundColorBorderCaptureFace;
+  
+  // Additional 15 colors
+  Color? _textColorContentMain;
+  Color? _backgroundColorLine;
+  Color? _backgroundColorDeactiveButton;
+  Color? _titleColorDeactiveButton;
+  Color? _backgroundColorCaptureDocumentScreen;
+  Color? _backgroundColorCaptureFaceScreen;
+  Color? _textColorNoticeFace;
+  Color? _effectColorNoticeInvalidFace;
+  Color? _colorContentFaceEffect;
+  Color? _effectColorNoticeValidDocument;
+  Color? _effectColorNoticeInvalidDocument;
+  Color? _textColorNoticeValidDocument;
+  Color? _textColorNoticeInvalidDocument;
+  Color? _tintColorButtonCapture;
+  Color? _textColorContentPopup;
 
   @override
   void initState() {
@@ -103,6 +131,79 @@ class _EkycScreenState extends State<EkycScreen> {
     _imageTutorialGlare = SharedPreferenceService.instance.getString(SharedPreferenceKeys.imageTutorialGlare);
     _logo = SharedPreferenceService.instance.getString(SharedPreferenceKeys.logo);
     _logoFaceOval = SharedPreferenceService.instance.getString(SharedPreferenceKeys.logoFaceOval);
+    
+    // Load color configurations as Color objects
+    final contentColorInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.contentColorHeaderBar);
+    _contentColorHeaderBar = contentColorInt != null ? Color(contentColorInt) : null;
+    
+    final backgroundColorHeaderInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.backgroundColorHeaderBar);
+    _backgroundColorHeaderBar = backgroundColorHeaderInt != null ? Color(backgroundColorHeaderInt) : null;
+    
+    final titleColorInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.titleColorMain);
+    _titleColorMain = titleColorInt != null ? Color(titleColorInt) : null;
+    
+    final backgroundMainInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.backgroundColorMainScreen);
+    _backgroundColorMainScreen = backgroundMainInt != null ? Color(backgroundMainInt) : null;
+    
+    final backgroundActiveInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.backgroundColorActiveButton);
+    _backgroundColorActiveButton = backgroundActiveInt != null ? Color(backgroundActiveInt) : null;
+    
+    final titleActiveInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.titleColorActiveButton);
+    _titleColorActiveButton = titleActiveInt != null ? Color(titleActiveInt) : null;
+    
+    final effectFaceInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.effectColorNoticeFace);
+    _effectColorNoticeFace = effectFaceInt != null ? Color(effectFaceInt) : null;
+    
+    final backgroundPopupInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.backgroundColorPopup);
+    _backgroundColorPopup = backgroundPopupInt != null ? Color(backgroundPopupInt) : null;
+
+    final backgroundColorBorderCaptureFaceInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.backgroundColorBorderCaptureFace);
+    _backgroundColorBorderCaptureFace = backgroundColorBorderCaptureFaceInt != null ? Color(backgroundColorBorderCaptureFaceInt) : null;
+    
+    final textColorContentMainInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.textColorContentMain);
+    _textColorContentMain = textColorContentMainInt != null ? Color(textColorContentMainInt) : null;
+    
+    final backgroundColorLineInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.backgroundColorLine);
+    _backgroundColorLine = backgroundColorLineInt != null ? Color(backgroundColorLineInt) : null;
+    
+    final backgroundColorDeactiveButtonInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.backgroundColorDeactiveButton);
+    _backgroundColorDeactiveButton = backgroundColorDeactiveButtonInt != null ? Color(backgroundColorDeactiveButtonInt) : null;
+    
+    final titleColorDeactiveButtonInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.titleColorDeactiveButton);
+    _titleColorDeactiveButton = titleColorDeactiveButtonInt != null ? Color(titleColorDeactiveButtonInt) : null;
+    
+    final backgroundColorCaptureDocumentScreenInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.backgroundColorCaptureDocumentScreen);
+    _backgroundColorCaptureDocumentScreen = backgroundColorCaptureDocumentScreenInt != null ? Color(backgroundColorCaptureDocumentScreenInt) : null;
+    
+    final backgroundColorCaptureFaceScreenInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.backgroundColorCaptureFaceScreen);
+    _backgroundColorCaptureFaceScreen = backgroundColorCaptureFaceScreenInt != null ? Color(backgroundColorCaptureFaceScreenInt) : null;
+    
+    final textColorNoticeFaceInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.textColorNoticeFace);
+    _textColorNoticeFace = textColorNoticeFaceInt != null ? Color(textColorNoticeFaceInt) : null;
+    
+    final effectColorNoticeInvalidFaceInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.effectColorNoticeInvalidFace);
+    _effectColorNoticeInvalidFace = effectColorNoticeInvalidFaceInt != null ? Color(effectColorNoticeInvalidFaceInt) : null;
+    
+    final colorContentFaceEffectInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.colorContentFaceEffect);
+    _colorContentFaceEffect = colorContentFaceEffectInt != null ? Color(colorContentFaceEffectInt) : null;
+    
+    final effectColorNoticeValidDocumentInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.effectColorNoticeValidDocument);
+    _effectColorNoticeValidDocument = effectColorNoticeValidDocumentInt != null ? Color(effectColorNoticeValidDocumentInt) : null;
+    
+    final effectColorNoticeInvalidDocumentInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.effectColorNoticeInvalidDocument);
+    _effectColorNoticeInvalidDocument = effectColorNoticeInvalidDocumentInt != null ? Color(effectColorNoticeInvalidDocumentInt) : null;
+    
+    final textColorNoticeValidDocumentInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.textColorNoticeValidDocument);
+    _textColorNoticeValidDocument = textColorNoticeValidDocumentInt != null ? Color(textColorNoticeValidDocumentInt) : null;
+    
+    final textColorNoticeInvalidDocumentInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.textColorNoticeInvalidDocument);
+    _textColorNoticeInvalidDocument = textColorNoticeInvalidDocumentInt != null ? Color(textColorNoticeInvalidDocumentInt) : null;
+    
+    final tintColorButtonCaptureInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.tintColorButtonCapture);
+    _tintColorButtonCapture = tintColorButtonCaptureInt != null ? Color(tintColorButtonCaptureInt) : null;
+    
+    final textColorContentPopupInt = SharedPreferenceService.instance.getInt(SharedPreferenceKeys.textColorContentPopup);
+    _textColorContentPopup = textColorContentPopupInt != null ? Color(textColorContentPopupInt) : null;
   }
 
   /// Navigate to Log Screen
@@ -141,6 +242,31 @@ class _EkycScreenState extends State<EkycScreen> {
         logoFaceOval: _logoFaceOval?.isEmpty ?? true ? null : _logoFaceOval,
         widthLogo: 148.0,
         heightLogo: 20.0,
+        // Color configurations
+        contentColorHeaderBar: _contentColorHeaderBar,
+        backgroundColorHeaderBar: _backgroundColorHeaderBar,
+        titleColorMain: _titleColorMain,
+        backgroundColorMainScreen: _backgroundColorMainScreen,
+        backgroundColorActiveButton: _backgroundColorActiveButton,
+        titleColorActiveButton: _titleColorActiveButton,
+        effectColorNoticeFace: _effectColorNoticeFace,
+        backgroundColorPopup: _backgroundColorPopup,
+        backgroundColorBorderCaptureFace: _backgroundColorBorderCaptureFace,
+        textColorContentMain: _textColorContentMain,
+        backgroundColorLine: _backgroundColorLine,
+        backgroundColorDeactiveButton: _backgroundColorDeactiveButton,
+        titleColorDeactiveButton: _titleColorDeactiveButton,
+        backgroundColorCaptureDocumentScreen: _backgroundColorCaptureDocumentScreen,
+        backgroundColorCaptureFaceScreen: _backgroundColorCaptureFaceScreen,
+        textColorNoticeFace: _textColorNoticeFace,
+        effectColorNoticeInvalidFace: _effectColorNoticeInvalidFace,
+        colorContentFaceEffect: _colorContentFaceEffect,
+        effectColorNoticeValidDocument: _effectColorNoticeValidDocument,
+        effectColorNoticeInvalidDocument: _effectColorNoticeInvalidDocument,
+        textColorNoticeValidDocument: _textColorNoticeValidDocument,
+        textColorNoticeInvalidDocument: _textColorNoticeInvalidDocument,
+        tintColorButtonCapture: _tintColorButtonCapture,
+        textColorContentPopup: _textColorContentPopup,
       );
       _navigate(await ICEkyc.instance.startEkycFull(config));
     } on PlatformException catch (e) {
@@ -168,9 +294,38 @@ class _EkycScreenState extends State<EkycScreen> {
         validateDocumentType: ValidateDocumentType.basic,
         imageTutorialFront: _imageTutorialFront?.isEmpty ?? true ? null : _imageTutorialFront,
         imageTutorialBack: _imageTutorialBack?.isEmpty ?? true ? null : _imageTutorialBack,
+        imageTutorialBlur: _imageTutorialBlur?.isEmpty ?? true ? null : _imageTutorialBlur,
+        imageTutorialLostAngle: _imageTutorialLostAngle?.isEmpty ?? true ? null : _imageTutorialLostAngle,
+        imageTutorialGlare: _imageTutorialGlare?.isEmpty ?? true ? null : _imageTutorialGlare,
         logo: _logo?.isEmpty ?? true ? null : _logo,
+        logoFaceOval: _logoFaceOval?.isEmpty ?? true ? null : _logoFaceOval,
         widthLogo: 148.0,
         heightLogo: 20.0,
+        // Color configurations
+        contentColorHeaderBar: _contentColorHeaderBar,
+        backgroundColorHeaderBar: _backgroundColorHeaderBar,
+        titleColorMain: _titleColorMain,
+        backgroundColorMainScreen: _backgroundColorMainScreen,
+        backgroundColorActiveButton: _backgroundColorActiveButton,
+        titleColorActiveButton: _titleColorActiveButton,
+        effectColorNoticeFace: _effectColorNoticeFace,
+        backgroundColorPopup: _backgroundColorPopup,
+        backgroundColorBorderCaptureFace: _backgroundColorBorderCaptureFace,
+        textColorContentMain: _textColorContentMain,
+        backgroundColorLine: _backgroundColorLine,
+        backgroundColorDeactiveButton: _backgroundColorDeactiveButton,
+        titleColorDeactiveButton: _titleColorDeactiveButton,
+        backgroundColorCaptureDocumentScreen: _backgroundColorCaptureDocumentScreen,
+        backgroundColorCaptureFaceScreen: _backgroundColorCaptureFaceScreen,
+        textColorNoticeFace: _textColorNoticeFace,
+        effectColorNoticeInvalidFace: _effectColorNoticeInvalidFace,
+        colorContentFaceEffect: _colorContentFaceEffect,
+        effectColorNoticeValidDocument: _effectColorNoticeValidDocument,
+        effectColorNoticeInvalidDocument: _effectColorNoticeInvalidDocument,
+        textColorNoticeValidDocument: _textColorNoticeValidDocument,
+        textColorNoticeInvalidDocument: _textColorNoticeInvalidDocument,
+        tintColorButtonCapture: _tintColorButtonCapture,
+        textColorContentPopup: _textColorContentPopup,
       );
       _navigate(await ICEkyc.instance.startEkycOcr(config));
     } on PlatformException catch (e) {
@@ -199,7 +354,33 @@ class _EkycScreenState extends State<EkycScreen> {
         imageTutorialLostAngle: _imageTutorialLostAngle?.isEmpty ?? true ? null : _imageTutorialLostAngle,
         imageTutorialGlare: _imageTutorialGlare?.isEmpty ?? true ? null : _imageTutorialGlare,
         imageTutorialFront: _imageTutorialFront?.isEmpty ?? true ? null : _imageTutorialFront,
-
+        imageTutorialBack: _imageTutorialBack?.isEmpty ?? true ? null : _imageTutorialBack,
+        logoFaceOval: _logoFaceOval?.isEmpty ?? true ? null : _logoFaceOval,
+        // Color configurations
+        contentColorHeaderBar: _contentColorHeaderBar,
+        backgroundColorHeaderBar: _backgroundColorHeaderBar,
+        titleColorMain: _titleColorMain,
+        backgroundColorMainScreen: _backgroundColorMainScreen,
+        backgroundColorActiveButton: _backgroundColorActiveButton,
+        titleColorActiveButton: _titleColorActiveButton,
+        effectColorNoticeFace: _effectColorNoticeFace,
+        backgroundColorPopup: _backgroundColorPopup,
+        backgroundColorBorderCaptureFace: _backgroundColorBorderCaptureFace,
+        textColorContentMain: _textColorContentMain,
+        backgroundColorLine: _backgroundColorLine,
+        backgroundColorDeactiveButton: _backgroundColorDeactiveButton,
+        titleColorDeactiveButton: _titleColorDeactiveButton,
+        backgroundColorCaptureDocumentScreen: _backgroundColorCaptureDocumentScreen,
+        backgroundColorCaptureFaceScreen: _backgroundColorCaptureFaceScreen,
+        textColorNoticeFace: _textColorNoticeFace,
+        effectColorNoticeInvalidFace: _effectColorNoticeInvalidFace,
+        colorContentFaceEffect: _colorContentFaceEffect,
+        effectColorNoticeValidDocument: _effectColorNoticeValidDocument,
+        effectColorNoticeInvalidDocument: _effectColorNoticeInvalidDocument,
+        textColorNoticeValidDocument: _textColorNoticeValidDocument,
+        textColorNoticeInvalidDocument: _textColorNoticeInvalidDocument,
+        tintColorButtonCapture: _tintColorButtonCapture,
+        textColorContentPopup: _textColorContentPopup,
       );
       _navigate(await ICEkyc.instance.startEkycOcrFront(config));
     } on PlatformException catch (e) {
@@ -233,6 +414,31 @@ class _EkycScreenState extends State<EkycScreen> {
         imageTutorialBlur: _imageTutorialBlur?.isEmpty ?? true ? null : _imageTutorialBlur,
         imageTutorialLostAngle: _imageTutorialLostAngle?.isEmpty ?? true ? null : _imageTutorialLostAngle,
         imageTutorialGlare: _imageTutorialGlare?.isEmpty ?? true ? null : _imageTutorialGlare,
+        // Color configurations
+        contentColorHeaderBar: _contentColorHeaderBar,
+        backgroundColorHeaderBar: _backgroundColorHeaderBar,
+        titleColorMain: _titleColorMain,
+        backgroundColorMainScreen: _backgroundColorMainScreen,
+        backgroundColorActiveButton: _backgroundColorActiveButton,
+        titleColorActiveButton: _titleColorActiveButton,
+        effectColorNoticeFace: _effectColorNoticeFace,
+        backgroundColorPopup: _backgroundColorPopup,
+        backgroundColorBorderCaptureFace: _backgroundColorBorderCaptureFace,
+        textColorContentMain: _textColorContentMain,
+        backgroundColorLine: _backgroundColorLine,
+        backgroundColorDeactiveButton: _backgroundColorDeactiveButton,
+        titleColorDeactiveButton: _titleColorDeactiveButton,
+        backgroundColorCaptureDocumentScreen: _backgroundColorCaptureDocumentScreen,
+        backgroundColorCaptureFaceScreen: _backgroundColorCaptureFaceScreen,
+        textColorNoticeFace: _textColorNoticeFace,
+        effectColorNoticeInvalidFace: _effectColorNoticeInvalidFace,
+        colorContentFaceEffect: _colorContentFaceEffect,
+        effectColorNoticeValidDocument: _effectColorNoticeValidDocument,
+        effectColorNoticeInvalidDocument: _effectColorNoticeInvalidDocument,
+        textColorNoticeValidDocument: _textColorNoticeValidDocument,
+        textColorNoticeInvalidDocument: _textColorNoticeInvalidDocument,
+        tintColorButtonCapture: _tintColorButtonCapture,
+        textColorContentPopup: _textColorContentPopup,
       );
       _navigate(await ICEkyc.instance.startEkycFace(config));
     } on PlatformException catch (e) {
@@ -263,6 +469,32 @@ class _EkycScreenState extends State<EkycScreen> {
         imageTutorialBlur: _imageTutorialBlur?.isEmpty ?? true ? null : _imageTutorialBlur,
         imageTutorialLostAngle: _imageTutorialLostAngle?.isEmpty ?? true ? null : _imageTutorialLostAngle,
         imageTutorialGlare: _imageTutorialGlare?.isEmpty ?? true ? null : _imageTutorialGlare,
+        // Color configurations
+        contentColorHeaderBar: _contentColorHeaderBar,
+        backgroundColorHeaderBar: _backgroundColorHeaderBar,
+        titleColorMain: _titleColorMain,
+        backgroundColorMainScreen: _backgroundColorMainScreen,
+        backgroundColorActiveButton: _backgroundColorActiveButton,
+        titleColorActiveButton: _titleColorActiveButton,
+        effectColorNoticeFace: _effectColorNoticeFace,
+        backgroundColorPopup: _backgroundColorPopup,
+        backgroundColorBorderCaptureFace: _backgroundColorBorderCaptureFace,
+        // Additional 15 colors
+        textColorContentMain: _textColorContentMain,
+        backgroundColorLine: _backgroundColorLine,
+        backgroundColorDeactiveButton: _backgroundColorDeactiveButton,
+        titleColorDeactiveButton: _titleColorDeactiveButton,
+        backgroundColorCaptureDocumentScreen: _backgroundColorCaptureDocumentScreen,
+        backgroundColorCaptureFaceScreen: _backgroundColorCaptureFaceScreen,
+        textColorNoticeFace: _textColorNoticeFace,
+        effectColorNoticeInvalidFace: _effectColorNoticeInvalidFace,
+        colorContentFaceEffect: _colorContentFaceEffect,
+        effectColorNoticeValidDocument: _effectColorNoticeValidDocument,
+        effectColorNoticeInvalidDocument: _effectColorNoticeInvalidDocument,
+        textColorNoticeValidDocument: _textColorNoticeValidDocument,
+        textColorNoticeInvalidDocument: _textColorNoticeInvalidDocument,
+        tintColorButtonCapture: _tintColorButtonCapture,
+        textColorContentPopup: _textColorContentPopup,
       );
       _navigate(await ICEkyc.instance.startEkycScanQRCode(config));
     } on PlatformException catch (e) {

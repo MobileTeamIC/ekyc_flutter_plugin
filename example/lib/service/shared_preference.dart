@@ -116,4 +116,32 @@ class SharedPreferenceKeys {
 
   static const String logo = 'logo';
   static const String logoFaceOval = 'logo_face_oval';
+  
+  // Color configurations
+  static const String contentColorHeaderBar = 'content_color_header_bar';
+  static const String backgroundColorHeaderBar = 'background_color_header_bar';
+  static const String titleColorMain = 'title_color_main';
+  static const String backgroundColorMainScreen = 'background_color_main_screen';
+  static const String backgroundColorActiveButton = 'background_color_active_button';
+  static const String titleColorActiveButton = 'title_color_active_button';
+  static const String effectColorNoticeFace = 'effect_color_notice_face';
+  static const String backgroundColorPopup = 'background_color_popup';
+  static const String backgroundColorBorderCaptureFace = 'background_color_border_capture_face';
+  
+  // Additional color configurations (15 colors)
+  static const String textColorContentMain = 'text_color_content_main';
+  static const String backgroundColorLine = 'background_color_line';
+  static const String backgroundColorDeactiveButton = 'background_color_deactive_button';
+  static const String titleColorDeactiveButton = 'title_color_deactive_button';
+  static const String backgroundColorCaptureDocumentScreen = 'background_color_capture_document_screen';
+  static const String backgroundColorCaptureFaceScreen = 'background_color_capture_face_screen';
+  static const String textColorNoticeFace = 'text_color_notice_face';
+  static const String effectColorNoticeInvalidFace = 'effect_color_notice_invalid_face';
+  static const String colorContentFaceEffect = 'color_content_face_effect';
+  static const String effectColorNoticeValidDocument = 'effect_color_notice_valid_document';
+  static const String effectColorNoticeInvalidDocument = 'effect_color_notice_invalid_document';
+  static const String textColorNoticeValidDocument = 'text_color_notice_valid_document';
+  static const String textColorNoticeInvalidDocument = 'text_color_notice_invalid_document';
+  static const String tintColorButtonCapture = 'tint_color_button_capture';
+  static const String textColorContentPopup = 'text_color_content_popup';
 }
