@@ -1,6 +1,6 @@
 name: flutter_plugin_ic_ekyc
 description: "A new Flutter plugin project."
-version: 1.0.1
+version: 1.0.2
 
 environment:
   sdk: ^3.7.2

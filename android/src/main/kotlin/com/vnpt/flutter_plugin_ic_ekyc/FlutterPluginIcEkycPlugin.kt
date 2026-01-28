@@ -166,6 +166,7 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
                         var qrCodeResult = data.getStringExtra(KeyResultConstants.QR_CODE_RESULT)
                         var qrCodeResultDetail = data.getStringExtra(KeyResultConstants.DETAIL_QR_CODE_RESULT)
                         var retryQRCodeResult = data.getStringExtra(KeyResultConstants.RETRY_QRCODE_RESULT)
+                        var pathImageQRCodeFull = data.getStringExtra(KeyResultConstants.PATH_IMAGE_QRCODE_FULL)
                         pendingResult.success(
                             JSONObject().apply {
                                 putSafe(KeyResultConstants.CROP_PARAM, cropPram)
@@ -194,7 +195,8 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
                                 putSafe(KeyResultConstantsEKYC.QR_CODE_RESULT, qrCodeResult)
                                 putSafe(KeyResultConstantsEKYC.QR_CODE_RESULT_DETAIL, qrCodeResultDetail)
                                 putSafe(KeyResultConstantsEKYC.RETRY_QR_CODE_RESULT, retryQRCodeResult)
-                                
+                                putSafe(KeyResultConstantsEKYC.PATH_IMAGE_QR_CODE_FULL, pathImageQRCodeFull)
+
                             }.toString()
                         )
                     } else {

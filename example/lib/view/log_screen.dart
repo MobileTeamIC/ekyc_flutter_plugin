@@ -88,6 +88,11 @@ class _LogScreenState extends State<LogScreen> {
                     'Ảnh 3D Scan',
                   ),
 
+                   _buildSafeImage(
+                    widget.json[ICEkycKeyResult.pathImageQRCodeFull] as String?,
+                    'Ảnh QR code full',
+                  ),
+
                   // Display data fields
                   _buildLogItem(
                     context,
@@ -164,10 +169,9 @@ class _LogScreenState extends State<LogScreen> {
                   _buildLogItem(
                     context,
                     icon: Icons.sync_problem,
-                    title: 'Retry QR Code Result (Map)',
-                    content: _formatMapToJson(widget.json[ICEkycKeyResult.retryQRCodeResult]),
+                    title: 'Retry QR Code Result (List)',
+                    content: _listMapToJson(widget.json[ICEkycKeyResult.retryQRCodeResult] as List? ?? []),
                   ),
-                  const SizedBox(height: 16),
                 ],
               ),
     );
@@ -177,16 +181,22 @@ class _LogScreenState extends State<LogScreen> {
   String? _formatMapToJson(dynamic data) {
     if (data == null) return null;
     
-    if (data is Map) {
-      try {
-        const encoder = JsonEncoder.withIndent('  ');
-        return encoder.convert(data);
-      } catch (e) {
-        return data.toString();
-      }
+    try {
+      const encoder = JsonEncoder.withIndent('  ');
+      return encoder.convert(data);
+    } catch (e) {
+      return data.toString();
     }
-    
-    return data.toString();
+  }
+
+  String? _listMapToJson(List list) {
+    if (list.isEmpty) return null;
+    try {
+      const encoder = JsonEncoder.withIndent('  ');
+      return encoder.convert(list);
+    } catch (e) {
+      return list.toString();
+    }
   }
 
   Widget _buildSafeImage(String? path, String label) {

@@ -155,6 +155,7 @@ struct KeyResultConstantsEKYC {
     
     // QR Code results
     static let qrCodeResult = "QR_CODE_RESULT"
+    static let pathImageQRCodeFull = "PATH_IMAGE_QR_CODE_FULL"
     static let qrCodeResultDetail = "QR_CODE_RESULT_DETAIL"
     static let retryQRCodeResult = "RETRY_QR_CODE_RESULT"
 }

@@ -155,6 +155,7 @@ object KeyResultConstantsEKYC {
 
     // QR Code results
     const val QR_CODE_RESULT = "QR_CODE_RESULT"
+    const val PATH_IMAGE_QR_CODE_FULL = "PATH_IMAGE_QR_CODE_FULL"
     const val QR_CODE_RESULT_DETAIL = "QR_CODE_RESULT_DETAIL"
     const val RETRY_QR_CODE_RESULT = "RETRY_QR_CODE_RESULT"
     

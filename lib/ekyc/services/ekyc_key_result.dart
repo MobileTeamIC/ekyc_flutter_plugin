@@ -11,6 +11,9 @@ class ICEkycKeyResult {
   // Dữ liệu việc QUÉT mã QR
   static const String qrCodeResult = "QR_CODE_RESULT";
 
+  // Đường dẫn ảnh qr code full
+  static const String pathImageQRCodeFull = "PATH_IMAGE_QR_CODE_FULL";
+
   // Dữ liệu việc QUÉT mã QR [StringJson]
   static const String qrCodeResultDetail = "QR_CODE_RESULT_DETAIL";
 
