@@ -1,8 +1,10 @@
 package com.vnpt.flutter_plugin_ic_ekyc
 
+import java.io.File
 import android.app.Activity
 import android.content.Intent
 import android.text.TextUtils
+import android.util.Log
 import com.vnptit.idg.sdk.activity.VnptFrontActivity
 import com.vnptit.idg.sdk.activity.VnptIdentityActivity
 import com.vnptit.idg.sdk.activity.VnptOcrActivity
@@ -39,6 +41,14 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
     private var result: Result? = null
     private var binding: ActivityPluginBinding? = null
 
+    // Lưu trữ các đường dẫn ảnh từ lần eKYC trước để xóa khi bắt đầu eKYC mới
+    private var pathImageFrontFull: String? = null
+    private var pathImageBackFull: String? = null
+    private var pathImageFaceFull: String? = null
+    private var pathImageFaceFarFull: String? = null
+    private var pathImageFaceNearFull: String? = null
+    private var pathImageScan3DFull: String? = null
+    private var pathImageQRCodeFull: String? = null
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, CHANNEL)
@@ -59,6 +69,9 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
             result.error("ALREADY_ACTIVE", "A request is already being processed", null)
             return
         }
+        
+        // Xóa các ảnh cũ từ lần eKYC trước (nếu có)
+        cleanupOldImages()
         
         val activity = binding.activity
         this.result = result
@@ -139,24 +152,24 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
                 if (resultCode == Activity.RESULT_OK ) {
                     if (data != null && lastStep == SDKEnum.LastStepEnum.Done.value) {
                         val cropPram = data.getStringExtra(KeyResultConstants.CROP_PARAM)
-                        val pathImageFrontFull =
+                        pathImageFrontFull =
                             data.getStringExtra(KeyResultConstants.PATH_IMAGE_FRONT_FULL)
-                        val pathImageBackFull =
+                        pathImageBackFull =
                             data.getStringExtra(KeyResultConstants.PATH_IMAGE_BACK_FULL)
-                        val pathImageFaceFull =
+                        pathImageFaceFull =
                             data.getStringExtra(KeyResultConstants.PATH_IMAGE_FACE_FULL)
-                        val pathImageFaceFarFull =
+                        pathImageFaceFarFull =
                             data.getStringExtra(KeyResultConstants.PATH_IMAGE_FACE_FAR_FULL)
-                        val pathImageFaceNearFull =
+                        pathImageFaceNearFull =
                             data.getStringExtra(KeyResultConstants.PATH_IMAGE_FACE_NEAR_FULL)
-                        val pathImageScan3DFull =
-                            data.getStringExtra(KeyResultConstants.PATH_FACE_SCAN3D)
+                        pathImageScan3DFull =
+                            data.getStringExtra(KeyResultConstants.PATH_FACE_SCAN3D) ?: ""
                         val clientSessionResult =
                             data.getStringExtra(KeyResultConstants.CLIENT_SESSION_RESULT)
-                        var qrCodeResult = data.getStringExtra(KeyResultConstants.QR_CODE_RESULT)
-                        var qrCodeResultDetail = data.getStringExtra(KeyResultConstants.DETAIL_QR_CODE_RESULT)
-                        var retryQRCodeResult = data.getStringExtra(KeyResultConstants.RETRY_QRCODE_RESULT)
-                        var pathImageQRCodeFull = data.getStringExtra(KeyResultConstants.PATH_IMAGE_QRCODE_FULL)
+                        val qrCodeResult = data.getStringExtra(KeyResultConstants.QR_CODE_RESULT)
+                        val qrCodeResultDetail = data.getStringExtra(KeyResultConstants.DETAIL_QR_CODE_RESULT)
+                        val retryQRCodeResult = data.getStringExtra(KeyResultConstants.RETRY_QRCODE_RESULT)
+                        pathImageQRCodeFull = data.getStringExtra(KeyResultConstants.PATH_IMAGE_QRCODE_FULL) ?: ""
                         pendingResult.success(
                             JSONObject().apply {
                                 putSafe(KeyResultConstants.CROP_PARAM, cropPram)
@@ -744,6 +757,54 @@ class FlutterPluginIcEkycPlugin : FlutterPlugin, ActivityAware ,MethodCallHandle
     override fun onDetachedFromActivity() {
         binding?.removeActivityResultListener(resultActivityListener)
         binding = null
+    }
+      /**
+     * Xóa file hoặc thư mục đệ quy
+     * @param file File hoặc directory cần xóa
+     * @return true nếu xóa thành công, false nếu thất bại
+     */
+    private fun deleteRecursive(file: File): Boolean {
+        if (!file.exists()) return false
+        var ret = true
+        if (file.isDirectory) {
+            val files = file.listFiles()
+            if (files != null) {
+                for (f in files) {
+                    ret = ret && deleteRecursive(f)
+                }
+            }
+        }
+        return ret && file.delete()
+    }
+    
+    /**
+     * Xóa file một cách an toàn với kiểm tra null và empty
+     * @param path Đường dẫn file cần xóa
+     */
+    private fun safeDeleteFile(path: String?) {
+        if (path.isNullOrEmpty()) return
+        
+        try {
+            val file = File(path)
+            if (deleteRecursive(file)) {
+                Log.i("1102","✅ File deleted successfully: $path")
+            }
+        } catch (e: Exception) {
+            Log.i("1102","❌ Failed to delete file: $path - ${e.message}")
+        }
+    }
+    
+    /**
+     * Xóa tất cả các ảnh cũ từ lần eKYC trước
+     */
+    private fun cleanupOldImages() {
+        safeDeleteFile(pathImageFrontFull)
+        safeDeleteFile(pathImageBackFull)
+        safeDeleteFile(pathImageFaceFull)
+        safeDeleteFile(pathImageFaceFarFull)
+        safeDeleteFile(pathImageFaceNearFull)
+        safeDeleteFile(pathImageScan3DFull)
+        safeDeleteFile(pathImageQRCodeFull)
     }
     // endregion
 }

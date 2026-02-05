@@ -33,6 +33,9 @@ public class FlutterPluginIcEkycPlugin: NSObject, FlutterPlugin {
         let channel = FlutterMethodChannel(name: "flutter.sdk.ic_ekyc/integrate", binaryMessenger: registrar.messenger())
         let instance = FlutterPluginIcEkycPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
+
+        // Clean up old eKYC images on plugin initialization
+        instance.cleanupEkycImages()
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -443,7 +446,7 @@ extension FlutterPluginIcEkycPlugin: ICEkycCameraDelegate {
             let dict: [String: Any] = [
                 KeyResultConstantsEKYC.clientSessionResult: clientSessionResult,
                 KeyResultConstantsEKYC.qrCodeResult: qrCodeResult,
-                KeyResultConstantsEKYC.pathImageQRCodeFull: pathImageQRCodeFull,
+                KeyResultConstantsEKYC.pathImageQRCodeFull: pathImageQRCodeFull.path,
                 KeyResultConstantsEKYC.qrCodeResultDetail: qrCodeResultDetail,
                 KeyResultConstantsEKYC.retryQRCodeResult: retryQRCodeResult
             ]
@@ -574,5 +577,51 @@ extension FlutterPluginIcEkycPlugin {
             debugPrint("[eKYC IC] Lỗi khi lưu data 3D: \(error.localizedDescription)")
             return nil
         }
+    }
+
+    func deleteFile(at url: URL) {
+        let fileManager = FileManager.default
+
+        if fileManager.fileExists(atPath: url.path) {
+            do {
+                try fileManager.removeItem(at: url)
+                debugPrint("✅ File deleted successfully at \(url.path)")
+            } catch {
+                debugPrint("❌ Failed to delete file: \(error.localizedDescription)")
+            }
+        } else {
+            debugPrint("⚠️ File does not exist at \(url.path)")
+        }
+    }
+    
+    /// Xóa tất cả các file ảnh eKYC từ ICEKYCSavedData khi khởi tạo plugin
+    func cleanupEkycImages() {
+        let savedData = ICEKYCSavedData.shared()
+        
+        // Danh sách các đường dẫn ảnh cần xóa
+        let imagePaths: [URL] = [
+            savedData.pathImageFrontFull,
+            savedData.pathImageBackFull,
+            savedData.pathImageFaceFull,
+            savedData.pathImageFaceFarFull,
+            savedData.pathImageFaceNearFull,
+            savedData.pathImageQRCodeFull
+        ]
+        
+        // Xóa từng file ảnh
+        for imagePath in imagePaths {
+            // Chỉ xóa nếu path không rỗng
+            if !imagePath.path.isEmpty {
+                deleteFile(at: imagePath)
+            }
+        }
+        
+        // Xóa file 3D scan nếu có
+        if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            let scan3DPath = documentsDirectory.appendingPathComponent("3dScanPortrait").appendingPathExtension("txt")
+            deleteFile(at: scan3DPath)
+        }
+        
+        debugPrint("✅ eKYC cleanup completed")
     }
 }
