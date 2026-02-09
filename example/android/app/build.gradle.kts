@@ -26,7 +26,7 @@ android {
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-        versionCode = 1
+        versionCode = 2
         versionName = "1.0.0"
     }
     //Define apk name file
@@ -54,7 +54,7 @@ android {
 }
 
 dependencies {
-    implementation(files("libs/ekyc_sdk-release-v3.6.12.aar"))
+    implementation(files("libs/ekyc_sdk-release-v3.6.13.aar"))
     implementation(files("libs/scanqr_ic_sdk-release-v1.0.6.aar"))
 }
 
