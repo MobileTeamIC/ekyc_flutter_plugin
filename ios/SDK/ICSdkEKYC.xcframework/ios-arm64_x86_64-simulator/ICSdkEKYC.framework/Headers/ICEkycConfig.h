@@ -254,6 +254,17 @@ NS_ASSUME_NONNULL_BEGIN
 // Thời gian giới hạn quá trình quét QR. Mặc định vô hạn
 @property (nonatomic) NSNumber *timeoutQRCodeFlow;
 
+// Giá trị xác định luồng thực hiện eKYC. Mặc định là none, sử dụng khi gọi các phương thức trong SDK
+// - none: không thực hiện luồng nào cả
+// - full: thực hiện eKYC đầy đủ các bước: chụp mặt trước, chụp mặt sau và chụp ảnh chân dung
+// - ocrFront: thực hiện OCR giấy tờ một bước: chụp mặt trước
+// - ocr: thực hiện OCR giấy tờ đầy đủ các bước: chụp mặt trước, chụp mặt sau
+// - face: thực hiện so sánh khuôn mặt với mã ảnh chân dung được truyền từ bên ngoài
+@property (nonatomic) FlowType flowType;
+
+// màn hình tuỳ chỉnh cho màn hướng dẫn quét QR
+@property (nonatomic, nullable) UIView *viewTutorialScanQRCode;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -520,6 +520,9 @@ NS_ASSUME_NONNULL_BEGIN
 // Thời gian giới hạn quá trình quét QR. Mặc định vô hạn
 @property (nonatomic, nullable) NSNumber *timeoutQRCodeFlow;
 
+// màn hình tuỳ chỉnh cho màn hướng dẫn quét QR
+@property (nonatomic, nullable) UIView *viewTutorialScanQRCode;
+
 #pragma mark - Các phương thức gọi trực tiếp từ ICEkycCameraViewController
 
 /**

@@ -55224,49 +55224,105 @@
     {
       "filePath": "\/Users\/minghieu\/Desktop\/ekyc_ios_sdk\/ICSdkEKYC\/build\/Build\/Intermediates.noindex\/ICSdkEKYC.build\/Release-iphoneos\/ICSdkEKYC.build\/DerivedSources\/GeneratedAssetSymbols.swift",
       "kind": "StringLiteral",
-      "offset": 5375,
+      "offset": 5391,
+      "length": 28,
+      "value": "\"mrz_code_missing_corner_ic\""
+    },
+    {
+      "filePath": "\/Users\/minghieu\/Desktop\/ekyc_ios_sdk\/ICSdkEKYC\/build\/Build\/Intermediates.noindex\/ICSdkEKYC.build\/Release-iphoneos\/ICSdkEKYC.build\/DerivedSources\/GeneratedAssetSymbols.swift",
+      "kind": "StringLiteral",
+      "offset": 5575,
+      "length": 27,
+      "value": "\"mrz_code_over_exposure_ic\""
+    },
+    {
+      "filePath": "\/Users\/minghieu\/Desktop\/ekyc_ios_sdk\/ICSdkEKYC\/build\/Build\/Intermediates.noindex\/ICSdkEKYC.build\/Release-iphoneos\/ICSdkEKYC.build\/DerivedSources\/GeneratedAssetSymbols.swift",
+      "kind": "StringLiteral",
+      "offset": 5752,
+      "length": 24,
+      "value": "\"mrz_code_too_blurry_ic\""
+    },
+    {
+      "filePath": "\/Users\/minghieu\/Desktop\/ekyc_ios_sdk\/ICSdkEKYC\/build\/Build\/Intermediates.noindex\/ICSdkEKYC.build\/Release-iphoneos\/ICSdkEKYC.build\/DerivedSources\/GeneratedAssetSymbols.swift",
+      "kind": "StringLiteral",
+      "offset": 5918,
       "length": 19,
       "value": "\"number_encrypt_bg\""
     },
     {
       "filePath": "\/Users\/minghieu\/Desktop\/ekyc_ios_sdk\/ICSdkEKYC\/build\/Build\/Intermediates.noindex\/ICSdkEKYC.build\/Release-iphoneos\/ICSdkEKYC.build\/DerivedSources\/GeneratedAssetSymbols.swift",
       "kind": "StringLiteral",
-      "offset": 5534,
+      "offset": 6093,
+      "length": 27,
+      "value": "\"qr_code_missing_corner_ic\""
+    },
+    {
+      "filePath": "\/Users\/minghieu\/Desktop\/ekyc_ios_sdk\/ICSdkEKYC\/build\/Build\/Intermediates.noindex\/ICSdkEKYC.build\/Release-iphoneos\/ICSdkEKYC.build\/DerivedSources\/GeneratedAssetSymbols.swift",
+      "kind": "StringLiteral",
+      "offset": 6274,
+      "length": 26,
+      "value": "\"qr_code_over_exposure_ic\""
+    },
+    {
+      "filePath": "\/Users\/minghieu\/Desktop\/ekyc_ios_sdk\/ICSdkEKYC\/build\/Build\/Intermediates.noindex\/ICSdkEKYC.build\/Release-iphoneos\/ICSdkEKYC.build\/DerivedSources\/GeneratedAssetSymbols.swift",
+      "kind": "StringLiteral",
+      "offset": 6448,
+      "length": 23,
+      "value": "\"qr_code_too_blurry_ic\""
+    },
+    {
+      "filePath": "\/Users\/minghieu\/Desktop\/ekyc_ios_sdk\/ICSdkEKYC\/build\/Build\/Intermediates.noindex\/ICSdkEKYC.build\/Release-iphoneos\/ICSdkEKYC.build\/DerivedSources\/GeneratedAssetSymbols.swift",
+      "kind": "StringLiteral",
+      "offset": 6611,
       "length": 18,
       "value": "\"qrcode_failed_ic\""
     },
     {
       "filePath": "\/Users\/minghieu\/Desktop\/ekyc_ios_sdk\/ICSdkEKYC\/build\/Build\/Intermediates.noindex\/ICSdkEKYC.build\/Release-iphoneos\/ICSdkEKYC.build\/DerivedSources\/GeneratedAssetSymbols.swift",
       "kind": "StringLiteral",
-      "offset": 5707,
+      "offset": 6784,
       "length": 26,
       "value": "\"qrcode_scan_markframe_bg\""
     },
     {
       "filePath": "\/Users\/minghieu\/Desktop\/ekyc_ios_sdk\/ICSdkEKYC\/build\/Build\/Intermediates.noindex\/ICSdkEKYC.build\/Release-iphoneos\/ICSdkEKYC.build\/DerivedSources\/GeneratedAssetSymbols.swift",
       "kind": "StringLiteral",
-      "offset": 5875,
+      "offset": 6952,
       "length": 19,
       "value": "\"qrcode_succeed_ic\""
     },
     {
       "filePath": "\/Users\/minghieu\/Desktop\/ekyc_ios_sdk\/ICSdkEKYC\/build\/Build\/Intermediates.noindex\/ICSdkEKYC.build\/Release-iphoneos\/ICSdkEKYC.build\/DerivedSources\/GeneratedAssetSymbols.swift",
       "kind": "StringLiteral",
-      "offset": 6034,
+      "offset": 7111,
       "length": 18,
       "value": "\"rotate_camera_ic\""
     },
     {
       "filePath": "\/Users\/minghieu\/Desktop\/ekyc_ios_sdk\/ICSdkEKYC\/build\/Build\/Intermediates.noindex\/ICSdkEKYC.build\/Release-iphoneos\/ICSdkEKYC.build\/DerivedSources\/GeneratedAssetSymbols.swift",
       "kind": "StringLiteral",
-      "offset": 6186,
+      "offset": 7259,
+      "length": 13,
+      "value": "\"scan_mrz_ic\""
+    },
+    {
+      "filePath": "\/Users\/minghieu\/Desktop\/ekyc_ios_sdk\/ICSdkEKYC\/build\/Build\/Intermediates.noindex\/ICSdkEKYC.build\/Release-iphoneos\/ICSdkEKYC.build\/DerivedSources\/GeneratedAssetSymbols.swift",
+      "kind": "StringLiteral",
+      "offset": 7400,
+      "length": 12,
+      "value": "\"scan_qr_ic\""
+    },
+    {
+      "filePath": "\/Users\/minghieu\/Desktop\/ekyc_ios_sdk\/ICSdkEKYC\/build\/Build\/Intermediates.noindex\/ICSdkEKYC.build\/Release-iphoneos\/ICSdkEKYC.build\/DerivedSources\/GeneratedAssetSymbols.swift",
+      "kind": "StringLiteral",
+      "offset": 7546,
       "length": 15,
       "value": "\"skip_video_ic\""
     },
     {
       "filePath": "\/Users\/minghieu\/Desktop\/ekyc_ios_sdk\/ICSdkEKYC\/build\/Build\/Intermediates.noindex\/ICSdkEKYC.build\/Release-iphoneos\/ICSdkEKYC.build\/DerivedSources\/GeneratedAssetSymbols.swift",
       "kind": "StringLiteral",
-      "offset": 6335,
+      "offset": 7695,
       "length": 15,
       "value": "\"take_photo_ic\""
     }
