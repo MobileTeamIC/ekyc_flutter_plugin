@@ -14,3 +14,8 @@
 
 * Update sdk android 3.6.13
 * Fix bug
+
+## 1.0.6
+
+* Update sdk android 3.6.14
+* Bổ sung màn hình hướng dẫn quét mã QR cho luồng tách quét QR (không áp dụng cho luồng xác thực giấy tờ gắn chip)
