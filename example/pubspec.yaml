@@ -1,8 +1,7 @@
 name: flutter_plugin_ic_ekyc_example
 description: "Demonstrates how to use the flutter_plugin_ic_ekyc plugin."
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: "none"
+version: 1.0.1+99
 
 environment:
   sdk: ^3.7.2
